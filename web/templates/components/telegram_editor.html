@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<style>
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+</style>
 <div class="telegram-editor-container">
   <div class="telegram-toolbar">
     <div class="toolbar-group">
@@ -114,8 +126,7 @@
     <textarea
       id="messageText"
       name="message_text"
-      class="form-input message-textarea"
-      style="display: none"
+      class="form-input message-textarea visually-hidden"
       required
     ></textarea>
   </div>
