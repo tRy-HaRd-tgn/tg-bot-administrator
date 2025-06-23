@@ -734,12 +734,17 @@ def get_calendar_events():
                         except:
                             continue
                 
-                # Если нет особых указаний дат, используем весь диапазон
+                # Если нет особых указаний дат
                 if not publication_dates:
-                    current_date = start_date
-                    while current_date <= end_date:
-                        publication_dates.append(current_date)
-                        current_date += timedelta(days=1)
+                    if campaign.get('repeat_enabled', False):
+                        # Для автоповтора — каждый день в диапазоне
+                        current_date = start_date
+                        while current_date <= end_date:
+                            publication_dates.append(current_date)
+                            current_date += timedelta(days=1)
+                    else:
+                        # Для разовой кампании — только start_date
+                        publication_dates.append(start_date)
                 
                 # Удаляем дубликаты дат
                 publication_dates = list(set(publication_dates))
