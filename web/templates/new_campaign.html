@@ -1,337 +1,530 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Создание компании - TG AutoPosting</title>
-    
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-      <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_campaign.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/schedule_modal.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/sidebar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/new_campaign.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/schedule_modal.css') }}"
+    />
+  </head>
+  <body>
     <!-- Sidebar -->
     {% include 'components/sidebar.html' %}
-    
+
     <!-- Mobile overlay -->
     <div class="mobile-overlay" onclick="toggleSidebar()"></div>
-    
+
     <!-- Mobile toggle button -->
     <button class="sidebar-toggle-mobile d-md-none" onclick="toggleSidebar()">
-        <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-bars"></i>
     </button>
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="new-campaign-container">
-            <!-- Header -->
-            <div class="campaign-header">
-                <div class="header-content">
-                    <div class="header-title">
-                        <h1><i class="fa-solid fa-plus-circle me-3"></i>Создание компании</h1>
-                        <p class="header-subtitle">Настройте автоматическую публикацию сообщений</p>
-                        <div class="utc-time-display">
-                            <i class="fa-solid fa-clock me-2"></i>
-                            <span>Текущее UTC время: </span>
-                            <span class="utc-time fw-bold">--:--:--</span>
-                        </div>
-                    </div>
-                    <div class="header-actions">
-                        <a href="{{ url_for('views.campaigns') }}" class="btn btn-outline-secondary">
-                            <i class="fa-solid fa-arrow-left me-2"></i>Назад к списку
-                        </a>
-                    </div>
-                </div>
+      <div class="new-campaign-container">
+        <!-- Header -->
+        <div class="campaign-header">
+          <div class="header-content">
+            <div class="header-title">
+              <h1>
+                <i class="fa-solid fa-plus-circle me-3"></i>Создание компании
+              </h1>
+              <p class="header-subtitle">
+                Настройте автоматическую публикацию сообщений
+              </p>
+              <div class="utc-time-display">
+                <i class="fa-solid fa-clock me-2"></i>
+                <span>Текущее UTC время: </span>
+                <span class="utc-time fw-bold">--:--:--</span>
+              </div>
+            </div>
+            <div class="header-actions">
+              <a
+                href="{{ url_for('views.campaigns') }}"
+                class="btn btn-outline-secondary"
+              >
+                <i class="fa-solid fa-arrow-left me-2"></i>Назад к списку
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaign Form -->
+        <form
+          id="campaignForm"
+          class="campaign-form"
+          enctype="multipart/form-data"
+        >
+          <!-- Basic Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2>
+                <i class="fa-solid fa-info-circle me-2"></i>Основная информация
+              </h2>
+              <p>Укажите название и описание кампании</p>
             </div>
 
-            <!-- Campaign Form -->
-            <form id="campaignForm" class="campaign-form" enctype="multipart/form-data">
-                <!-- Basic Information Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-info-circle me-2"></i>Основная информация</h2>
-                        <p>Укажите название и описание кампании</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="campaignName" class="form-label required"
+                  >Название кампании</label
+                >
+                <input
+                  type="text"
+                  id="campaignName"
+                  name="name"
+                  class="form-input"
+                  placeholder="Введите название кампании"
+                  required
+                />
+                <div class="form-feedback"></div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="campaignDescription" class="form-label"
+                  >Описание (опционально)</label
+                >
+                <textarea
+                  id="campaignDescription"
+                  name="description"
+                  class="form-input"
+                  rows="3"
+                  placeholder="Краткое описание кампании"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Расписание -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2>
+                <i class="fa-solid fa-calendar-days me-2"></i>Расписание
+                публикаций
+              </h2>
+              <p>
+                Настройте точное расписание публикаций с выбором конкретных дат
+                и времени
+              </p>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <button
+                  type="button"
+                  class="btn btn-outline-purple"
+                  id="configureScheduleBtn"
+                >
+                  <i class="fa-solid fa-calendar-plus me-2"></i>
+                  Настроить расписание публикаций
+                </button>
+                <small class="form-help">
+                  <i class="fa-solid fa-info-circle me-1"></i>
+                  Выберите конкретные даты и время для каждой публикации
+                </small>
+              </div>
+
+              <!-- Отображение настроенного расписания -->
+              <div
+                class="form-group full-width"
+                id="scheduleSettingsDisplay"
+                style="display: none"
+              >
+                <div class="settings-display-card">
+                  <div class="settings-header">
+                    <h6>
+                      <i class="fa-solid fa-calendar-check me-2"></i>Настроенное
+                      расписание
+                    </h6>
+                    <div class="settings-actions">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        onclick="editScheduleSettings()"
+                      >
+                        <i class="fa-solid fa-edit me-1"></i>Изменить
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        onclick="clearScheduleSettings()"
+                      >
+                        <i class="fa-solid fa-trash me-1"></i>Удалить
+                      </button>
                     </div>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="campaignName" class="form-label required">Название кампании</label>
-                            <input type="text" id="campaignName" name="name" class="form-input" 
-                                   placeholder="Введите название кампании" required>
-                            <div class="form-feedback"></div>
-                        </div>
-                        
-                        <div class="form-group full-width">
-                            <label for="campaignDescription" class="form-label">Описание (опционально)</label>
-                            <textarea id="campaignDescription" name="description" class="form-input" rows="3"
-                                      placeholder="Краткое описание кампании"></textarea>
-                        </div>
+                  </div>
+                  <div class="settings-content" id="scheduleSettingsContent">
+                    <!-- Содержимое настроек расписания -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Автоповтор публикации -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2>
+                <i class="fa-solid fa-repeat me-2"></i>Автоповтор публикации
+              </h2>
+              <p>
+                Настройте автоматическое повторение публикаций через
+                определенные интервалы
+              </p>
+            </div>
+
+            <div class="form-grid">
+              <!-- Переключатель автоповтора -->
+              <div class="form-group full-width">
+                <div class="setting-item">
+                  <div class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      id="repeatEnabled"
+                      class="toggle-input"
+                    />
+                    <label for="repeatEnabled" class="toggle-label">
+                      <div class="toggle-slider"></div>
+                    </label>
+                  </div>
+                  <div class="setting-content">
+                    <h6>Включить автоповтор</h6>
+                    <p>
+                      Автоматически повторять публикацию через заданные
+                      интервалы времени
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Блок настроек автоповтора -->
+              <div
+                class="form-group full-width"
+                id="repeatOptions"
+                style="display: none"
+              >
+                <div class="repeat-settings-card">
+                  <div class="repeat-settings-header">
+                    <h6>
+                      <i class="fa-solid fa-cogs me-2"></i>Настройки автоповтора
+                    </h6>
+                    <button
+                      type="button"
+                      class="btn btn-outline-purple"
+                      id="configureRepeatBtn"
+                    >
+                      <i class="fa-solid fa-repeat me-2"></i>
+                      Настроить автоповтор
+                    </button>
+                  </div>
+
+                  <!-- Отображение настроек автоповтора -->
+                  <div
+                    id="repeatSettingsDisplay"
+                    class="repeat-settings-display"
+                  >
+                    <div class="no-repeat-settings">
+                      <i class="fa-solid fa-info-circle me-2"></i>
+                      Настройки повторения не заданы. Нажмите "Настроить" для
+                      выбора интервала и периода.
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chats Selection Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2><i class="fa-solid fa-comments me-2"></i>Выбор чатов</h2>
+              <p>Выберите чаты, группы и форумы для публикации</p>
+            </div>
+
+            <div class="chats-selection">
+              <div class="chats-search">
+                <div class="search-input-group">
+                  <i class="fa-solid fa-search search-icon"></i>
+                  <input
+                    type="text"
+                    id="chatsSearch"
+                    class="search-input"
+                    placeholder="Поиск чатов..."
+                  />
+                </div>
+              </div>
+
+              <div id="chatsContainer" class="chats-container">
+                <div class="loading-state">
+                  <div class="spinner">
+                    <div class="inner"></div>
+                  </div>
+                  <p>Загрузка чатов...</p>
+                </div>
+              </div>
+
+              <div id="selectedChatsContainer" class="selected-chats-container">
+                <h6>Выбранные чаты: <span id="selectedChatsCount">0</span></h6>
+                <div id="selectedChatsList" class="selected-chats-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Content Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2>
+                <i class="fa-solid fa-message me-2"></i>Содержимое сообщения
+              </h2>
+              <p>Создайте текст и добавьте медиафайлы</p>
+            </div>
+
+            <div class="message-content">
+              <div class="form-group">
+                <label for="messageText" class="form-label required"
+                  >Текст сообщения</label
+                >
+
+                <!-- Заменяем обычное textarea на Telegram редактор -->
+                {% include 'components/telegram_editor.html' %}
+
+                <div class="form-help">
+                  <strong>Доступные теги форматирования:</strong><br />
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: repeat(
+                        auto-fit,
+                        minmax(200px, 1fr)
+                      );
+                      gap: 8px;
+                      margin-top: 8px;
+                    "
+                  >
+                    <div>
+                      <code>&lt;b&gt;жирный&lt;/b&gt;</code> -
+                      <strong>жирный текст</strong>
+                    </div>
+                    <div>
+                      <code>&lt;i&gt;курсив&lt;/i&gt;</code> - <em>курсив</em>
+                    </div>
+                    <div>
+                      <code>&lt;u&gt;подчерк&lt;/u&gt;</code> -
+                      <u>подчеркнутый</u>
+                    </div>
+                    <div>
+                      <code>&lt;s&gt;зачерк&lt;/s&gt;</code> -
+                      <s>зачеркнутый</s>
+                    </div>
+                    <div>
+                      <code>&lt;code&gt;код&lt;/code&gt;</code> -
+                      <code>моноширинный</code>
+                    </div>
+                    <div>
+                      <code>&lt;pre&gt;блок&lt;/pre&gt;</code> - блок кода
+                    </div>
+                    <div>
+                      <code>&lt;tg-spoiler&gt;спойлер&lt;/tg-spoiler&gt;</code>
+                      - скрытый текст
+                    </div>
+                    <div>
+                      <code>&lt;a href="url"&gt;ссылка&lt;/a&gt;</code> -
+                      гиперссылка
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Media Upload -->
+              <div class="media-upload-section">
+                <label class="form-label">Медиафайлы</label>
+                <div class="media-upload-area" id="mediaUploadArea">
+                  <div class="upload-placeholder">
+                    <i class="fa-solid fa-cloud-upload-alt fa-3x"></i>
+                    <h6>Перетащите файлы сюда или нажмите для выбора</h6>
+                    <p>
+                      Поддерживаются: JPG, PNG, GIF, MP4 (до 8 фото или 1 видео)
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    id="mediaFiles"
+                    name="media_files"
+                    multiple
+                    accept="image/*,video/*"
+                    style="display: none"
+                  />
                 </div>
 
-                <!-- Расписание -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-calendar-days me-2"></i>Расписание публикаций</h2>
-                        <p>Настройте точное расписание публикаций с выбором конкретных дат и времени</p>
-                    </div>
-                    
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <button type="button" class="btn btn-outline-purple" id="configureScheduleBtn">
-                                <i class="fa-solid fa-calendar-plus me-2"></i>
-                                Настроить расписание публикаций
-                            </button>
-                            <small class="form-help">
-                                <i class="fa-solid fa-info-circle me-1"></i>
-                                Выберите конкретные даты и время для каждой публикации
-                            </small>
-                        </div>
+                <div id="mediaPreview" class="media-preview"></div>
+              </div>
 
-                        <!-- Отображение настроенного расписания -->
-                        <div class="form-group full-width" id="scheduleSettingsDisplay" style="display: none;">
-                            <div class="settings-display-card">
-                                <div class="settings-header">
-                                    <h6><i class="fa-solid fa-calendar-check me-2"></i>Настроенное расписание</h6>
-                                    <div class="settings-actions">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="editScheduleSettings()">
-                                            <i class="fa-solid fa-edit me-1"></i>Изменить
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearScheduleSettings()">
-                                            <i class="fa-solid fa-trash me-1"></i>Удалить
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="settings-content" id="scheduleSettingsContent">
-                                    <!-- Содержимое настроек расписания -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <!-- Buttons Section -->
+              <div class="buttons-section">
+                <div class="buttons-header">
+                  <label class="form-label">Inline кнопки</label>
+                  <button
+                    type="button"
+                    id="addButton"
+                    class="btn btn-sm btn-outline-primary"
+                  >
+                    <i class="fa-solid fa-plus me-1"></i>Добавить кнопку
+                  </button>
                 </div>
 
-                <!-- Автоповтор публикации -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-repeat me-2"></i>Автоповтор публикации</h2>
-                        <p>Настройте автоматическое повторение публикаций через определенные интервалы</p>
-                    </div>
-                    
-                    <div class="form-grid">
-                        <!-- Переключатель автоповтора -->
-                        <div class="form-group full-width">
-                            <div class="setting-item">
-                                <div class="setting-toggle">
-                                    <input type="checkbox" id="repeatEnabled" class="toggle-input">
-                                    <label for="repeatEnabled" class="toggle-label">
-                                        <div class="toggle-slider"></div>
-                                    </label>
-                                </div>
-                                <div class="setting-content">
-                                    <h6>Включить автоповтор</h6>
-                                    <p>Автоматически повторять публикацию через заданные интервалы времени</p>
-                                </div>
-                            </div>
-                        </div>
+                <div id="buttonsContainer" class="buttons-container"></div>
+              </div>
+            </div>
+          </div>
 
-                        <!-- Блок настроек автоповтора -->
-                        <div class="form-group full-width" id="repeatOptions" style="display: none;">
-                            <div class="repeat-settings-card">
-                                <div class="repeat-settings-header">
-                                    <h6><i class="fa-solid fa-cogs me-2"></i>Настройки автоповтора</h6>
-                                    <button type="button" class="btn btn-outline-purple" id="configureRepeatBtn">
-                                        <i class="fa-solid fa-repeat me-2"></i>
-                                        Настроить автоповтор
-                                    </button>
-                                </div>
-                                
-                                <!-- Отображение настроек автоповтора -->
-                                <div id="repeatSettingsDisplay" class="repeat-settings-display">
-                                    <div class="no-repeat-settings">
-                                        <i class="fa-solid fa-info-circle me-2"></i>
-                                        Настройки повторения не заданы. Нажмите "Настроить" для выбора интервала и периода.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+          <!-- Блок настроек публикации -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Настройки публикации</h5>
+            </div>
+            <div class="card-body">
+              <p class="card-text text-muted mb-4">
+                Дополнительные параметры для публикации
+              </p>
+
+              <div class="form-group">
+                <div class="form-check form-switch mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="disable_preview"
+                    name="disable_preview"
+                  />
+                  <label class="form-check-label" for="disable_preview">
+                    <strong>Отключить предпросмотр ссылок</strong>
+                    <div class="text-muted small">
+                      Ссылки в сообщении не будут показывать превью
                     </div>
+                  </label>
                 </div>
 
-                <!-- Chats Selection Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-comments me-2"></i>Выбор чатов</h2>
-                        <p>Выберите чаты, группы и форумы для публикации</p>
+                <div class="form-check form-switch mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="disable_notification"
+                    name="disable_notification"
+                  />
+                  <label class="form-check-label" for="disable_notification">
+                    <strong>Тихая отправка</strong>
+                    <div class="text-muted small">
+                      Получатели не будут уведомлены о новом сообщении
                     </div>
-                    
-                    <div class="chats-selection">
-                        <div class="chats-search">
-                            <div class="search-input-group">
-                                <i class="fa-solid fa-search search-icon"></i>
-                                <input type="text" id="chatsSearch" class="search-input" 
-                                       placeholder="Поиск чатов...">
-                            </div>
-                        </div>
-                        
-                        <div id="chatsContainer" class="chats-container">
-                            <div class="loading-state">
-                                <div class="spinner">
-                                    <div class="inner"></div>
-                                </div>
-                                <p>Загрузка чатов...</p>
-                            </div>
-                        </div>
-                        
-                        <div id="selectedChatsContainer" class="selected-chats-container">
-                            <h6>Выбранные чаты: <span id="selectedChatsCount">0</span></h6>
-                            <div id="selectedChatsList" class="selected-chats-list"></div>
-                        </div>
-                    </div>
+                  </label>
                 </div>
 
-                <!-- Message Content Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-message me-2"></i>Содержимое сообщения</h2>
-                        <p>Создайте текст и добавьте медиафайлы</p>
+                <div class="form-check form-switch mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="protect_content"
+                    name="protect_content"
+                  />
+                  <label class="form-check-label" for="protect_content">
+                    <strong>Защищённый контент</strong>
+                    <div class="text-muted small">
+                      Запрещает пересылку и сохранение сообщения
                     </div>
-                    
-                    <div class="message-content">
-                        <div class="form-group">
-                            <label for="messageText" class="form-label required">Текст сообщения</label>
-                            
-                            <!-- Заменяем обычное textarea на Telegram редактор -->
-                            {% include 'components/telegram_editor.html' %}
-                            
-                            <div class="form-help">
-                                <strong>Доступные теги форматирования:</strong><br>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 8px;">
-                                    <div><code>&lt;b&gt;жирный&lt;/b&gt;</code> - <strong>жирный текст</strong></div>
-                                    <div><code>&lt;i&gt;курсив&lt;/i&gt;</code> - <em>курсив</em></div>
-                                    <div><code>&lt;u&gt;подчерк&lt;/u&gt;</code> - <u>подчеркнутый</u></div>
-                                    <div><code>&lt;s&gt;зачерк&lt;/s&gt;</code> - <s>зачеркнутый</s></div>
-                                    <div><code>&lt;code&gt;код&lt;/code&gt;</code> - <code>моноширинный</code></div>
-                                    <div><code>&lt;pre&gt;блок&lt;/pre&gt;</code> - блок кода</div>
-                                    <div><code>&lt;tg-spoiler&gt;спойлер&lt;/tg-spoiler&gt;</code> - скрытый текст</div>
-                                    <div><code>&lt;a href="url"&gt;ссылка&lt;/a&gt;</code> - гиперссылка</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Media Upload -->
-                        <div class="media-upload-section">
-                            <label class="form-label">Медиафайлы</label>
-                            <div class="media-upload-area" id="mediaUploadArea">
-                                <div class="upload-placeholder">
-                                    <i class="fa-solid fa-cloud-upload-alt fa-3x"></i>
-                                    <h6>Перетащите файлы сюда или нажмите для выбора</h6>
-                                    <p>Поддерживаются: JPG, PNG, GIF, MP4 (до 8 фото или 1 видео)</p>
-                                </div>
-                                <input type="file" id="mediaFiles" name="media_files" multiple 
-                                       accept="image/*,video/*" style="display: none;">
-                            </div>
-                            
-                            <div id="mediaPreview" class="media-preview"></div>
-                        </div>
-                        
-                        <!-- Buttons Section -->
-                        <div class="buttons-section">
-                            <div class="buttons-header">
-                                <label class="form-label">Inline кнопки</label>
-                                <button type="button" id="addButton" class="btn btn-sm btn-outline-primary">
-                                    <i class="fa-solid fa-plus me-1"></i>Добавить кнопку
-                                </button>
-                            </div>
-                            
-                            <div id="buttonsContainer" class="buttons-container"></div>
-                        </div>
-                    </div>
+                  </label>
                 </div>
 
-                <!-- Блок настроек публикации -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Настройки публикации</h5>
+                <div class="form-check form-switch mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="pin_message"
+                    name="pin_message"
+                  />
+                  <label class="form-check-label" for="pin_message">
+                    <strong>Закрепить сообщение</strong>
+                    <div class="text-muted small">
+                      Автоматически закрепляет сообщение в чате
                     </div>
-                    <div class="card-body">
-                        <p class="card-text text-muted mb-4">Дополнительные параметры для публикации</p>
-                        
-                        <div class="form-group">
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="disable_preview" name="disable_preview">
-                                <label class="form-check-label" for="disable_preview">
-                                    <strong>Отключить предпросмотр ссылок</strong>
-                                    <div class="text-muted small">Ссылки в сообщении не будут показывать превью</div>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="disable_notification" name="disable_notification">
-                                <label class="form-check-label" for="disable_notification">
-                                    <strong>Тихая отправка</strong>
-                                    <div class="text-muted small">Получатели не будут уведомлены о новом сообщении</div>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="protect_content" name="protect_content">
-                                <label class="form-check-label" for="protect_content">
-                                    <strong>Защищённый контент</strong>
-                                    <div class="text-muted small">Запрещает пересылку и сохранение сообщения</div>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="pin_message" name="pin_message">
-                                <label class="form-check-label" for="pin_message">
-                                    <strong>Закрепить сообщение</strong>
-                                    <div class="text-muted small">Автоматически закрепляет сообщение в чате</div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                  </label>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <!-- Preview Section -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <h2><i class="fa-solid fa-eye me-2"></i>Предпросмотр</h2>
-                        <p>Посмотрите как будет выглядеть ваше сообщение</p>
-                    </div>
-                    
-                    <div class="preview-container">
-                        <button type="button" id="previewButton" class="btn btn-outline-purple">
-                            <i class="fa-solid fa-eye me-2"></i>Показать предпросмотр
-                        </button>
-                        
-                        <div id="messagePreview" class="message-preview-container" style="display: none;">
-                            <!-- Preview will be generated here -->
-                        </div>
-                    </div>
-                </div>
+          <!-- Preview Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <h2><i class="fa-solid fa-eye me-2"></i>Предпросмотр</h2>
+              <p>Посмотрите как будет выглядеть ваше сообщение</p>
+            </div>
 
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <div class="actions-right">
-                        <button type="button" id="cancelBtn" class="btn btn-outline-danger">
-                            <i class="fa-solid fa-times me-2"></i>Отмена
-                        </button>
-                        <button type="submit" id="createCampaignBtn" class="btn btn-primary">
-                            <i class="fa-solid fa-rocket me-2"></i>Создать компанию
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>    <!-- Подключение модальных окон -->
-    {% include 'components/schedule_modal.html' %}
-    {% include 'components/repeat_modal.html' %}
+            <div class="preview-container">
+              <button
+                type="button"
+                id="previewButton"
+                class="btn btn-outline-purple"
+              >
+                <i class="fa-solid fa-eye me-2"></i>Показать предпросмотр
+              </button>
+
+              <div
+                id="messagePreview"
+                class="message-preview-container"
+                style="display: none"
+              >
+                <!-- Preview will be generated here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <div class="actions-right">
+              <button
+                type="button"
+                id="cancelBtn"
+                class="btn btn-outline-danger"
+              >
+                <i class="fa-solid fa-times me-2"></i>Отмена
+              </button>
+              <button
+                type="submit"
+                id="createCampaignBtn"
+                class="btn btn-primary"
+              >
+                <i class="fa-solid fa-rocket me-2"></i>Создать компанию
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Подключение модальных окон -->
+    {% include 'components/schedule_modal.html' %} {% include
+    'components/repeat_modal.html' %}
 
     <!-- Подключение скриптов -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -343,175 +536,189 @@
     <script src="{{ url_for('static', filename='js/new_campaign.js') }}"></script>
 
     <script>
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация сайдбара
-            new Sidebar();
-            
-            // Обработчик для кнопки настройки расписания
-            const configureScheduleBtn = document.getElementById('configureScheduleBtn');
-            if (configureScheduleBtn) {
-                configureScheduleBtn.addEventListener('click', function() {
-                    console.log('Нажата кнопка настройки расписания');
-                    if (window.scheduleModal) {
-                        window.scheduleModal.show();
-                    } else {
-                        console.error('ScheduleModal не найден');
-                    }
-                });
-            }
-            
-            // Обработчик для кнопки открытия модального окна условий
-            const addConditionBtn = document.getElementById('addConditionModalBtn');
-            if (addConditionBtn) {
-                addConditionBtn.addEventListener('click', function() {
-                    if (window.conditionsModal) {
-                        window.conditionsModal.show();
-                    }
-                });
-            }
+      // Инициализация при загрузке страницы
+      document.addEventListener("DOMContentLoaded", function () {
+        // Инициализация сайдбара
+        new Sidebar();
 
-            // Обработчик для переключателя автоповтора
-            const repeatToggle = document.getElementById('repeatEnabled');
-            const repeatOptions = document.getElementById('repeatOptions');
-            
-            if (repeatToggle && repeatOptions) {
-                repeatToggle.addEventListener('change', function() {
-                    if (this.checked) {
-                        repeatOptions.style.display = 'block';
-                        repeatOptions.style.animation = 'fadeInUp 0.3s ease-out';
-                    } else {
-                        repeatOptions.style.display = 'none';
-                        // Очищаем настройки повтора
-                        clearRepeatSettings();
-                    }
-                });
-            }
-
-            // Обработчик для кнопки настройки автоповтора
-            const configureRepeatBtn = document.getElementById('configureRepeatBtn');
-            if (configureRepeatBtn) {
-                configureRepeatBtn.addEventListener('click', function() {
-                    if (window.repeatModal) {
-                        window.repeatModal.show();
-                    }
-                });
-            }            // Callback для настроек расписания
+        // Обработчик для кнопки настройки расписания
+        const configureScheduleBtn = document.getElementById(
+          "configureScheduleBtn"
+        );
+        if (configureScheduleBtn) {
+          configureScheduleBtn.addEventListener("click", function () {
+            console.log("Нажата кнопка настройки расписания");
             if (window.scheduleModal) {
-                window.scheduleModal.setCallback(function(settings) {
-                    updateScheduleSettings(settings);
-                });
+              window.scheduleModal.show();
+            } else {
+              console.error("ScheduleModal не найден");
             }
+          });
+        }
 
-            // Callback для настроек автоповтора
-            if (window.repeatModal) {
-                window.repeatModal.setCallback(function(settings) {
-                    updateRepeatSettings(settings);
-                });
+        // Обработчик для кнопки открытия модального окна условий
+        const addConditionBtn = document.getElementById("addConditionModalBtn");
+        if (addConditionBtn) {
+          addConditionBtn.addEventListener("click", function () {
+            if (window.conditionsModal) {
+              window.conditionsModal.show();
             }
-        });        // Функция обновления настроек расписания
-        function updateScheduleSettings(settings) {
-            console.log('Обновление настроек расписания:', settings);
-            
-            const display = document.getElementById('scheduleSettingsDisplay');
-            const content = document.getElementById('scheduleSettingsContent');
-            
-            if (!display || !content) return;
-            
-            // Показываем блок с настройками
-            display.style.display = 'block';
-            
-            // Создаем отображение настроек
-            let settingsHtml = '';
-            
-            // Период
-            const startDate = new Date(settings.startDate).toLocaleDateString('ru-RU');
-            const endDate = settings.endDate ? new Date(settings.endDate).toLocaleDateString('ru-RU') : 'Не ограничен';
-            
-            settingsHtml += `
+          });
+        }
+
+        // Обработчик для переключателя автоповтора
+        const repeatToggle = document.getElementById("repeatEnabled");
+        const repeatOptions = document.getElementById("repeatOptions");
+
+        if (repeatToggle && repeatOptions) {
+          repeatToggle.addEventListener("change", function () {
+            if (this.checked) {
+              repeatOptions.style.display = "block";
+              repeatOptions.style.animation = "fadeInUp 0.3s ease-out";
+            } else {
+              repeatOptions.style.display = "none";
+              // Очищаем настройки повтора
+              clearRepeatSettings();
+            }
+          });
+        }
+
+        // Обработчик для кнопки настройки автоповтора
+        const configureRepeatBtn =
+          document.getElementById("configureRepeatBtn");
+        if (configureRepeatBtn) {
+          configureRepeatBtn.addEventListener("click", function () {
+            if (window.repeatModal) {
+              window.repeatModal.show();
+            }
+          });
+        } // Callback для настроек расписания
+        if (window.scheduleModal) {
+          window.scheduleModal.setCallback(function (settings) {
+            updateScheduleSettings(settings);
+          });
+        }
+
+        // Callback для настроек автоповтора
+        if (window.repeatModal) {
+          window.repeatModal.setCallback(function (settings) {
+            updateRepeatSettings(settings);
+          });
+        }
+      }); // Функция обновления настроек расписания
+      function updateScheduleSettings(settings) {
+        console.log("Обновление настроек расписания:", settings);
+
+        const display = document.getElementById("scheduleSettingsDisplay");
+        const content = document.getElementById("scheduleSettingsContent");
+
+        if (!display || !content) return;
+
+        // Показываем блок с настройками
+        display.style.display = "block";
+
+        // Создаем отображение настроек
+        let settingsHtml = "";
+
+        // Период
+        const startDate = new Date(settings.startDate).toLocaleDateString(
+          "ru-RU"
+        );
+        const endDate = settings.endDate
+          ? new Date(settings.endDate).toLocaleDateString("ru-RU")
+          : "Не ограничен";
+
+        settingsHtml += `
                 <div class="schedule-info-item">
-                    <strong>Период:</strong> с ${startDate} ${settings.endDate ? 'по ' + endDate : '(без ограничений)'}
+                    <strong>Период:</strong> с ${startDate} ${
+          settings.endDate ? "по " + endDate : "(без ограничений)"
+        }
                 </div>
             `;
-            
-            // Количество выбранных дат
-            settingsHtml += `
+
+        // Количество выбранных дат
+        settingsHtml += `
                 <div class="schedule-info-item">
                     <strong>Выбрано дат:</strong> ${settings.selectedDates.length}
                 </div>
             `;
-            
-            // Режим времени
-            const timeModeLabel = settings.timeMode === 'single' ? 'Одно время для всех' : 'Индивидуальное время';
-            settingsHtml += `
+
+        // Режим времени
+        const timeModeLabel =
+          settings.timeMode === "single"
+            ? "Одно время для всех"
+            : "Индивидуальное время";
+        settingsHtml += `
                 <div class="schedule-info-item">
                     <strong>Режим времени:</strong> ${timeModeLabel}
                 </div>
             `;
-            
-            // Время
-            if (settings.timeMode === 'single') {
-                settingsHtml += `
+
+        // Время
+        if (settings.timeMode === "single") {
+          settingsHtml += `
                     <div class="schedule-info-item">
                         <strong>Время:</strong> ${settings.globalTime} UTC
                     </div>
                 `;
-            } else {
-                settingsHtml += `
+        } else {
+          settingsHtml += `
                     <div class="schedule-info-item">
                         <strong>Индивидуальные времена:</strong> настроены для каждой даты
                     </div>
                 `;
-            }
-            
-            // Сохраняем настройки для отправки формы
-            const hiddenInput = document.getElementById('scheduleSettings') || document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.id = 'scheduleSettings';
-            hiddenInput.name = 'schedule_settings';
-            hiddenInput.value = JSON.stringify(settings);
-            
-            if (!document.getElementById('scheduleSettings')) {
-                document.getElementById('campaignForm').appendChild(hiddenInput);
-            }
-            
-            content.innerHTML = settingsHtml;
         }
 
-        // Функция редактирования настроек расписания
-        function editScheduleSettings() {
-            if (window.scheduleModal) {
-                window.scheduleModal.show();
-            }
+        // Сохраняем настройки для отправки формы
+        const hiddenInput =
+          document.getElementById("scheduleSettings") ||
+          document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.id = "scheduleSettings";
+        hiddenInput.name = "schedule_settings";
+        hiddenInput.value = JSON.stringify(settings);
+
+        if (!document.getElementById("scheduleSettings")) {
+          document.getElementById("campaignForm").appendChild(hiddenInput);
         }
 
-        // Функция очистки настроек расписания
-        function clearScheduleSettings() {
-            const display = document.getElementById('scheduleSettingsDisplay');
-            if (display) {
-                display.style.display = 'none';
-            }
-            
-            const hiddenInput = document.getElementById('scheduleSettings');
-            if (hiddenInput) {
-                hiddenInput.remove();
-            }
-            
-            if (window.scheduleModal) {
-                window.scheduleModal.clearSettings();
-            }
+        content.innerHTML = settingsHtml;
+      }
+
+      // Функция редактирования настроек расписания
+      function editScheduleSettings() {
+        if (window.scheduleModal) {
+          window.scheduleModal.show();
+        }
+      }
+
+      // Функция очистки настроек расписания
+      function clearScheduleSettings() {
+        const display = document.getElementById("scheduleSettingsDisplay");
+        if (display) {
+          display.style.display = "none";
         }
 
-        // Создание элемента условия
-        function createConditionElement(condition) {
-            const item = document.createElement('div');
-            item.className = 'condition-item';
-            
-            const iconClass = getConditionIconClass(condition.type);
-            const description = getConditionDescription(condition);
-            const typeLabel = getConditionTypeLabel(condition.type);
+        const hiddenInput = document.getElementById("scheduleSettings");
+        if (hiddenInput) {
+          hiddenInput.remove();
+        }
 
-            item.innerHTML = `
+        if (window.scheduleModal) {
+          window.scheduleModal.clearSettings();
+        }
+      }
+
+      // Создание элемента условия
+      function createConditionElement(condition) {
+        const item = document.createElement("div");
+        item.className = "condition-item";
+
+        const iconClass = getConditionIconClass(condition.type);
+        const description = getConditionDescription(condition);
+        const typeLabel = getConditionTypeLabel(condition.type);
+
+        item.innerHTML = `
                 <div class="condition-content">
                     <div class="condition-icon ${condition.type}">
                         <i class="${iconClass}"></i>
@@ -528,104 +735,124 @@
                 </div>
             `;
 
-            return item;
+        return item;
+      }
+
+      // Получение иконки для типа условия
+      function getConditionIconClass(type) {
+        const icons = {
+          "time-range": "fa-solid fa-clock",
+          "date-range": "fa-solid fa-calendar-days",
+          weekdays: "fa-solid fa-calendar-week",
+          "month-days": "fa-solid fa-calendar-day",
+        };
+        return icons[type] || "fa-solid fa-filter";
+      }
+
+      // Получение описания условия
+      function getConditionDescription(condition) {
+        const weekdayNames = ["", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+        const monthNames = [
+          "января",
+          "февраля",
+          "марта",
+          "апреля",
+          "мая",
+          "июня",
+          "июля",
+          "августа",
+          "сентября",
+          "октября",
+          "ноября",
+          "декабря",
+        ];
+
+        switch (condition.type) {
+          case "time-range":
+            return `С ${condition.timeStart} до ${condition.timeEnd}`;
+
+          case "date-range":
+            const startDate = new Date(condition.dateStart).toLocaleDateString(
+              "ru-RU"
+            );
+            const endDate = new Date(condition.dateEnd).toLocaleDateString(
+              "ru-RU"
+            );
+            return `С ${startDate} по ${endDate}`;
+
+          case "weekdays":
+            const days = condition.weekdays
+              .map((day) => weekdayNames[day])
+              .join(", ");
+            return `Дни: ${days}`;
+
+          case "month-days":
+            const monthName = monthNames[condition.month - 1];
+            return `${condition.days
+              .sort((a, b) => a - b)
+              .join(", ")} ${monthName}`;
+
+          default:
+            return "Неизвестное условие";
         }
+      }
 
-        // Получение иконки для типа условия
-        function getConditionIconClass(type) {
-            const icons = {
-                'time-range': 'fa-solid fa-clock',
-                'date-range': 'fa-solid fa-calendar-days',
-                'weekdays': 'fa-solid fa-calendar-week',
-                'month-days': 'fa-solid fa-calendar-day'
-            };
-            return icons[type] || 'fa-solid fa-filter';
-        }
+      // Получение названия типа условия
+      function getConditionTypeLabel(type) {
+        const labels = {
+          "time-range": "Временной промежуток",
+          "date-range": "Интервал дат",
+          weekdays: "Дни недели",
+          "month-days": "Дни месяца",
+        };
+        return labels[type] || "Условие";
+      }
 
-        // Получение описания условия
-        function getConditionDescription(condition) {
-            const weekdayNames = ['', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-            const monthNames = [
-                'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-            ];
+      // Удаление условия
+      function removeCondition(button) {
+        const conditionItem = button.closest(".condition-item");
+        const conditionsList = document.getElementById("conditionsList");
 
-            switch (condition.type) {
-                case 'time-range':
-                    return `С ${condition.timeStart} до ${condition.timeEnd}`;
-                
-                case 'date-range':
-                    const startDate = new Date(condition.dateStart).toLocaleDateString('ru-RU');
-                    const endDate = new Date(condition.dateEnd).toLocaleDateString('ru-RU');
-                    return `С ${startDate} по ${endDate}`;
-                
-                case 'weekdays':
-                    const days = condition.weekdays.map(day => weekdayNames[day]).join(', ');
-                    return `Дни: ${days}`;
-                
-                case 'month-days':
-                    const monthName = monthNames[condition.month - 1];
-                    return `${condition.days.sort((a, b) => a - b).join(', ')} ${monthName}`;
-                
-                default:
-                    return 'Неизвестное условие';
-            }
-        }
+        conditionItem.remove();
 
-        // Получение названия типа условия
-        function getConditionTypeLabel(type) {
-            const labels = {
-                'time-range': 'Временной промежуток',
-                'date-range': 'Интервал дат',
-                'weekdays': 'Дни недели',
-                'month-days': 'Дни месяца'
-            };
-            return labels[type] || 'Условие';
-        }
-
-        // Удаление условия
-        function removeCondition(button) {
-            const conditionItem = button.closest('.condition-item');
-            const conditionsList = document.getElementById('conditionsList');
-            
-            conditionItem.remove();
-            
-            // Если условий не осталось, показываем заглушку
-            if (conditionsList.children.length === 0) {
-                conditionsList.innerHTML = `
+        // Если условий не осталось, показываем заглушку
+        if (conditionsList.children.length === 0) {
+          conditionsList.innerHTML = `
                     <div class="no-conditions">
                         <i class="fa-solid fa-info-circle me-2"></i>
                         Дополнительные условия не заданы. Публикация будет происходить согласно основному расписанию.
                     </div>
                 `;
-            }
+        }
+      }
+
+      // Функция обновления настроек повтора
+      function updateRepeatSettings(settings) {
+        const settingsDisplay = document.getElementById(
+          "repeatSettingsDisplay"
+        );
+        const noSettings = settingsDisplay.querySelector(".no-repeat-settings");
+
+        // Удаляем заглушку если есть
+        if (noSettings) {
+          noSettings.remove();
         }
 
-        // Функция обновления настроек повтора
-        function updateRepeatSettings(settings) {
-            const settingsDisplay = document.getElementById('repeatSettingsDisplay');
-            const noSettings = settingsDisplay.querySelector('.no-repeat-settings');
-            
-            // Удаляем заглушку если есть
-            if (noSettings) {
-                noSettings.remove();
-            }
+        const settingsItem = createRepeatSettingsElement(settings);
+        settingsDisplay.innerHTML = "";
+        settingsDisplay.appendChild(settingsItem);
+      }
 
-            const settingsItem = createRepeatSettingsElement(settings);
-            settingsDisplay.innerHTML = '';
-            settingsDisplay.appendChild(settingsItem);
-        }
+      // Создание элемента настроек повтора
+      function createRepeatSettingsElement(settings) {
+        const item = document.createElement("div");
+        item.className = "repeat-settings-item";
 
-        // Создание элемента настроек повтора
-        function createRepeatSettingsElement(settings) {
-            const item = document.createElement('div');
-            item.className = 'repeat-settings-item';
-            
-            const iconClass = getRepeatIconClass(settings.interval);
-            const description = getRepeatSettingsDescription(settings);
-            const title = getRepeatSettingsTitle(settings.interval);
+        const iconClass = getRepeatIconClass(settings.interval);
+        const description = getRepeatSettingsDescription(settings);
+        const title = getRepeatSettingsTitle(settings.interval);
 
-            item.innerHTML = `
+        item.innerHTML = `
                 <div class="repeat-settings-content">
                     <div class="repeat-settings-icon">
                         <i class="${iconClass}"></i>
@@ -645,89 +872,122 @@
                 </div>
             `;
 
-            return item;
+        return item;
+      }
+
+      // Получение иконки для типа повтора
+      function getRepeatIconClass(interval) {
+        const icons = {
+          hourly: "fa-solid fa-clock",
+          daily: "fa-solid fa-calendar-day",
+          weekly: "fa-solid fa-calendar-week",
+          monthly: "fa-solid fa-calendar",
+        };
+        return icons[interval] || "fa-solid fa-repeat";
+      }
+
+      // Получение заголовка настроек повтора
+      function getRepeatSettingsTitle(interval) {
+        const titles = {
+          hourly: "Каждый час",
+          daily: "Ежедневно",
+          weekly: "Еженедельно",
+          monthly: "Ежемесячно",
+        };
+        return titles[interval] || "Автоповтор";
+      }
+
+      // Получение описания настроек повтора
+      function getRepeatSettingsDescription(settings) {
+        const startDate = new Date(settings.startDate).toLocaleDateString(
+          "ru-RU"
+        );
+        const endDate = settings.endDate
+          ? new Date(settings.endDate).toLocaleDateString("ru-RU")
+          : "бесконечно";
+
+        let description = `С ${startDate} по ${endDate}`;
+
+        // Добавляем детали в зависимости от типа
+        if (settings.interval === "weekly" && settings.weeklyDay) {
+          const dayNames = [
+            "",
+            "по понедельникам",
+            "по вторникам",
+            "по средам",
+            "по четвергам",
+            "по пятницам",
+            "по субботам",
+            "по воскресеньям",
+          ];
+          description += ` • ${dayNames[settings.weeklyDay]}`;
         }
 
-        // Получение иконки для типа повтора
-        function getRepeatIconClass(interval) {
-            const icons = {
-                'hourly': 'fa-solid fa-clock',
-                'daily': 'fa-solid fa-calendar-day',
-                'weekly': 'fa-solid fa-calendar-week',
-                'monthly': 'fa-solid fa-calendar'
+        if (settings.interval === "monthly") {
+          if (settings.monthlyType === "date" && settings.monthlyDate) {
+            description += ` • ${settings.monthlyDate} числа каждого месяца`;
+          } else if (settings.monthlyType === "weekday") {
+            const weekNames = {
+              1: "первый",
+              2: "второй",
+              3: "третий",
+              4: "четвертый",
+              "-1": "последний",
             };
-            return icons[interval] || 'fa-solid fa-repeat';
+            const dayNames = [
+              "",
+              "понедельник",
+              "вторник",
+              "среда",
+              "четверг",
+              "пятница",
+              "суббота",
+              "воскресенье",
+            ];
+            description += ` • ${weekNames[settings.monthlyWeek]} ${
+              dayNames[settings.monthlyWeekday]
+            } месяца`;
+          }
         }
 
-        // Получение заголовка настроек повтора
-        function getRepeatSettingsTitle(interval) {
-            const titles = {
-                'hourly': 'Каждый час',
-                'daily': 'Ежедневно',
-                'weekly': 'Еженедельно',
-                'monthly': 'Ежемесячно'
-            };
-            return titles[interval] || 'Автоповтор';
-        }
+        return description;
+      }
 
-        // Получение описания настроек повтора
-        function getRepeatSettingsDescription(settings) {
-            const startDate = new Date(settings.startDate).toLocaleDateString('ru-RU');
-            const endDate = settings.endDate ? new Date(settings.endDate).toLocaleDateString('ru-RU') : 'бесконечно';
-            
-            let description = `С ${startDate} по ${endDate}`;
-            
-            // Добавляем детали в зависимости от типа
-            if (settings.interval === 'weekly' && settings.weeklyDay) {
-                const dayNames = ['', 'по понедельникам', 'по вторникам', 'по средам', 'по четвергам', 'по пятницам', 'по субботам', 'по воскресеньям'];
-                description += ` • ${dayNames[settings.weeklyDay]}`;
-            }
-            
-            if (settings.interval === 'monthly') {
-                if (settings.monthlyType === 'date' && settings.monthlyDate) {
-                    description += ` • ${settings.monthlyDate} числа каждого месяца`;
-                } else if (settings.monthlyType === 'weekday') {
-                    const weekNames = { '1': 'первый', '2': 'второй', '3': 'третий', '4': 'четвертый', '-1': 'последний' };
-                    const dayNames = ['', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'];
-                    description += ` • ${weekNames[settings.monthlyWeek]} ${dayNames[settings.monthlyWeekday]} месяца`;
-                }
-            }
-            
-            return description;
+      // Редактирование настроек повтора
+      function editRepeatSettings() {
+        if (window.repeatModal) {
+          // Загружаем текущие настройки в модал
+          const currentSettings = window.repeatModal.getSettings();
+          if (currentSettings) {
+            window.repeatModal.loadSettings(currentSettings);
+          }
+          window.repeatModal.show();
         }
+      }
 
-        // Редактирование настроек повтора
-        function editRepeatSettings() {
-            if (window.repeatModal) {
-                // Загружаем текущие настройки в модал
-                const currentSettings = window.repeatModal.getSettings();
-                if (currentSettings) {
-                    window.repeatModal.loadSettings(currentSettings);
-                }
-                window.repeatModal.show();
-            }
-        }
+      // Удаление настроек повтора
+      function removeRepeatSettings() {
+        const settingsDisplay = document.getElementById(
+          "repeatSettingsDisplay"
+        );
 
-        // Удаление настроек повтора
-        function removeRepeatSettings() {
-            const settingsDisplay = document.getElementById('repeatSettingsDisplay');
-            
-            settingsDisplay.innerHTML = `
+        settingsDisplay.innerHTML = `
                 <div class="no-repeat-settings">
                     <i class="fa-solid fa-info-circle me-2"></i>
                     Настройки повторения не заданы. Нажмите "Настроить" для выбора интервала и периода.
                 </div>
             `;
-            
-            // Очищаем настройки в модале
-            if (window.repeatModal) {
-                window.repeatModal.clearSettings();
-            }
-        }
 
-        // Очистка настроек повтора при выключении
-        function clearRepeatSettings() {
-            removeRepeatSettings();
+        // Очищаем настройки в модале
+        if (window.repeatModal) {
+          window.repeatModal.clearSettings();
         }
+      }
+
+      // Очистка настроек повтора при выключении
+      function clearRepeatSettings() {
+        removeRepeatSettings();
+      }
     </script>
-</body>
+  </body>
+</html>

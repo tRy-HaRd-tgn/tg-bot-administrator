@@ -1,267 +1,296 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
     <title>Вход в систему — TG AutoPosting</title>
-    
+
     <!-- Preconnect to external resources -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/login.css') }}"
+    />
+
     <!-- Meta tags for better SEO and display -->
-    <meta name="description" content="Панель управления автопостингом в Telegram">
-    <meta name="theme-color" content="#007AFF">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    
+    <meta
+      name="description"
+      content="Панель управления автопостингом в Telegram"
+    />
+    <meta name="theme-color" content="#007AFF" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
     <style>
-        /* Дополнительные мобильные улучшения */
-        @media (max-width: 480px) {
-            .login-container {
-                width: 94%;
-                max-width: 350px;
-                padding: 20px;
-            }
-            
-            .login-title {
-                font-size: 24px;
-            }
-            
-            .form-control {
-                font-size: 16px; /* iOS автоматический зум предотвращение */
-                padding: 12px;
-            }
-            
-            .btn-login {
-                padding: 12px;
-                font-size: 16px;
-            }
-            
-            /* Фиксы для iPhone и малых экранов */
-            input, select, textarea {
-                font-size: 16px; /* Предотвращает зум на iOS */
-            }
+      /* Дополнительные мобильные улучшения */
+      @media (max-width: 480px) {
+        .login-container {
+          width: 94%;
+          max-width: 350px;
+          padding: 20px;
         }
+
+        .login-title {
+          font-size: 24px;
+        }
+
+        .form-control {
+          font-size: 16px; /* iOS автоматический зум предотвращение */
+          padding: 12px;
+        }
+
+        .btn-login {
+          padding: 12px;
+          font-size: 16px;
+        }
+
+        /* Фиксы для iPhone и малых экранов */
+        input,
+        select,
+        textarea {
+          font-size: 16px; /* Предотвращает зум на iOS */
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <main class="login-container" role="main">
-        <!-- Header Section -->
-        <header class="login-header">
-            <div class="logo" role="img" aria-label="TG AutoPosting Logo">
-                <i class="fa-brands fa-telegram" aria-hidden="true"></i>
-            </div>
-            <h1 class="login-title">TG AutoPosting</h1>
-            <p class="login-subtitle">Войдите в панель управления</p>
-        </header>
+      <!-- Header Section -->
+      <header class="login-header">
+        <div class="logo" role="img" aria-label="TG AutoPosting Logo">
+          <i class="fa-brands fa-telegram" aria-hidden="true"></i>
+        </div>
+        <h1 class="login-title">TG AutoPosting</h1>
+        <p class="login-subtitle">Войдите в панель управления</p>
+      </header>
 
-        <!-- Main Form -->
-        <form class="login-form" method="POST" novalidate>
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ 'danger' if category == 'error' else category }}" role="alert">
-                            <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
-                            <span>{{ message }}</span>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+      <!-- Main Form -->
+      <form class="login-form" method="POST" novalidate>
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ 'danger' if category == 'error' else category }}"
+          role="alert"
+        >
+          <i class="fa-solid fa-exclamation-triangle" aria-hidden="true"></i>
+          <span>{{ message }}</span>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
 
-            <!-- Username Field -->
-            <div class="form-group">
-                <label for="username" class="form-label">Имя пользователя</label>
-                <input type="text" 
-                       class="form-control" 
-                       id="username" 
-                       name="username" 
-                       placeholder="Введите имя пользователя" 
-                       required 
-                       autofocus
-                       autocomplete="username"
-                       aria-describedby="username-help">
-            </div>
+        <!-- Username Field -->
+        <div class="form-group">
+          <label for="username" class="form-label">Имя пользователя</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Введите имя пользователя"
+            required
+            autofocus
+            autocomplete="username"
+            aria-describedby="username-help"
+          />
+        </div>
 
-            <!-- Password Field -->
-            <div class="form-group">
-                <label for="password" class="form-label">Пароль</label>
-                <div class="password-group">
-                    <input type="password" 
-                           class="form-control" 
-                           id="password" 
-                           name="password" 
-                           placeholder="Введите пароль" 
-                           required
-                           autocomplete="current-password"
-                           aria-describedby="password-help">
-                    <button type="button" 
-                            class="password-toggle" 
-                            onclick="togglePassword()"
-                            aria-label="Показать пароль"
-                            tabindex="-1">
-                        <i class="fa-solid fa-eye" id="passwordIcon" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn-login" id="loginBtn">
-                <span class="login-text">
-                    <i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>
-                    Войти в систему
-                </span>
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">Пароль</label>
+          <div class="password-group">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Введите пароль"
+              required
+              autocomplete="current-password"
+              aria-describedby="password-help"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword()"
+              aria-label="Показать пароль"
+              tabindex="-1"
+            >
+              <i
+                class="fa-solid fa-eye"
+                id="passwordIcon"
+                aria-hidden="true"
+              ></i>
             </button>
-        </form>
+          </div>
+        </div>
 
-        <!-- Footer -->
-        <footer class="login-footer">
-            <div class="footer-text">
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                <span>Защищенный вход в систему</span>
-            </div>
-            <div class="version">TG AutoPosting v1.0</div>
-        </footer>
+        <!-- Submit Button -->
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span class="login-text">
+            <i
+              class="fa-solid fa-arrow-right-to-bracket"
+              aria-hidden="true"
+            ></i>
+            Войти в систему
+          </span>
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <footer class="login-footer">
+        <div class="footer-text">
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          <span>Защищенный вход в систему</span>
+        </div>
+        <div class="version">TG AutoPosting v1.0</div>
+      </footer>
     </main>
 
     <!-- JavaScript -->
     <script>
-        // Password visibility toggle
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordIcon = document.getElementById('passwordIcon');
-            const toggleBtn = passwordInput.nextElementSibling;
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.classList.remove('fa-eye');
-                passwordIcon.classList.add('fa-eye-slash');
-                toggleBtn.setAttribute('aria-label', 'Скрыть пароль');
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.classList.remove('fa-eye-slash');
-                passwordIcon.classList.add('fa-eye');
-                toggleBtn.setAttribute('aria-label', 'Показать пароль');
+      // Password visibility toggle
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const passwordIcon = document.getElementById("passwordIcon");
+        const toggleBtn = passwordInput.nextElementSibling;
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.classList.remove("fa-eye");
+          passwordIcon.classList.add("fa-eye-slash");
+          toggleBtn.setAttribute("aria-label", "Скрыть пароль");
+        } else {
+          passwordInput.type = "password";
+          passwordIcon.classList.remove("fa-eye-slash");
+          passwordIcon.classList.add("fa-eye");
+          toggleBtn.setAttribute("aria-label", "Показать пароль");
+        }
+      }
+
+      // Enhanced form submission with better UX
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector(".login-form");
+        const loginBtn = document.getElementById("loginBtn");
+        const loginText = loginBtn.querySelector(".login-text");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+
+        // Form submission handling
+        form.addEventListener("submit", function (e) {
+          if (!form.checkValidity()) {
+            e.preventDefault();
+            return;
+          }
+
+          loginBtn.disabled = true;
+          loginText.innerHTML = '<div class="spinner"></div>Вход в систему...';
+
+          // Re-enable button after timeout (fallback)
+          setTimeout(() => {
+            if (loginBtn.disabled) {
+              loginBtn.disabled = false;
+              loginText.innerHTML =
+                '<i class="fa-solid fa-arrow-right-to-bracket"></i>Войти в систему';
             }
+          }, 10000);
+        });
+
+        // Enhanced focus management
+        if (!usernameInput.value.trim()) {
+          usernameInput.focus();
+        } else {
+          passwordInput.focus();
         }
 
-        // Enhanced form submission with better UX
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('.login-form');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginText = loginBtn.querySelector('.login-text');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            
-            // Form submission handling
-            form.addEventListener('submit', function(e) {
-                if (!form.checkValidity()) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                loginBtn.disabled = true;
-                loginText.innerHTML = '<div class="spinner"></div>Вход в систему...';
-                
-                // Re-enable button after timeout (fallback)
-                setTimeout(() => {
-                    if (loginBtn.disabled) {
-                        loginBtn.disabled = false;
-                        loginText.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i>Войти в систему';
-                    }
-                }, 10000);
-            });
+        // Shake animation on error
+        const alertError = document.querySelector(".alert-danger");
+        if (alertError) {
+          const container = document.querySelector(".login-container");
+          container.classList.add("shake");
 
-            // Enhanced focus management
-            if (!usernameInput.value.trim()) {
-                usernameInput.focus();
-            } else {
-                passwordInput.focus();
+          // Remove shake class after animation
+          setTimeout(() => {
+            container.classList.remove("shake");
+          }, 500);
+
+          // Focus on appropriate field
+          if (usernameInput.value.trim()) {
+            passwordInput.focus();
+            passwordInput.select();
+          } else {
+            usernameInput.focus();
+          }
+        }
+
+        // Enhanced keyboard navigation
+        document.addEventListener("keydown", function (e) {
+          // Enter key handling
+          if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+            const activeElement = document.activeElement;
+
+            if (activeElement === usernameInput && usernameInput.value.trim()) {
+              e.preventDefault();
+              passwordInput.focus();
+            } else if (activeElement === passwordInput && passwordInput.value) {
+              e.preventDefault();
+              form.submit();
             }
+          }
 
-            // Shake animation on error
-            const alertError = document.querySelector('.alert-danger');
-            if (alertError) {
-                const container = document.querySelector('.login-container');
-                container.classList.add('shake');
-                
-                // Remove shake class after animation
-                setTimeout(() => {
-                    container.classList.remove('shake');
-                }, 500);
-                
-                // Focus on appropriate field
-                if (usernameInput.value.trim()) {
-                    passwordInput.focus();
-                    passwordInput.select();
-                } else {
-                    usernameInput.focus();
-                }
-            }
-
-            // Enhanced keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                // Enter key handling
-                if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
-                    const activeElement = document.activeElement;
-                    
-                    if (activeElement === usernameInput && usernameInput.value.trim()) {
-                        e.preventDefault();
-                        passwordInput.focus();
-                    } else if (activeElement === passwordInput && passwordInput.value) {
-                        e.preventDefault();
-                        form.submit();
-                    }
-                }
-                
-                // Escape key to clear focus
-                if (e.key === 'Escape') {
-                    document.activeElement.blur();
-                }
-            });
-
-            // Input validation feedback
-            [usernameInput, passwordInput].forEach(input => {
-                input.addEventListener('input', function() {
-                    this.setCustomValidity('');
-                });
-                
-                input.addEventListener('invalid', function() {
-                    if (!this.value) {
-                        this.setCustomValidity('Это поле обязательно для заполнения');
-                    }
-                });
-            });
-
-            // Remove any existing alerts after 5 seconds
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    alert.style.transform = 'translateY(-10px)';
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 300);
-                }, 5000);
-            });
+          // Escape key to clear focus
+          if (e.key === "Escape") {
+            document.activeElement.blur();
+          }
         });
 
-        // Improved accessibility
-        document.addEventListener('keydown', function(e) {
-            // Skip to main content with Alt+S
-            if (e.altKey && e.key === 's') {
-                e.preventDefault();
-                document.getElementById('username').focus();
+        // Input validation feedback
+        [usernameInput, passwordInput].forEach((input) => {
+          input.addEventListener("input", function () {
+            this.setCustomValidity("");
+          });
+
+          input.addEventListener("invalid", function () {
+            if (!this.value) {
+              this.setCustomValidity("Это поле обязательно для заполнения");
             }
+          });
         });
+
+        // Remove any existing alerts after 5 seconds
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach((alert) => {
+          setTimeout(() => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-10px)";
+            setTimeout(() => {
+              alert.remove();
+            }, 300);
+          }, 5000);
+        });
+      });
+
+      // Improved accessibility
+      document.addEventListener("keydown", function (e) {
+        // Skip to main content with Alt+S
+        if (e.altKey && e.key === "s") {
+          e.preventDefault();
+          document.getElementById("username").focus();
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
