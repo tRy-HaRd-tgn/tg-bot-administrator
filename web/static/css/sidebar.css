@@ -134,14 +134,17 @@
   overflow: hidden;
 }
 
+.sidebar-menu-link:hover,
+.sidebar-menu-link.active {
+  color: white;
+}
+
 .sidebar-menu-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: white;
 }
 
 .sidebar-menu-link.active {
   background-color: var(--sidebar-active);
-  color: white;
   font-weight: 500;
   box-shadow: 0 5px 15px rgba(74, 86, 255, 0.3);
 }
@@ -235,6 +238,10 @@
     justify-content: center;
     box-shadow: var(--shadow-sm);
   }
+
+  .main-content {
+    margin-left: 0;
+  }
 }
 
 /* Улучшенная адаптивность сайдбара для очень маленьких экранов */
@@ -281,10 +288,4 @@
 
 body.sidebar-collapsed .main-content {
   margin-left: var(--sidebar-collapsed-width);
-}
-
-@media screen and (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-  }
 }

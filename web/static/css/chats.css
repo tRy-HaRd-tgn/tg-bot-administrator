@@ -17,7 +17,7 @@
   --apple-gray-5: #e5e5ea;
   --apple-gray-6: #f2f2f7;
 
-  --apple-label: #000000;
+  --apple-label: #000;
   --apple-label-secondary: rgba(60, 60, 67, 0.6);
   --apple-label-tertiary: rgba(60, 60, 67, 0.3);
   --apple-label-quaternary: rgba(60, 60, 67, 0.18);
@@ -27,9 +27,9 @@
   --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
   --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
 
-  --apple-bg: #ffffff;
+  --apple-bg: #fff;
   --apple-bg-secondary: #f2f2f7;
-  --apple-bg-tertiary: #ffffff;
+  --apple-bg-tertiary: #fff;
 
   --apple-separator: rgba(60, 60, 67, 0.36);
   --apple-separator-opaque: #c6c6c8;
@@ -90,7 +90,7 @@ body {
 .header-title h1 {
   font-size: 36px;
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
   margin: 0 0 8px 0;
   letter-spacing: -1px;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -116,7 +116,9 @@ body {
   flex-wrap: wrap;
 }
 
-.btn {
+.btn,
+.btn-primary,
+.btn-outline-secondary {
   padding: 12px 20px;
   border-radius: var(--radius-medium);
   font-weight: 600;
@@ -134,7 +136,7 @@ body {
 
 .btn-primary {
   background: rgba(0, 122, 255, 0.9);
-  color: white;
+  color: #fff;
   box-shadow: var(--shadow-3);
 }
 
@@ -146,7 +148,7 @@ body {
 
 .btn-outline-secondary {
   background: rgba(255, 255, 255, 0.15);
-  color: white;
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -253,7 +255,7 @@ body {
 .filter-btn.active {
   background: var(--apple-blue);
   border-color: var(--apple-blue);
-  color: white;
+  color: #fff;
   box-shadow: var(--shadow-3);
 }
 
@@ -273,7 +275,7 @@ body {
 
 .filter-btn.active .filter-count {
   background: rgba(255, 255, 255, 0.3);
-  color: white;
+  color: #fff;
 }
 
 /* Поиск */
@@ -359,7 +361,7 @@ body {
   justify-content: center;
   font-size: 40px;
   background: linear-gradient(135deg, var(--apple-blue) 0%, #5856d6 100%);
-  color: white;
+  color: #fff;
   box-shadow: var(--shadow-4);
 }
 
@@ -419,7 +421,7 @@ body {
   top: 3px;
   left: 3px;
   border: 3px solid transparent;
-  border-top-color: white;
+  border-top-color: #fff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   box-sizing: border-box;
@@ -529,7 +531,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  color: white;
+  color: #fff;
   font-weight: 600;
   background: linear-gradient(135deg, var(--apple-blue), #5856d6);
 }
@@ -751,7 +753,7 @@ body {
 
 .page-item.active .page-link {
   background: var(--apple-blue);
-  color: white;
+  color: #fff;
   box-shadow: var(--shadow-2);
 }
 
@@ -773,7 +775,7 @@ body {
 
 .modal-title {
   font-weight: 700;
-  color: #000000;
+  color: #000;
   font-size: 18px;
 }
 
@@ -790,7 +792,7 @@ body {
   display: block;
   font-size: 16px;
   font-weight: 600;
-  color: #000000;
+  color: #000;
   margin-bottom: 10px;
 }
 
@@ -798,8 +800,8 @@ body {
   width: 100%;
   padding: 14px 16px;
   font-size: 16px;
-  color: #000000;
-  background: #ffffff;
+  color: #000;
+  background: #fff;
   border: 2px solid #d1d1d6;
   border-radius: var(--radius-medium);
   transition: all 0.3s ease;
@@ -809,7 +811,7 @@ body {
 }
 
 .form-input:focus {
-  background: #ffffff;
+  background: #fff;
   border-color: var(--apple-blue);
   box-shadow: 0 0 0 4px var(--apple-blue-light);
   transform: translateY(-1px);
@@ -822,7 +824,7 @@ body {
 .form-help {
   margin-top: 16px;
   font-size: 14px;
-  color: #000000;
+  color: #000;
   background: #f2f2f7;
   padding: 16px;
   border-radius: var(--radius-medium);
@@ -830,7 +832,7 @@ body {
 }
 
 .form-help strong {
-  color: #000000;
+  color: #000;
   display: block;
   margin-bottom: 8px;
   font-size: 15px;
@@ -1100,7 +1102,7 @@ body {
 /* Темная тема */
 @media (prefers-color-scheme: dark) {
   :root {
-    --apple-label: #ffffff;
+    --apple-label: #fff;
     --apple-label-secondary: rgba(235, 235, 245, 0.6);
     --apple-label-tertiary: rgba(235, 235, 245, 0.3);
     --apple-label-quaternary: rgba(235, 235, 245, 0.18);
@@ -1142,7 +1144,7 @@ body {
   }
 
   .modal-title {
-    color: #ffffff;
+    color: #fff;
   }
 
   .modal-body {
@@ -1150,11 +1152,11 @@ body {
   }
 
   .form-label {
-    color: #ffffff;
+    color: #fff;
   }
 
   .form-input {
-    color: #ffffff;
+    color: #fff;
     background: #3a3a3c;
     border-color: #48484a;
   }
@@ -1169,12 +1171,12 @@ body {
   }
 
   .form-help {
-    color: #ffffff;
+    color: #fff;
     background: rgba(60, 60, 70, 0.7);
   }
 
   .form-help strong {
-    color: #ffffff;
+    color: #fff;
   }
 
   .form-help li {
@@ -1189,8 +1191,8 @@ body {
 /* Принт стили */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: #fff;
+    color: #000;
   }
 
   .sidebar,
@@ -1210,7 +1212,7 @@ body {
     break-inside: avoid;
     box-shadow: none;
     border: 1px solid #ccc;
-    background: white;
+    background: #fff;
   }
 
   .chats-grid {

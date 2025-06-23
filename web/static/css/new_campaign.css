@@ -1,49 +1,38 @@
 /* Modern Apple Design System для страницы создания новой кампании */
-
-/* Используем переменные из chats.css */
 :root {
   --apple-blue: #007aff;
   --apple-blue-hover: #0051d5;
   --apple-blue-active: #004cba;
   --apple-blue-light: rgba(0, 122, 255, 0.08);
-
   --apple-green: #30d158;
   --apple-red: #ff3b30;
   --apple-orange: #ff9500;
   --apple-purple: #af52de;
-
   --apple-gray-1: #8e8e93;
   --apple-gray-2: #aeaeb2;
   --apple-gray-3: #c7c7cc;
   --apple-gray-4: #d1d1d6;
   --apple-gray-5: #e5e5ea;
   --apple-gray-6: #f2f2f7;
-
   --apple-label: #000000;
   --apple-label-secondary: rgba(60, 60, 67, 0.6);
   --apple-label-tertiary: rgba(60, 60, 67, 0.3);
   --apple-label-quaternary: rgba(60, 60, 67, 0.18);
-
   --apple-fill: rgba(120, 120, 128, 0.2);
   --apple-fill-secondary: rgba(120, 120, 128, 0.16);
   --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
   --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
-
   --apple-bg: #ffffff;
   --apple-bg-secondary: #f2f2f7;
   --apple-bg-tertiary: #ffffff;
-
   --apple-separator: rgba(60, 60, 67, 0.36);
   --apple-separator-opaque: #c6c6c8;
-
   --system-font: -apple-system, BlinkMacSystemFont, "SF Pro Display",
     "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
   --radius-small: 8px;
   --radius-medium: 12px;
   --radius-large: 16px;
   --radius-xlarge: 20px;
-
   --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-2: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-3: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -61,6 +50,69 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* Универсальные классы */
+.btn,
+.btn-primary,
+.btn-outline-secondary,
+.btn-outline-danger,
+.btn-outline-purple {
+  padding: 12px 20px;
+  border-radius: var(--radius-medium);
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--apple-blue);
+  color: #fff;
+  box-shadow: var(--shadow-3);
+}
+.btn-primary:hover {
+  background: var(--apple-blue-hover);
+  box-shadow: var(--shadow-4);
+}
+.btn-outline-secondary {
+  background: var(--apple-fill-secondary);
+  color: var(--apple-label);
+  border: 1px solid var(--apple-separator);
+}
+.btn-outline-secondary:hover {
+  background: var(--apple-fill);
+  border-color: var(--apple-label-secondary);
+}
+.btn-outline-danger {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--apple-red);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+}
+.btn-outline-danger:hover {
+  background: var(--apple-red);
+  color: #fff;
+  border-color: var(--apple-red);
+}
+.btn-outline-purple {
+  background: rgba(175, 82, 222, 0.1);
+  color: var(--apple-purple);
+  border: 1px solid rgba(175, 82, 222, 0.3);
+}
+.btn-outline-purple:hover {
+  background: var(--apple-purple);
+  color: #fff;
+  border-color: var(--apple-purple);
 }
 
 /* Основной контент */
@@ -227,7 +279,12 @@ body {
   margin-left: 4px;
 }
 
-.form-input {
+/* Универсальные группы для input, textarea, select */
+.form-input,
+.search-input,
+.topic-input,
+.message-textarea,
+.form-control {
   padding: 14px 16px;
   font-size: 16px;
   color: var(--apple-label);
@@ -238,79 +295,213 @@ body {
   font-family: var(--system-font);
   outline: none;
 }
-
-.form-input:focus {
+.form-input:focus,
+.search-input:focus,
+.topic-input:focus,
+.form-control:focus {
   border-color: var(--apple-blue);
   box-shadow: 0 0 0 4px var(--apple-blue-light);
   transform: translateY(-1px);
 }
-
-.form-input:disabled {
+.form-input:disabled,
+.search-input:disabled,
+.topic-input:disabled,
+.form-control:disabled {
   background: var(--apple-fill-quaternary);
   color: var(--apple-label-secondary);
   cursor: not-allowed;
   border-color: var(--apple-separator);
 }
-
-.form-input:disabled:focus {
-  border-color: var(--apple-separator);
-  box-shadow: none;
-  transform: none;
-}
-
-.form-input.error {
+.form-input.error,
+.form-control.error {
   border-color: var(--apple-red);
   box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.1);
 }
-
-.form-input::placeholder {
+.form-input::placeholder,
+.search-input::placeholder,
+.topic-input::placeholder,
+.form-control::placeholder {
   color: var(--apple-label-tertiary);
 }
 
-.message-textarea {
-  min-height: 120px;
-  resize: vertical;
-  font-family: var(--system-font);
-  line-height: 1.5;
-}
-
-.form-feedback {
-  font-size: 14px;
-  color: var(--apple-red);
-  display: none;
-  margin-top: 4px;
-}
-
-.form-help {
+/* Универсальные группы для .char-counter */
+.char-counter,
+.editor-footer .char-counter {
   font-size: 14px;
   color: var(--apple-label-secondary);
-  background: var(--apple-fill-quaternary);
-  padding: 12px 16px;
-  border-radius: var(--radius-medium);
-  border-left: 4px solid var(--apple-blue);
   margin-top: 8px;
-}
-
-.form-help strong {
-  color: var(--apple-label);
-  display: block;
-  margin-bottom: 4px;
-}
-
-.form-help code {
-  background: var(--apple-fill-secondary);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: "SF Mono", "Monaco", monospace;
-}
-
-/* Счетчик символов */
-.char-counter {
   text-align: right;
-  font-size: 14px;
-  color: var(--apple-label-secondary);
-  margin-top: 8px;
+}
+.char-counter.warning {
+  color: var(--apple-orange);
+}
+.char-counter.error {
+  color: var(--apple-red);
+}
+
+/* Универсальные группы для .form-section, .form-actions */
+.form-section,
+.form-actions {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-xlarge);
+  box-shadow: var(--shadow-5);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Универсальные группы для .container */
+.main-content,
+.new-campaign-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* Универсальные группы для .modal-content */
+#repeatModal .modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: var(--radius-xlarge);
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  box-shadow: var(--shadow-5);
+  overflow: hidden;
+}
+
+/* Группировка медиа-запросов для мобильных */
+@media (max-width: 1200px) {
+  .form-grid,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  .button-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 992px) {
+  .main-content {
+    padding: 24px;
+  }
+  .form-section {
+    padding: 24px;
+  }
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .main-content,
+  .form-section {
+    padding: 16px;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .actions-left,
+  .actions-right {
+    width: 100%;
+    justify-content: center;
+  }
+  .weekdays-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .media-preview-grid {
+    grid-template-columns: 1fr;
+  }
+  .chats-container {
+    max-height: 300px;
+  }
+  .utc-time-display {
+    font-size: 13px;
+    padding: 6px 12px;
+    margin-top: 8px;
+  }
+  .form-grid,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .setting-item {
+    padding: 12px;
+  }
+}
+@media (max-width: 576px) {
+  .form-section {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .utc-time-display {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  .section-header h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .section-header p {
+    font-size: 14px;
+  }
+  .button-item {
+    flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+  }
+  .button-inputs {
+    width: 100%;
+  }
+  .remove-button-btn {
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+  .form-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--apple-bg);
+    padding: 10px 16px;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+  }
+  .actions-right {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+  }
+  .main-content {
+    padding-bottom: 80px;
+  }
+  .message-textarea {
+    height: 120px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 420px) {
+  .header-title h1 {
+    font-size: 20px;
+  }
+  .header-subtitle {
+    font-size: 13px;
+  }
+  .form-label {
+    font-size: 14px;
+  }
+  .btn {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* Настройки повторения */

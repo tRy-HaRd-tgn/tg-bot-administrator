@@ -26,7 +26,7 @@
 
 .schedule-modal-header {
   background: linear-gradient(135deg, var(--schedule-primary), #6c72cb);
-  color: white;
+  color: #fff;
   border-radius: var(--schedule-radius) var(--schedule-radius) 0 0;
   padding: 20px 24px;
 }
@@ -54,7 +54,7 @@
 .schedule-modal-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--schedule-border);
-  background-color: var(--schedule-light);
+  background: var(--schedule-light);
   border-radius: 0 0 var(--schedule-radius) var(--schedule-radius);
 }
 
@@ -83,14 +83,26 @@
   color: var(--schedule-primary);
 }
 
-.schedule-section-description {
+.schedule-section-description,
+.no-dates-selected,
+.no-schedule-preview {
   color: #6c757d;
-  margin-bottom: 20px;
   font-size: 0.95rem;
+  margin-bottom: 20px;
+  font-style: italic;
+  text-align: center;
+  padding: 24px;
+}
+
+.schedule-section-description {
+  font-style: normal;
+  padding: 0;
+  text-align: left;
 }
 
 /* Поля ввода */
-.schedule-input {
+.schedule-input,
+.individual-time-input {
   border: 2px solid var(--schedule-border);
   border-radius: 8px;
   padding: 12px 16px;
@@ -98,7 +110,8 @@
   font-size: 1rem;
 }
 
-.schedule-input:focus {
+.schedule-input:focus,
+.individual-time-input:focus {
   border-color: var(--schedule-primary);
   box-shadow: 0 0 0 0.2rem rgba(74, 86, 255, 0.15);
   outline: none;
@@ -109,11 +122,26 @@
 }
 
 /* Календарь выбора дат */
-.dates-selection-wrapper {
+.dates-selection-wrapper,
+.calendar-container,
+.single-time-setting,
+.multiple-time-setting,
+.time-mode-selection,
+.schedule-preview {
   background: var(--schedule-light);
   border-radius: var(--schedule-radius);
-  padding: 20px;
+  padding: 16px;
   border: 1px solid var(--schedule-border);
+}
+
+.dates-selection-wrapper {
+  padding: 20px;
+}
+
+.calendar-container {
+  background: #fff;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .dates-controls {
@@ -121,6 +149,7 @@
   gap: 8px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .dates-controls .btn {
@@ -128,14 +157,6 @@
   padding: 6px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
-}
-
-.calendar-container {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid var(--schedule-border);
-  margin-bottom: 16px;
 }
 
 .calendar-header {
@@ -159,7 +180,7 @@
 }
 
 .calendar-nav-btn:hover {
-  background-color: var(--schedule-selected);
+  background: var(--schedule-selected);
 }
 
 .calendar-month-year {
@@ -196,47 +217,40 @@
 }
 
 .calendar-day:hover {
-  background-color: var(--schedule-hover);
+  background: var(--schedule-hover);
 }
 
-.calendar-day.other-month {
-  color: #ccc;
-  cursor: not-allowed;
-}
-
-.calendar-day.other-month:hover {
-  background-color: transparent;
-}
-
-.calendar-day.today {
-  background-color: var(--schedule-info);
-  color: white;
-  font-weight: 600;
-}
-
-.calendar-day.selected {
-  background-color: var(--schedule-primary);
-  color: white;
-  font-weight: 600;
-}
-
-.calendar-day.selected:hover {
-  background-color: var(--schedule-primary-hover);
-}
-
+.calendar-day.other-month,
 .calendar-day.past {
   color: #ccc;
   cursor: not-allowed;
 }
 
+.calendar-day.other-month:hover,
 .calendar-day.past:hover {
-  background-color: transparent;
+  background: transparent;
+}
+
+.calendar-day.today {
+  background: var(--schedule-info);
+  color: #fff;
+  font-weight: 600;
+}
+
+.calendar-day.selected {
+  background: var(--schedule-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.calendar-day.selected:hover {
+  background: var(--schedule-primary-hover);
 }
 
 .selected-dates-info {
   text-align: center;
   padding: 12px;
-  background: white;
+  background: #fff;
   border-radius: 6px;
   border: 1px solid var(--schedule-border);
 }
@@ -247,14 +261,6 @@
 }
 
 /* Настройки времени */
-.time-mode-selection {
-  background: var(--schedule-light);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
-  border: 1px solid var(--schedule-border);
-}
-
 .time-mode-selection .form-check {
   margin-bottom: 12px;
 }
@@ -274,20 +280,6 @@
 
 .time-setting {
   transition: all 0.3s ease;
-}
-
-.single-time-setting {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid var(--schedule-border);
-}
-
-.multiple-time-setting {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid var(--schedule-border);
 }
 
 .individual-times-container {
@@ -324,25 +316,8 @@
   width: 120px;
 }
 
-.individual-time-input:focus {
-  border-color: var(--schedule-primary);
-  outline: none;
-  box-shadow: 0 0 0 0.15rem rgba(74, 86, 255, 0.15);
-}
-
-.no-dates-selected {
-  text-align: center;
-  padding: 24px;
-  color: #6c757d;
-  font-style: italic;
-}
-
 /* Превью расписания */
 .schedule-preview {
-  background: var(--schedule-light);
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid var(--schedule-border);
   max-height: 300px;
   overflow-y: auto;
 }
@@ -352,7 +327,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
-  background: white;
+  background: #fff;
   border-radius: 6px;
   margin-bottom: 8px;
   border: 1px solid var(--schedule-border);
@@ -379,13 +354,6 @@
   background: var(--schedule-selected);
   padding: 4px 8px;
   border-radius: 4px;
-}
-
-.no-schedule-preview {
-  text-align: center;
-  padding: 24px;
-  color: #6c757d;
-  font-style: italic;
 }
 
 /* Адаптивность */

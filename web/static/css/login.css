@@ -17,7 +17,7 @@
   --apple-gray-5: #e5e5ea;
   --apple-gray-6: #f2f2f7;
 
-  --apple-label: #000000;
+  --apple-label: #000;
   --apple-label-secondary: rgba(60, 60, 67, 0.6);
   --apple-label-tertiary: rgba(60, 60, 67, 0.3);
   --apple-label-quaternary: rgba(60, 60, 67, 0.18);
@@ -27,9 +27,9 @@
   --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
   --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
 
-  --apple-bg: #ffffff;
+  --apple-bg: #fff;
   --apple-bg-secondary: #f2f2f7;
-  --apple-bg-tertiary: #ffffff;
+  --apple-bg-tertiary: #fff;
 
   --apple-separator: rgba(60, 60, 67, 0.36);
   --apple-separator-opaque: #c6c6c8;
@@ -548,7 +548,7 @@ body {
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --apple-label: #ffffff;
+    --apple-label: #fff;
     --apple-label-secondary: rgba(235, 235, 245, 0.6);
     --apple-label-tertiary: rgba(235, 235, 245, 0.3);
     --apple-label-quaternary: rgba(235, 235, 245, 0.18);
