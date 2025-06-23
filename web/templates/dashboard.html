@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления - TG AutoPosting</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="dashboard-title">Панель управления</h1>
+                        <p class="dashboard-subtitle">Добро пожаловать в систему автопостинга Telegram</p>
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-name">{{ current_user.username }}</span>
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Statistics Section -->
+            <section class="dashboard-section">
+                <h2 class="section-title">
+                    <i class="fa-solid fa-chart-bar me-2"></i>
+                    Статистика кампаний
+                </h2>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card campaign-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Активных кампаний</h6>
+                                <div class="stat-card-value" id="activeСampaigns">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card campaign-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Всего кампаний</h6>
+                                <div class="stat-card-value" id="totalСampaigns">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-bullhorn"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chats Statistics Section -->
+            <section class="dashboard-section">
+                <h2 class="section-title">
+                    <i class="fa-solid fa-comments me-2"></i>
+                    Статистика чатов
+                </h2>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card chat-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Обычные группы</h6>
+                                <div class="stat-card-value" id="regularGroups">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card chat-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Форумы</h6>
+                                <div class="stat-card-value" id="forumGroups">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card chat-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Супергруппы</h6>
+                                <div class="stat-card-value" id="superGroups">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card chat-card">
+                            <div class="stat-card-content">
+                                <h6 class="stat-card-title">Всего чатов</h6>
+                                <div class="stat-card-value" id="totalChats">0</div>
+                                <p class="stat-card-change">
+                                    <span class="text-muted">Время обновления: <span class="last-update-time">--:--</span></span>
+                                </p>
+                            </div>
+                            <div class="stat-card-icon">
+                                <i class="fa-solid fa-hashtag"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions Section -->
+            <section class="dashboard-section">
+                <h2 class="section-title">
+                    <i class="fa-solid fa-bolt me-2"></i>
+                    Быстрые действия
+                    <button class="btn btn-outline-primary btn-sm ms-3" id="refreshStatsBtn">
+                        <i class="fa-solid fa-sync-alt me-1"></i>Обновить статистику
+                    </button>
+                </h2>
+                <div class="quick-actions">
+                    <a href="/campaigns/new" class="quick-action-card">
+                        <div class="quick-action-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Создать кампанию</h3>
+                            <p>Настроить новую кампанию автопостинга</p>
+                        </div>
+                    </a>
+
+                    <a href="/campaigns" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #06D6A0, #34c759);">
+                            <i class="fa-solid fa-list"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Управление кампаниями</h3>
+                            <p>Просмотр и редактирование кампаний</p>
+                        </div>
+                    </a>
+
+                    <a href="/chats" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #FFD166, #FF9500);">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Управление чатами</h3>
+                            <p>Добавление и настройка чатов</p>
+                        </div>
+                    </a>
+
+                    <a href="/calendar" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #EF476F, #FF6B6B);">
+                            <i class="fa-solid fa-calendar"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Календарь публикаций</h3>
+                            <p>Просмотр расписания публикаций</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
+    <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

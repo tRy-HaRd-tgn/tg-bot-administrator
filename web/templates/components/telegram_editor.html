@@ -1,0 +1,69 @@
+<div class="telegram-editor-container">
+    <div class="telegram-toolbar">
+        <div class="toolbar-group">
+            <button type="button" class="toolbar-btn" data-command="bold" title="Жирный текст">
+                <i class="fa-solid fa-bold"></i>
+            </button>
+            <button type="button" class="toolbar-btn" data-command="italic" title="Курсив">
+                <i class="fa-solid fa-italic"></i>
+            </button>
+            <button type="button" class="toolbar-btn" data-command="underline" title="Подчеркнутый">
+                <i class="fa-solid fa-underline"></i>
+            </button>
+            <button type="button" class="toolbar-btn" data-command="strikeThrough" title="Зачеркнутый">
+                <i class="fa-solid fa-strikethrough"></i>
+            </button>
+        </div>
+        
+        <div class="toolbar-group">
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.insertCode()" title="Код">
+                <i class="fa-solid fa-code"></i>
+            </button>
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.insertPre()" title="Блок кода">
+                <i class="fa-solid fa-terminal"></i>
+            </button>
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.insertSpoiler()" title="Спойлер">
+                <i class="fa-solid fa-eye-slash"></i>
+            </button>
+        </div>
+        
+        <div class="toolbar-group">
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.insertLink()" title="Ссылка">
+                <i class="fa-solid fa-link"></i>
+            </button>
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.insertEmoji()" title="Эмодзи">
+                <i class="fa-solid fa-smile"></i>
+            </button>
+        </div>
+        
+        <div class="toolbar-group">
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.clearFormatting()" title="Очистить форматирование">
+                <i class="fa-solid fa-eraser"></i>
+            </button>
+            <button type="button" class="toolbar-btn" onclick="telegramEditor.showSource()" title="Показать HTML код">
+                <i class="fa-solid fa-code"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="telegram-editor-wrapper">
+        <div id="telegramEditor" class="telegram-editor" contenteditable="true" 
+             oninput="telegramEditor.updateCounter(); telegramEditor.syncWithTextarea();"
+             onkeyup="telegramEditor.updateButtonStates()"
+             onmouseup="telegramEditor.updateButtonStates()">
+        </div>
+        <textarea id="messageText" name="message_text" class="form-input message-textarea" 
+                  style="display: none;" required></textarea>
+    </div>
+    
+    <div class="editor-footer">
+        <div class="char-counter">
+            <span id="telegramCharCount">0</span> / 4096 символов
+        </div>
+        <div class="editor-modes">
+            <button type="button" class="mode-btn" onclick="telegramEditor.toggleMode()" id="modeToggle">
+                <i class="fa-solid fa-code me-1"></i>HTML режим
+            </button>
+        </div>
+    </div>
+</div>

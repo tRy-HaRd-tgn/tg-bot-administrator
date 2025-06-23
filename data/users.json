@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": "850c4c2f-51b2-410f-b9ea-35f265735b71",
+      "username": "admin",
+      "password_hash": "scrypt:32768:8:1$QfBlVBtINK9Mzb55$19f01be8900770301b5b4220b50dfc6ac8cb15024c4d7a629856d5741a3d82c4adbfa5b024ad89c16421e78eca2c2de15276a0d63d14c37cc0f2d30c6b1c5e4c",
+      "is_admin": true,
+      "created_at": 1749961570.165823
+    }
+  ]
+}

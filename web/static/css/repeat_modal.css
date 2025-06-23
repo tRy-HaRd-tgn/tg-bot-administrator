@@ -1,0 +1,639 @@
+/* Modern Apple Design System для модального окна настройки автоповтора */
+
+/* Используем переменные из chats.css */
+:root {
+    --apple-blue: #007AFF;
+    --apple-blue-hover: #0051D5;
+    --apple-blue-active: #004CBA;
+    --apple-blue-light: rgba(0, 122, 255, 0.08);
+    
+    --apple-green: #30D158;
+    --apple-red: #FF3B30;
+    --apple-orange: #FF9500;
+    --apple-purple: #AF52DE;
+    
+    --apple-gray-1: #8E8E93;
+    --apple-gray-2: #AEAEB2;
+    --apple-gray-3: #C7C7CC;
+    --apple-gray-4: #D1D1D6;
+    --apple-gray-5: #E5E5EA;
+    --apple-gray-6: #F2F2F7;
+    
+    --apple-label: #000000;
+    --apple-label-secondary: rgba(60, 60, 67, 0.6);
+    --apple-label-tertiary: rgba(60, 60, 67, 0.3);
+    --apple-label-quaternary: rgba(60, 60, 67, 0.18);
+    
+    --apple-fill: rgba(120, 120, 128, 0.2);
+    --apple-fill-secondary: rgba(120, 120, 128, 0.16);
+    --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
+    --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
+    
+    --apple-bg: #FFFFFF;
+    --apple-bg-secondary: #F2F2F7;
+    --apple-bg-tertiary: #FFFFFF;
+    
+    --apple-separator: rgba(60, 60, 67, 0.36);
+    --apple-separator-opaque: #C6C6C8;
+    
+    --system-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    
+    --radius-small: 8px;
+    --radius-medium: 12px;
+    --radius-large: 16px;
+    --radius-xlarge: 20px;
+    
+    --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-3: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-4: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --shadow-5: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Модальное окно */
+#repeatModal .modal-content {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: var(--radius-xlarge);
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow: var(--shadow-5);
+    overflow: hidden;
+}
+
+#repeatModal .modal-header {
+    border-bottom: 1px solid var(--apple-separator);
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
+}
+
+#repeatModal .modal-title {
+    font-weight: 700;
+    color: var(--apple-label);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#repeatModal .modal-body {
+    padding: 24px;
+    background: var(--apple-bg);
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#repeatModal .modal-footer {
+    border-top: 1px solid var(--apple-separator);
+    padding: 16px 24px;
+    background: var(--apple-fill-quaternary);
+}
+
+/* Контейнер настроек */
+.repeat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Заголовки секций */
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.section-description {
+    font-size: 15px;
+    color: var(--apple-label-secondary);
+    margin: 0 0 20px 0;
+    line-height: 1.4;
+}
+
+/* Выбор интервала */
+.interval-selection {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.interval-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.interval-option {
+    cursor: pointer;
+    display: block;
+    position: relative;
+}
+
+.interval-radio {
+    display: none;
+}
+
+.interval-card {
+    background: var(--apple-bg);
+    border: 2px solid var(--apple-separator);
+    border-radius: var(--radius-large);
+    padding: 20px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.interval-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.interval-option:hover .interval-card {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-3);
+    border-color: var(--apple-blue-light);
+}
+
+.interval-option:hover .interval-card::before {
+    left: 100%;
+}
+
+.interval-radio:checked + .interval-card {
+    background: linear-gradient(135deg, var(--apple-blue-light), rgba(0, 122, 255, 0.05));
+    border-color: var(--apple-blue);
+    box-shadow: var(--shadow-4);
+    transform: translateY(-2px);
+}
+
+.interval-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: white;
+    font-size: 24px;
+    box-shadow: var(--shadow-2);
+}
+
+.interval-icon.minutely {
+    background: linear-gradient(135deg, var(--apple-orange), #ff9f0a);
+}
+
+.interval-icon.hourly {
+    background: linear-gradient(135deg, var(--apple-blue), #5856d6);
+}
+
+.interval-icon.daily {
+    background: linear-gradient(135deg, var(--apple-green), #32d74b);
+}
+
+.interval-icon.weekly {
+    background: linear-gradient(135deg, var(--apple-purple), #bf5af2);
+}
+
+.interval-icon.monthly {
+    background: linear-gradient(135deg, var(--apple-red), #ff6b6b);
+}
+
+.interval-content h6 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0 0 8px 0;
+}
+
+.interval-content p {
+    font-size: 14px;
+    color: var(--apple-label-secondary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Настройки периода */
+.period-settings {
+    animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+
+.period-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--apple-label);
+}
+
+.form-control {
+    padding: 14px 16px;
+    font-size: 16px;
+    color: var(--apple-label);
+    background: var(--apple-bg);
+    border: 2px solid var(--apple-separator);
+    border-radius: var(--radius-medium);
+    transition: all 0.3s ease;
+    font-family: var(--system-font);
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--apple-blue);
+    box-shadow: 0 0 0 4px var(--apple-blue-light);
+    transform: translateY(-1px);
+}
+
+.invalid-feedback {
+    font-size: 14px;
+    color: var(--apple-red);
+    display: none;
+}
+
+.form-control.is-invalid {
+    border-color: var(--apple-red);
+    box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.1);
+}
+
+.form-control.is-invalid + .invalid-feedback {
+    display: block;
+}
+
+/* Дополнительные настройки */
+.additional-settings {
+    animation: fadeInUp 0.5s ease-out 0.2s both;
+}
+
+.interval-specific-settings {
+    background: var(--apple-fill-quaternary);
+    border-radius: var(--radius-large);
+    padding: 24px;
+    border: 1px solid var(--apple-separator);
+}
+
+/* Настройки для еженедельного повторения */
+.weekday-selector {
+    margin-top: 16px;
+}
+
+.weekdays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.weekday-option {
+    cursor: pointer;
+    display: block;
+}
+
+.weekday-option input[type="radio"] {
+    display: none;
+}
+
+.weekday-label {
+    padding: 16px 12px;
+    background: var(--apple-bg);
+    border: 2px solid var(--apple-separator);
+    border-radius: var(--radius-medium);
+    text-align: center;
+    font-weight: 500;
+    color: var(--apple-label);
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.weekday-option:hover .weekday-label {
+    border-color: var(--apple-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.weekday-option input[type="radio"]:checked + .weekday-label {
+    background: var(--apple-blue);
+    border-color: var(--apple-blue);
+    color: white;
+    box-shadow: var(--shadow-3);
+}
+
+/* Настройки для ежемесячного повторения */
+.monthly-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.monthly-option {
+    cursor: pointer;
+    display: block;
+}
+
+.monthly-option input[type="radio"] {
+    display: none;
+}
+
+.monthly-option-content {
+    background: var(--apple-bg);
+    border: 2px solid var(--apple-separator);
+    border-radius: var(--radius-medium);
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.monthly-option:hover .monthly-option-content {
+    border-color: var(--apple-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.monthly-option input[type="radio"]:checked + .monthly-option-content {
+    background: var(--apple-blue-light);
+    border-color: var(--apple-blue);
+    box-shadow: var(--shadow-3);
+}
+
+.monthly-option-content h6 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0 0 8px 0;
+}
+
+.monthly-option-content p {
+    font-size: 14px;
+    color: var(--apple-label-secondary);
+    margin: 0 0 16px 0;
+}
+
+.date-input-group,
+.weekday-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.form-row label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--apple-label);
+    min-width: 80px;
+}
+
+.form-row .form-control {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+/* Превью настроек */
+.repeat-preview {
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.05), rgba(88, 86, 214, 0.05));
+    border-radius: var(--radius-large);
+    padding: 24px;
+    border: 1px solid var(--apple-blue-light);
+    animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+
+.preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--apple-bg);
+    border-radius: var(--radius-medium);
+    border: 1px solid var(--apple-separator);
+}
+
+.preview-item strong {
+    color: var(--apple-label);
+    min-width: 140px;
+    font-weight: 600;
+}
+
+.preview-item span {
+    color: var(--apple-label-secondary);
+    font-weight: 500;
+}
+
+/* Кнопки */
+.btn {
+    padding: 12px 20px;
+    border-radius: var(--radius-medium);
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--apple-blue);
+    color: white;
+    box-shadow: var(--shadow-3);
+}
+
+.btn-primary:hover {
+    background: var(--apple-blue-hover);
+    box-shadow: var(--shadow-4);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--apple-fill-secondary);
+    color: var(--apple-label);
+    border: 1px solid var(--apple-separator);
+}
+
+.btn-secondary:hover {
+    background: var(--apple-fill);
+    border-color: var(--apple-label-secondary);
+    color: var(--apple-label);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .interval-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .period-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .weekdays-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .date-input-group,
+    .weekday-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-row label {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #repeatModal .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    #repeatModal .modal-body {
+        padding: 15px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .mobile-optimized-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+    
+    .mobile-optimized-footer .btn {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .interval-card {
+        min-height: 120px;
+        padding: 16px;
+    }
+    
+    .interval-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+    
+    .weekdays-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .weekday-label {
+        padding: 12px;
+    }
+    
+    .repeat-container {
+        gap: 24px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+    }
+    
+    .section-description {
+        font-size: 14px;
+    }
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --apple-label: #FFFFFF;
+        --apple-label-secondary: rgba(235, 235, 245, 0.6);
+        --apple-label-tertiary: rgba(235, 235, 245, 0.3);
+        --apple-label-quaternary: rgba(235, 235, 245, 0.18);
+        
+        --apple-fill: rgba(120, 120, 128, 0.36);
+        --apple-fill-secondary: rgba(120, 120, 128, 0.32);
+        --apple-fill-tertiary: rgba(120, 120, 128, 0.24);
+        --apple-fill-quaternary: rgba(120, 120, 128, 0.18);
+        
+        --apple-bg: #1C1C1E;
+        --apple-bg-secondary: #2C2C2E;
+        --apple-bg-tertiary: #3A3A3C;
+        
+        --apple-separator: rgba(84, 84, 88, 0.65);
+        --apple-separator-opaque: #38383A;
+    }
+    
+    #repeatModal .modal-content {
+        background: rgba(28, 28, 30, 0.98);
+        border: 1px solid rgba(80, 80, 90, 0.7);
+    }
+    
+    #repeatModal .modal-header {
+        background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+    }
+    
+    #repeatModal .modal-body {
+        background: var(--apple-bg);
+    }
+    
+    #repeatModal .modal-footer {
+        background: var(--apple-bg-secondary);
+    }
+    
+    .interval-specific-settings,
+    .repeat-preview {
+        background: var(--apple-bg-secondary);
+        border-color: var(--apple-separator);
+    }
+}

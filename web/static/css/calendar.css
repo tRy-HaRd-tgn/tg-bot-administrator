@@ -1,0 +1,1172 @@
+/* Modern Apple Design System для календаря */
+:root {
+    --apple-blue: #007AFF;
+    --apple-blue-hover: #0051D5;
+    --apple-blue-active: #004CBA;
+    --apple-blue-light: rgba(0, 122, 255, 0.08);
+    
+    --apple-green: #30D158;
+    --apple-red: #FF3B30;
+    --apple-orange: #FF9500;
+    --apple-purple: #AF52DE;
+    
+    --apple-gray-1: #8E8E93;
+    --apple-gray-2: #AEAEB2;
+    --apple-gray-3: #C7C7CC;
+    --apple-gray-4: #D1D1D6;
+    --apple-gray-5: #E5E5EA;
+    --apple-gray-6: #F2F2F7;
+    
+    --apple-label: #000000;
+    --apple-label-secondary: rgba(60, 60, 67, 0.6);
+    --apple-label-tertiary: rgba(60, 60, 67, 0.3);
+    --apple-label-quaternary: rgba(60, 60, 67, 0.18);
+    
+    --apple-fill: rgba(120, 120, 128, 0.2);
+    --apple-fill-secondary: rgba(120, 120, 128, 0.16);
+    --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
+    --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
+    
+    --apple-bg: #FFFFFF;
+    --apple-bg-secondary: #F2F2F7;
+    --apple-bg-tertiary: #FFFFFF;
+    
+    --apple-separator: rgba(60, 60, 67, 0.36);
+    --apple-separator-opaque: #C6C6C8;
+    
+    --system-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    
+    --radius-small: 8px;
+    --radius-medium: 12px;
+    --radius-large: 16px;
+    --radius-xlarge: 20px;
+    
+    --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-3: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-4: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --shadow-5: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Основные стили */
+body {
+    font-family: var(--system-font);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: var(--apple-label);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Основной контент */
+.main-content {
+    padding: 32px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    margin-left: 250px; /* Ширина сайдбара */
+    transition: margin-left 0.3s ease;
+}
+
+.calendar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Заголовок страницы */
+.calendar-header {
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.header-title h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px 0;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: var(--radius-large);
+    display: inline-block;
+    border-left: 4px solid var(--apple-blue);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.header-subtitle {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Статистика календаря */
+.calendar-stats {
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    padding: 24px;
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-5), 0 0 30px rgba(0, 122, 255, 0.1);
+}
+
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    background: linear-gradient(135deg, var(--apple-blue), #5856d6);
+    box-shadow: var(--shadow-3);
+}
+
+.stat-icon.campaigns {
+    background: linear-gradient(135deg, var(--apple-blue), #5856d6);
+}
+
+.stat-icon.events {
+    background: linear-gradient(135deg, var(--apple-green), #32d74b);
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--apple-label);
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--apple-label-secondary);
+    margin: 0;
+}
+
+/* Календарный виджет */
+.calendar-widget {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* Заголовок календаря */
+.calendar-header-widget {
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
+    border-bottom: 1px solid var(--apple-separator);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calendar-navigation {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--apple-fill-secondary);
+    color: var(--apple-label);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 16px;
+}
+
+.nav-btn:hover {
+    background: var(--apple-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.current-month {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0 16px;
+    min-width: 200px;
+    text-align: center;
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-medium);
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--apple-blue);
+    color: white;
+    box-shadow: var(--shadow-2);
+}
+
+.btn-primary:hover {
+    background: var(--apple-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-3);
+}
+
+.btn-outline {
+    background: var(--apple-fill-secondary);
+    color: var(--apple-label);
+    border: 1px solid var(--apple-separator);
+}
+
+.btn-outline:hover {
+    background: var(--apple-fill);
+    border-color: var(--apple-blue);
+    transform: translateY(-1px);
+}
+
+/* Календарная сетка */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--apple-separator);
+    margin: 0;
+}
+
+.calendar-day-header {
+    background: var(--apple-fill-quaternary);
+    padding: 16px 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--apple-label-secondary);
+    border-bottom: 1px solid var(--apple-separator);
+}
+
+.calendar-day {
+    background: var(--apple-bg);
+    min-height: 120px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day:hover {
+    background: var(--apple-blue-light);
+}
+
+.calendar-day.today {
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(88, 86, 214, 0.1) 100%);
+    border: 2px solid var(--apple-blue);
+}
+
+.calendar-day.empty {
+    background: var(--apple-fill-quaternary);
+    cursor: default;
+}
+
+.calendar-day.empty:hover {
+    background: var(--apple-fill-quaternary);
+}
+
+.day-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin-bottom: 8px;
+}
+
+.calendar-day.today .day-number {
+    color: var(--apple-blue);
+}
+
+.day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 5px;
+    max-height: 70px;
+    overflow-y: auto;
+}
+
+.event-item {
+    display: flex;
+    flex-direction: column;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: rgba(0, 122, 255, 0.1);
+    border-left: 3px solid var(--apple-blue);
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.2;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.event-item:hover {
+    transform: translateY(-1px);
+    background: rgba(0, 122, 255, 0.2);
+}
+
+.event-item.campaign-event {
+    background: rgba(0, 122, 255, 0.1);
+    border-left-color: var(--apple-blue);
+}
+
+.event-item.message-event {
+    background: rgba(48, 209, 88, 0.1);
+    border-left-color: var(--apple-green);
+}
+
+.event-item.reminder-event {
+    background: rgba(255, 149, 0, 0.1);
+    border-left-color: var(--apple-orange);
+}
+
+.event-item.default-event {
+    background: rgba(142, 142, 147, 0.1);
+    border-left-color: var(--apple-gray-1);
+}
+
+.event-time {
+    font-weight: bold;
+    font-size: 9px;
+    color: var(--apple-label-secondary);
+}
+
+.event-title {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--apple-label);
+}
+
+.more-events {
+    font-size: 10px;
+    background: var(--apple-fill-secondary);
+    text-align: center;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    color: var(--apple-label-secondary);
+}
+
+.more-events:hover {
+    background: var(--apple-fill);
+}
+
+/* Календарное событие в модальном окне */
+.day-event-item {
+    display: flex;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: var(--apple-fill-quaternary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid var(--apple-blue);
+}
+
+.day-event-item:hover {
+    background: var(--apple-blue-light);
+    transform: translateY(-2px);
+}
+
+.day-event-item.campaign-event {
+    border-left-color: var(--apple-blue);
+}
+
+.day-event-item.message-event {
+    border-left-color: var(--apple-green);
+}
+
+.day-event-item.reminder-event {
+    border-left-color: var(--apple-orange);
+}
+
+.day-event-item .event-time {
+    font-weight: bold;
+    min-width: 80px;
+    color: var(--apple-label-secondary);
+    font-size: 14px;
+}
+
+.event-details {
+    flex-grow: 1;
+}
+
+.event-type {
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+    margin-bottom: 5px;
+}
+
+.event-description {
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+    margin-bottom: 8px;
+}
+
+.event-campaign,
+.event-chats {
+    font-size: 12px;
+    color: var(--apple-label-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.event-campaign-name {
+    font-weight: 500;
+    color: var(--apple-blue);
+}
+
+.event-chats-count {
+    display: inline-block;
+    background-color: rgba(0, 122, 255, 0.1);
+    padding: 1px 6px;
+    border-radius: 15px;
+    font-size: 11px;
+    color: var(--apple-blue);
+}
+
+.event-detail-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--apple-separator);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(248, 249, 250, 0.8);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: var(--apple-fill-secondary);
+    color: var(--apple-label);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: var(--apple-red);
+    color: white;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.no-events {
+    text-align: center;
+    color: var(--apple-label-secondary);
+    font-size: 16px;
+    padding: 40px 20px;
+}
+
+.day-event-item {
+    display: flex;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: var(--apple-fill-quaternary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid var(--apple-blue);
+}
+
+.day-event-item:hover {
+    background: var(--apple-blue-light);
+    transform: translateY(-2px);
+}
+
+.day-event-item.campaign-event {
+    border-left-color: var(--apple-blue);
+}
+
+.day-event-item.message-event {
+    border-left-color: var(--apple-green);
+}
+
+.day-event-item.reminder-event {
+    border-left-color: var(--apple-orange);
+}
+
+.day-event-item .event-time {
+    font-weight: bold;
+    min-width: 80px;
+    color: var(--apple-label-secondary);
+    font-size: 14px;
+}
+
+.event-details {
+    flex-grow: 1;
+}
+
+.event-type {
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+    margin-bottom: 5px;
+}
+
+.event-description {
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+    margin-bottom: 8px;
+}
+
+.event-campaign,
+.event-chats {
+    font-size: 12px;
+    color: var(--apple-label-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.event-campaign-name {
+    font-weight: 500;
+    color: var(--apple-blue);
+}
+
+.event-chats-count {
+    display: inline-block;
+    background-color: rgba(0, 122, 255, 0.1);
+    padding: 1px 6px;
+    border-radius: 15px;
+    font-size: 11px;
+    color: var(--apple-blue);
+}
+
+.event-detail-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Состояния загрузки */
+.loading-state,
+.error-state {
+    text-align: center;
+    padding: 80px 32px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.state-icon {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 24px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    background: linear-gradient(135deg, var(--apple-blue) 0%, #5856d6 100%);
+    color: white;
+    box-shadow: var(--shadow-4);
+}
+
+.state-icon.error {
+    background: linear-gradient(135deg, var(--apple-red) 0%, #ff6b6b 100%);
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Спиннер загрузки */
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.spinner .inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-sizing: border-box;
+}
+
+/* Анимации */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 1200px) {
+    .calendar-grid {
+        gap: 0;
+    }
+    
+    .calendar-day {
+        min-height: 100px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        padding: 24px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
+    
+    .calendar-header-widget {
+        padding: 16px;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .current-month {
+        font-size: 20px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 16px;
+        margin-left: 0;
+    }
+    
+    body.sidebar-collapsed .main-content {
+        margin-left: 0;
+    }
+    
+    .header-title h1 {
+        font-size: 28px;
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+        padding: 6px;
+    }
+    
+    .day-number {
+        font-size: 16px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .calendar-navigation {
+        gap: 12px;
+    }
+    
+    .nav-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .calendar-day-header {
+        padding: 12px 4px;
+        font-size: 12px;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+        padding: 4px;
+    }
+    
+    .day-number {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    .event-dot {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .day-event-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .event-time {
+        align-self: flex-start;
+        min-width: auto;
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --apple-label: #FFFFFF;
+        --apple-label-secondary: rgba(235, 235, 245, 0.6);
+        --apple-label-tertiary: rgba(235, 235, 245, 0.3);
+        --apple-label-quaternary: rgba(235, 235, 245, 0.18);
+        
+        --apple-fill: rgba(120, 120, 128, 0.36);
+        --apple-fill-secondary: rgba(120, 120, 128, 0.32);
+        --apple-fill-tertiary: rgba(120, 120, 128, 0.24);
+        --apple-fill-quaternary: rgba(120, 120, 128, 0.18);
+        
+        --apple-bg: #1C1C1E;
+        --apple-bg-secondary: #2C2C2E;
+        --apple-bg-tertiary: #3A3A3C;
+        
+        --apple-separator: rgba(84, 84, 88, 0.65);
+        --apple-separator-opaque: #38383A;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    
+    .stat-card,
+    .calendar-widget,
+    .modal-content {
+        background: rgba(28, 28, 30, 0.95);
+        border: 0.5px solid rgba(235, 235, 245, 0.1);
+    }
+    
+    .calendar-day {
+        background: var(--apple-bg-secondary);
+    }
+    
+    .calendar-day:hover {
+        background: rgba(0, 122, 255, 0.2);
+    }
+    
+    .modal-header {
+        background-color: rgba(50, 50, 55, 0.8);
+    }
+}
+
+/* Принт стили */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .sidebar,
+    .header-actions,
+    .calendar-actions,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+        padding: 20px !important;
+    }
+    
+    .calendar-widget {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        background: white;
+    }
+    
+    .calendar-day {
+        border: 1px solid #ddd;
+        min-height: 100px;
+    }
+}
+
+.utc-time-display {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+    border-radius: var(--radius-medium);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    letter-spacing: 0.5px;
+    margin-top: 12px;
+}
+
+.utc-time-display i {
+    color: var(--apple-blue);
+    filter: drop-shadow(0 0 6px rgba(0, 122, 255, 0.5));
+}
+
+.utc-time {
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.utc-indicator {
+    font-size: 12px;
+    color: var(--apple-blue);
+    margin-left: 5px;
+    font-weight: 500;
+}
+
+/* Модификация модального окна событий для отображения UTC */
+.modal-event-time .utc-badge {
+    display: inline-block;
+    background-color: var(--apple-blue-light);
+    color: var(--apple-blue);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: text-top;
+    font-weight: bold;
+}
+
+/* Стили для блока сегодняшних кампаний */
+.today-campaigns-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-4);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out 0.15s both;
+}
+
+.today-campaigns-header {
+    padding: 16px 24px;
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
+    border-bottom: 1px solid var(--apple-separator);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--apple-label);
+    display: flex;
+    align-items: center;
+}
+
+.today-campaigns-header i {
+    color: var(--apple-blue);
+    margin-right: 10px;
+}
+
+.today-campaigns-content {
+    padding: 20px 24px;
+}
+
+.today-campaign-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: var(--apple-fill-quaternary);
+    transition: all 0.2s;
+    border-left: 3px solid var(--apple-blue);
+}
+
+.today-campaign-item:hover {
+    background: var(--apple-blue-light);
+    transform: translateY(-2px);
+}
+
+.today-campaign-time {
+    font-weight: 600;
+    min-width: 70px;
+    color: var(--apple-label-secondary);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.today-campaign-time i {
+    color: var(--apple-blue);
+    margin-right: 6px;
+    font-size: 12px;
+}
+
+.today-campaign-details {
+    flex-grow: 1;
+}
+
+.today-campaign-title {
+    font-weight: 600;
+    color: var(--apple-label);
+    margin-bottom: 5px;
+}
+
+.today-campaign-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+}
+
+.today-campaign-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.today-campaign-status .badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.today-campaign-chats {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.today-campaign-actions {
+    display: flex;
+    align-items: center;
+}
+
+.today-campaign-button {
+    background: transparent;
+    color: var(--apple-blue);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 5px;
+}
+
+.today-campaign-button:hover {
+    background: var(--apple-blue);
+    color: white;
+}
+
+.no-campaigns-today {
+    text-align: center;
+    padding: 20px;
+    color: var(--apple-label-secondary);
+}
+
+.loading-placeholder {
+    text-align: center;
+    padding: 15px;
+    color: var(--apple-label-tertiary);
+    font-size: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .today-campaigns-container {
+        background: rgba(28, 28, 30, 0.95);
+        border: 0.5px solid rgba(235, 235, 245, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .today-campaigns-header {
+        padding: 12px 16px;
+        font-size: 16px;
+    }
+    
+    .today-campaigns-content {
+        padding: 12px 16px;
+    }
+    
+    .today-campaign-item {
+        padding: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .today-campaign-time {
+        margin-bottom: 8px;
+    }
+    
+    .today-campaign-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .today-campaign-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

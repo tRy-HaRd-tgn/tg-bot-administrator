@@ -1,0 +1,1225 @@
+/* Modern Apple Design System для страницы кампаний */
+:root {
+    --apple-blue: #007AFF;
+    --apple-blue-hover: #0051D5;
+    --apple-blue-active: #004CBA;
+    --apple-blue-light: rgba(0, 122, 255, 0.08);
+    
+    --apple-green: #30D158;
+    --apple-red: #FF3B30;
+    --apple-orange: #FF9500;
+    --apple-purple: #AF52DE;
+    --apple-yellow: #FFCC00;
+    
+    --apple-gray-1: #8E8E93;
+    --apple-gray-2: #AEAEB2;
+    --apple-gray-3: #C7C7CC;
+    --apple-gray-4: #D1D1D6;
+    --apple-gray-5: #E5E5EA;
+    --apple-gray-6: #F2F2F7;
+    
+    --apple-label: #000000;
+    --apple-label-secondary: rgba(60, 60, 67, 0.6);
+    --apple-label-tertiary: rgba(60, 60, 67, 0.3);
+    --apple-label-quaternary: rgba(60, 60, 67, 0.18);
+    
+    --apple-fill: rgba(120, 120, 128, 0.2);
+    --apple-fill-secondary: rgba(120, 120, 128, 0.16);
+    --apple-fill-tertiary: rgba(120, 120, 128, 0.12);
+    --apple-fill-quaternary: rgba(120, 120, 128, 0.08);
+    
+    --apple-bg: #FFFFFF;
+    --apple-bg-secondary: #F2F2F7;
+    --apple-bg-tertiary: #FFFFFF;
+    
+    --apple-separator: rgba(60, 60, 67, 0.36);
+    --apple-separator-opaque: #C6C6C8;
+    
+    --system-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    
+    --radius-small: 8px;
+    --radius-medium: 12px;
+    --radius-large: 16px;
+    --radius-xlarge: 20px;
+    
+    --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-3: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-4: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --shadow-5: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Основные стили */
+body {
+    font-family: var(--system-font);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: var(--apple-label);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Основной контент */
+.main-content {
+    padding: 32px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+.campaigns-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Заголовок страницы */
+.campaigns-header {
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.header-title h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 8px 0;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: var(--radius-large);
+    display: inline-block;
+    border-left: 4px solid var(--apple-blue);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.header-subtitle {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 20px;
+    border-radius: var(--radius-medium);
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: rgba(0, 122, 255, 0.9);
+    color: white;
+    box-shadow: var(--shadow-3);
+}
+
+.btn-primary:hover {
+    background: var(--apple-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-outline-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline-secondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Секция фильтров */
+.filters-section {
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.filters-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    padding: 24px;
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filters-header h5 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0;
+}
+
+.filters-stats {
+    font-size: 15px;
+    color: var(--apple-label-secondary);
+    font-weight: 500;
+}
+
+.filters-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+/* Кнопки фильтров */
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--apple-fill-secondary);
+    border: 2px solid transparent;
+    border-radius: 25px;
+    color: var(--apple-label);
+    font-weight: 500;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+    border-color: var(--apple-blue-light);
+    background: var(--apple-fill);
+}
+
+.filter-btn:hover::before {
+    left: 100%;
+}
+
+.filter-btn.active {
+    background: var(--apple-blue);
+    border-color: var(--apple-blue);
+    color: white;
+    box-shadow: var(--shadow-3);
+}
+
+.filter-text {
+    margin: 0 8px 0 0;
+}
+
+.filter-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+}
+
+.filter-btn.active .filter-count {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* Поиск */
+.search-container {
+    flex: 0 0 300px;
+}
+
+.search-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--apple-fill-secondary);
+    border-radius: var(--radius-medium);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.search-input-group:focus-within {
+    background: var(--apple-bg);
+    box-shadow: 0 0 0 4px var(--apple-blue-light), var(--shadow-2);
+    transform: translateY(-1px);
+}
+
+.search-icon {
+    padding: 0 16px;
+    color: var(--apple-label-secondary);
+    font-size: 16px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 0;
+    font-size: 15px;
+    color: var(--apple-label);
+    outline: none;
+    font-family: var(--system-font);
+}
+
+.search-input::placeholder {
+    color: var(--apple-label-tertiary);
+}
+
+.search-clear {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: var(--apple-label-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-small);
+    transition: all 0.2s ease;
+}
+
+.search-clear:hover {
+    color: var(--apple-blue);
+    background: var(--apple-blue-light);
+}
+
+/* Контент кампаний */
+.campaigns-content {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.content-state {
+    text-align: center;
+    padding: 80px 32px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.state-icon {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 24px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    background: linear-gradient(135deg, var(--apple-blue) 0%, #5856d6 100%);
+    color: white;
+    box-shadow: var(--shadow-4);
+}
+
+.state-icon.error {
+    background: linear-gradient(135deg, var(--apple-red) 0%, #ff6b6b 100%);
+}
+
+.state-icon.loading-spinner {
+    background: linear-gradient(135deg, var(--apple-blue) 0%, #5856d6 100%);
+}
+
+.content-state h5 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin-bottom: 12px;
+}
+
+.content-state p {
+    font-size: 17px;
+    color: var(--apple-label-secondary);
+    margin-bottom: 24px;
+}
+
+/* Спиннер загрузки */
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.spinner:before,
+.spinner:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--apple-blue) 0%, #5856d6 100%);
+    opacity: 0.6;
+    filter: blur(4px);
+}
+
+.spinner:before {
+    animation: pulse 2s ease-out infinite;
+}
+
+.spinner:after {
+    animation: pulse 2s ease-out 1s infinite;
+}
+
+.spinner .inner {
+    position: absolute;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    top: 3px;
+    left: 3px;
+    border: 3px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-sizing: border-box;
+}
+
+/* Сетка кампаний */
+.campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+/* Карточка кампании */
+.campaign-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xlarge);
+    box-shadow: var(--shadow-3);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.campaign-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-5);
+}
+
+.campaign-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(135deg, var(--apple-blue), #5856d6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.campaign-card:hover::before {
+    opacity: 1;
+}
+
+/* Статусные цвета карточек */
+.campaign-card.status-active::before {
+    background: linear-gradient(135deg, var(--apple-green), #32d74b);
+}
+
+.campaign-card.status-paused::before {
+    background: linear-gradient(135deg, var(--apple-orange), #ff9f0a);
+}
+
+.campaign-card.status-completed::before {
+    background: linear-gradient(135deg, var(--apple-gray-1), #a2a2a7);
+}
+
+.campaign-card.status-draft::before {
+    background: linear-gradient(135deg, var(--apple-purple), #bf5af2);
+}
+
+/* Заголовок карточки */
+.campaign-header {
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
+    border-bottom: 1px solid var(--apple-separator);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.campaign-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--apple-label);
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.campaign-status {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.campaign-status.active {
+    background: rgba(48, 209, 88, 0.1);
+    color: var(--apple-green);
+}
+
+.campaign-status.paused {
+    background: rgba(255, 149, 0, 0.1);
+    color: var(--apple-orange);
+}
+
+.campaign-status.completed {
+    background: rgba(142, 142, 147, 0.1);
+    color: var(--apple-gray-1);
+}
+
+.campaign-status.draft {
+    background: rgba(175, 82, 222, 0.1);
+    color: var(--apple-purple);
+}
+
+/* Тело карточки */
+.campaign-body {
+    padding: 20px;
+}
+
+.campaign-info {
+    margin-bottom: 16px;
+}
+
+.campaign-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--apple-label-secondary);
+}
+
+.campaign-detail:last-child {
+    margin-bottom: 0;
+}
+
+.campaign-detail i {
+    width: 18px;
+    margin-right: 10px;
+    color: var(--apple-blue);
+}
+
+.campaign-detail strong {
+    color: var(--apple-label);
+    margin-right: 8px;
+}
+
+.campaign-message {
+    background: var(--apple-fill-quaternary);
+    border-radius: var(--radius-medium);
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.campaign-message-text {
+    font-size: 13px;
+    color: var(--apple-label-secondary);
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    margin: 0;
+}
+
+.campaign-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.campaign-badge {
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--apple-fill-secondary);
+    color: var(--apple-label-secondary);
+}
+
+.campaign-badge.media {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--apple-blue);
+}
+
+.campaign-badge.buttons {
+    background: rgba(48, 209, 88, 0.1);
+    color: var(--apple-green);
+}
+
+/* Подвал карточки */
+.campaign-footer {
+    padding: 16px 20px;
+    background: var(--apple-fill-quaternary);
+    border-top: 1px solid var(--apple-separator);
+}
+
+.campaign-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.campaign-action-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--apple-separator);
+    border-radius: var(--radius-medium);
+    background: var(--apple-bg);
+    color: var(--apple-label-secondary);
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.campaign-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+
+.campaign-action-btn.view:hover {
+    border-color: var(--apple-blue);
+    color: var(--apple-blue);
+    background: var(--apple-blue-light);
+}
+
+.campaign-action-btn.edit:hover {
+    border-color: var(--apple-orange);
+    color: var(--apple-orange);
+    background: rgba(255, 149, 0, 0.1);
+}
+
+.campaign-action-btn.toggle:hover {
+    border-color: var(--apple-green);
+    color: var(--apple-green);
+    background: rgba(48, 209, 88, 0.1);
+}
+
+.campaign-action-btn.delete:hover {
+    border-color: var(--apple-red);
+    color: var(--apple-red);
+    background: rgba(255, 59, 48, 0.1);
+}
+
+/* Пагинация */
+.pagination-container {
+    text-align: center;
+    margin-top: 32px;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.pagination {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-large);
+    padding: 8px;
+    box-shadow: var(--shadow-3);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.page-link {
+    padding: 10px 16px;
+    margin: 0 2px;
+    border: none;
+    border-radius: var(--radius-medium);
+    color: var(--apple-label-secondary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.page-link:hover {
+    background: var(--apple-fill-secondary);
+    color: var(--apple-blue);
+}
+
+.page-item.active .page-link {
+    background: var(--apple-blue);
+    color: white;
+    box-shadow: var(--shadow-2);
+}
+
+/* Анимации */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.6;
+    }
+}
+
+/* Анимация карточек с задержкой */
+.campaign-card:nth-child(1) { animation-delay: 0s; }
+.campaign-card:nth-child(2) { animation-delay: 0.1s; }
+.campaign-card:nth-child(3) { animation-delay: 0.2s; }
+.campaign-card:nth-child(4) { animation-delay: 0.3s; }
+.campaign-card:nth-child(5) { animation-delay: 0.4s; }
+.campaign-card:nth-child(6) { animation-delay: 0.5s; }
+
+/* Адаптивный дизайн */
+@media (max-width: 1200px) {
+    .campaigns-grid {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        padding: 24px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .filters-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-container {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 16px;
+    }
+    
+    .header-title h1 {
+        font-size: 28px;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+    }
+    
+    .filter-text {
+        display: none;
+    }
+    
+    .campaigns-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .campaign-header {
+        padding: 16px;
+    }
+    
+    .campaign-body {
+        padding: 16px;
+    }
+    
+    .campaign-footer {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        justify-content: center;
+    }
+    
+    .campaign-actions {
+        gap: 6px;
+    }
+    
+    .campaign-action-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+/* Улучшенная адаптивность для сверхмалых экранов */
+@media (max-width: 480px) {
+    .campaigns-grid {
+        gap: 12px;
+    }
+    
+    .campaign-header {
+        padding: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .campaign-status {
+        align-self: flex-start;
+    }
+    
+    .campaign-body {
+        padding: 12px;
+    }
+    
+    .campaign-actions {
+        gap: 4px;
+    }
+    
+    .campaign-detail {
+        font-size: 12px;
+    }
+    
+    .header-title h1 {
+        font-size: 22px;
+    }
+    
+    .btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    /* Кнопки для легкого нажатия пальцем */
+    .campaign-action-btn {
+        min-height: 38px;
+        font-size: 12px;
+    }
+    
+    /* Улучшенное отображение на маленьких экранах */
+    .telegram-message-preview {
+        max-width: 100%;
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --apple-label: #FFFFFF;
+        --apple-label-secondary: rgba(235, 235, 245, 0.6);
+        --apple-label-tertiary: rgba(235, 235, 245, 0.3);
+        --apple-label-quaternary: rgba(235, 235, 245, 0.18);
+        
+        --apple-fill: rgba(120, 120, 128, 0.36);
+        --apple-fill-secondary: rgba(120, 120, 128, 0.32);
+        --apple-fill-tertiary: rgba(120, 120, 128, 0.24);
+        --apple-fill-quaternary: rgba(120, 120, 128, 0.18);
+        
+        --apple-bg: #1C1C1E;
+        --apple-bg-secondary: #2C2C2E;
+        --apple-bg-tertiary: #3A3A3C;
+        
+        --apple-separator: rgba(84, 84, 88, 0.65);
+        --apple-separator-opaque: #38383A;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    
+    .filters-card,
+    .content-state,
+    .campaign-card,
+    .pagination {
+        background: rgba(28, 28, 30, 0.95);
+        border: 0.5px solid rgba(235, 235, 245, 0.1);
+    }
+    
+    /* Темная тема для модальных окон */
+    .modal-glass .modal-content {
+        background: rgba(40, 40, 45, 0.98);
+        border: 1px solid rgba(80, 80, 90, 0.7);
+        color: #FFFFFF;
+    }
+    
+    .modal-header {
+        background-color: rgba(50, 50, 55, 0.8);
+    }
+    
+    .modal-title {
+        color: #FFFFFF;
+    }
+    
+    .modal-body {
+        background-color: rgba(30, 30, 35, 0.95);
+        color: #FFFFFF;
+    }
+    
+    .modal-footer {
+        background-color: rgba(50, 50, 55, 0.8);
+    }
+}
+
+/* Принт стили */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .sidebar,
+    .header-actions,
+    .filters-section,
+    .campaign-actions,
+    .pagination-container {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+        padding: 20px !important;
+    }
+    
+    .campaign-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        background: white;
+    }
+    
+    .campaigns-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* Улучшенные модальные окна с лучшей контрастностью */
+.modal-glass .modal-content {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: var(--radius-xlarge);
+    border: 1px solid rgba(200, 200, 200, 0.5);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow: var(--shadow-5);
+    color: var(--apple-label);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--apple-separator);
+    padding: 24px;
+    background-color: rgba(248, 249, 250, 0.8);
+}
+
+.modal-title {
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 18px;
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--apple-separator);
+    padding: 16px 24px;
+    background-color: rgba(248, 249, 250, 0.8);
+}
+
+/* Стили для предпросмотра сообщений */
+.message-preview-container {
+    max-width: 500px;
+    margin: 20px auto;
+    background: #f8f9fa;
+    border-radius: var(--radius-large);
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.telegram-message-preview {
+    background: white;
+    border-radius: var(--radius-medium);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    overflow: hidden;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.telegram-message-header {
+    padding: 12px 16px;
+    background: #4A90E2;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.telegram-message-avatar {
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4A90E2;
+    font-weight: bold;
+}
+
+.telegram-message-body {
+    padding: 16px;
+}
+
+.telegram-message-media {
+    margin-bottom: 12px;
+}
+
+.telegram-message-media img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-small);
+}
+
+.telegram-message-media-group {
+    display: grid;
+    gap: 2px;
+    border-radius: var(--radius-small);
+    overflow: hidden;
+}
+
+.telegram-message-media-group.two-photos {
+    grid-template-columns: 1fr 1fr;
+}
+
+.telegram-message-media-group.three-photos {
+    grid-template-columns: 2fr 1fr;
+}
+
+.telegram-message-media-group.four-photos {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.telegram-message-media-group img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.telegram-message-text {
+    line-height: 1.4;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+}
+
+.telegram-message-text strong {
+    font-weight: bold;
+}
+
+.telegram-message-text em {
+    font-style: italic;
+}
+
+.telegram-message-text code {
+    background: #f1f3f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.telegram-message-text pre {
+    background: #f1f3f4;
+    padding: 8px;
+    border-radius: var(--radius-small);
+    font-family: monospace;
+    font-size: 0.9em;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+.telegram-message-text a {
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+.telegram-inline-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.telegram-inline-button-row {
+    display: flex;
+    gap: 6px;
+}
+
+.telegram-inline-button {
+    flex: 1;
+    background: #4A90E2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-small);
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.telegram-inline-button:hover {
+    background: #357ABD;
+    color: white;
+    text-decoration: none;
+}
+
+.telegram-message-time {
+    font-size: 12px;
+    color: #8b9499;
+    text-align: right;
+    margin-top: 8px;
+}
+
+/* Кнопка предпросмотра */
+.preview-button {
+    background: var(--apple-purple);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: var(--radius-medium);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-button:hover {
+    background: #9a44d4;
+    transform: translateY(-1px);
+}
+
+/* Стили для отображения UTC времени */
+.utc-time-display {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+    border-radius: var(--radius-medium);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+    letter-spacing: 0.5px;
+    margin-top: 12px;
+}
+
+.utc-time-display i {
+    color: var(--apple-blue);
+    filter: drop-shadow(0 0 6px rgba(0, 122, 255, 0.5));
+}
+
+.utc-time {
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 576px) {
+    .utc-time-display {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
