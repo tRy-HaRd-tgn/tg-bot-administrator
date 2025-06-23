@@ -1,179 +1,233 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Кампании - TG AutoPosting</title>
-    
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/campaigns.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/sidebar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/campaigns.css') }}"
+    />
+  </head>
+  <body>
     <!-- Sidebar -->
     {% include 'components/sidebar.html' %}
-    
+
     <!-- Mobile overlay -->
     <div class="mobile-overlay" onclick="toggleSidebar()"></div>
-    
+
     <!-- Mobile toggle button -->
     <button class="sidebar-toggle-mobile d-md-none" onclick="toggleSidebar()">
-        <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-bars"></i>
     </button>
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="campaigns-container">
-            <!-- Header -->
-            <div class="campaigns-header">
-                <div class="header-content">
-                    <div class="header-title">
-                        <h1><i class="fa-solid fa-bullhorn me-3"></i>Управление кампаниями</h1>
-                        <p class="header-subtitle">Создавайте и управляйте кампаниями для автоматической публикации</p>
-                        <div class="utc-time-display">
-                            <i class="fa-solid fa-clock me-2"></i>
-                            <span>Текущее UTC время: </span>
-                            <span class="utc-time fw-bold">--:--:--</span>
-                        </div>
-                    </div>
-                    <div class="header-actions">
-                        <a href="{{ url_for('views.new_campaign') }}" class="btn btn-primary">
-                            <i class="fa-solid fa-plus me-2"></i>Создать кампанию
-                        </a>
-                        <button class="btn btn-outline-secondary" onclick="campaignsManager.loadCampaigns()">
-                            <i class="fa-solid fa-refresh me-2"></i>Обновить
-                        </button>
-                    </div>
-                </div>
+      <div class="campaigns-container">
+        <!-- Header -->
+        <div class="campaigns-header">
+          <div class="header-content">
+            <div class="header-title">
+              <h1>
+                <i class="fa-solid fa-bullhorn me-3"></i>Управление кампаниями
+              </h1>
+              <p class="header-subtitle">
+                Создавайте и управляйте кампаниями для автоматической публикации
+              </p>
+              <div class="utc-time-display">
+                <i class="fa-solid fa-clock me-2"></i>
+                <span>Текущее UTC время: </span>
+                <span class="utc-time fw-bold">--:--:--</span>
+              </div>
             </div>
-
-            <!-- Filters Section -->
-            <div class="filters-section">
-                <div class="filters-card">
-                    <div class="filters-header">
-                        <h5><i class="fa-solid fa-filter me-2"></i>Фильтры и поиск</h5>
-                        <div class="filters-stats">
-                            <span id="campaignsCount">Загрузка...</span>
-                        </div>
-                    </div>
-                    
-                    <div class="filters-content">
-                        <div class="filter-buttons">
-                            <button class="filter-btn active" data-filter="all">
-                                <span class="filter-text">Все</span>
-                                <span class="filter-count" id="allCount">0</span>
-                            </button>
-                            <button class="filter-btn" data-filter="active">
-                                <i class="fa-solid fa-play me-1"></i>
-                                <span class="filter-text">Активные</span>
-                                <span class="filter-count" id="activeCount">0</span>
-                            </button>
-                            <button class="filter-btn" data-filter="paused">
-                                <i class="fa-solid fa-pause me-1"></i>
-                                <span class="filter-text">Приостановленные</span>
-                                <span class="filter-count" id="pausedCount">0</span>
-                            </button>
-                            <button class="filter-btn" data-filter="draft">
-                                <i class="fa-solid fa-edit me-1"></i>
-                                <span class="filter-text">Черновики</span>
-                                <span class="filter-count" id="draftCount">0</span>
-                            </button>
-                            <button class="filter-btn" data-filter="completed">
-                                <i class="fa-solid fa-check me-1"></i>
-                                <span class="filter-text">Завершенные</span>
-                                <span class="filter-count" id="completedCount">0</span>
-                            </button>
-                        </div>
-                        
-                        <div class="search-container">
-                            <div class="search-input-group">
-                                <i class="fa-solid fa-search search-icon"></i>
-                                <input type="text" id="searchInput" class="search-input" placeholder="Поиск кампаний...">
-                                <button class="search-clear" onclick="campaignsManager.clearSearch()" style="display: none;">
-                                    <i class="fa-solid fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="header-actions">
+              <a
+                href="{{ url_for('views.new_campaign') }}"
+                class="btn btn-primary"
+              >
+                <i class="fa-solid fa-plus me-2"></i>Создать кампанию
+              </a>
+              <button
+                class="btn btn-outline-secondary"
+                onclick="campaignsManager.loadCampaigns()"
+              >
+                <i class="fa-solid fa-refresh me-2"></i>Обновить
+              </button>
             </div>
-
-            <!-- Campaigns Content -->
-            <div class="campaigns-content">
-                <div class="campaigns-grid" id="campaignsGrid">
-                    <!-- Campaigns will be loaded here -->
-                    <div class="content-state">
-                        <div class="state-icon loading-spinner">
-                            <div class="spinner">
-                                <div class="inner"></div>
-                            </div>
-                        </div>
-                        <h5>Загрузка кампаний</h5>
-                        <p>Получение данных с сервера...</p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+          <div class="filters-card">
+            <div class="filters-header">
+              <h5><i class="fa-solid fa-filter me-2"></i>Фильтры и поиск</h5>
+              <div class="filters-stats">
+                <span id="campaignsCount">Загрузка...</span>
+              </div>
+            </div>
+
+            <div class="filters-content">
+              <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">
+                  <span class="filter-text">Все</span>
+                  <span class="filter-count" id="allCount">0</span>
+                </button>
+                <button class="filter-btn" data-filter="active">
+                  <i class="fa-solid fa-play me-1"></i>
+                  <span class="filter-text">Активные</span>
+                  <span class="filter-count" id="activeCount">0</span>
+                </button>
+                <button class="filter-btn" data-filter="paused">
+                  <i class="fa-solid fa-pause me-1"></i>
+                  <span class="filter-text">Приостановленные</span>
+                  <span class="filter-count" id="pausedCount">0</span>
+                </button>
+                <button class="filter-btn" data-filter="draft">
+                  <i class="fa-solid fa-edit me-1"></i>
+                  <span class="filter-text">Черновики</span>
+                  <span class="filter-count" id="draftCount">0</span>
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                  <i class="fa-solid fa-check me-1"></i>
+                  <span class="filter-text">Завершенные</span>
+                  <span class="filter-count" id="completedCount">0</span>
+                </button>
+              </div>
+
+              <div class="search-container">
+                <div class="search-input-group">
+                  <i class="fa-solid fa-search search-icon"></i>
+                  <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Поиск кампаний..."
+                  />
+                  <button
+                    class="search-clear"
+                    onclick="campaignsManager.clearSearch()"
+                    style="display: none"
+                  >
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaigns Content -->
+        <div class="campaigns-content">
+          <div class="campaigns-grid" id="campaignsGrid">
+            <!-- Campaigns will be loaded here -->
+            <div class="content-state">
+              <div class="state-icon loading-spinner">
+                <div class="spinner">
+                  <div class="inner"></div>
+                </div>
+              </div>
+              <h5>Загрузка кампаний</h5>
+              <p>Получение данных с сервера...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Campaign Detail Modal -->
     <div class="modal fade modal-glass" id="campaignDetailModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fa-solid fa-info-circle me-2"></i>
-                        Детали кампании
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="campaignDetailContent">
-                    <!-- Content will be loaded here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                </div>
-            </div>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fa-solid fa-info-circle me-2"></i>
+              Детали кампании
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body" id="campaignDetailContent">
+            <!-- Content will be loaded here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Закрыть
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fa-solid fa-exclamation-triangle me-2 text-warning"></i>
-                        Подтверждение удаления
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Вы уверены, что хотите удалить кампанию <strong id="deleteCampaignName"></strong>?</p>
-                    <p class="text-muted small">Это действие нельзя отменить.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                        <i class="fa-solid fa-trash me-2"></i>Удалить
-                    </button>
-                </div>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fa-solid fa-exclamation-triangle me-2 text-warning"></i>
+              Подтверждение удаления
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Вы уверены, что хотите удалить кампанию
+              <strong id="deleteCampaignName"></strong>?
+            </p>
+            <p class="text-muted small">Это действие нельзя отменить.</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Отмена
+            </button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+              <i class="fa-solid fa-trash me-2"></i>Удалить
+            </button>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/campaigns.js') }}"></script>
-</body>
+  </body>
 </html>

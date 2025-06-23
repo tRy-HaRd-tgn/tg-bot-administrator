@@ -1,147 +1,226 @@
+<!DOCTYPE html>
 <!-- Модальное окно настройки расписания публикаций -->
-<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content schedule-modal-content">
-            <div class="modal-header schedule-modal-header">
-                <h5 class="modal-title" id="scheduleModalLabel">
-                    <i class="fa-solid fa-calendar-days me-2"></i>
-                    Настройка расписания публикаций
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <div class="modal-body schedule-modal-body">
-                <!-- Период публикаций -->
-                <div class="schedule-section">
-                    <h6 class="schedule-section-title">
-                        <i class="fa-solid fa-calendar-range me-2"></i>
-                        Период публикаций
-                    </h6>
-                    <p class="schedule-section-description">
-                        Укажите общий период, в течение которого будут происходить публикации
-                    </p>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="scheduleStartDate" class="form-label">Дата начала</label>
-                            <input type="date" id="scheduleStartDate" class="form-control schedule-input" required>
-                            <div class="invalid-feedback" id="scheduleStartDateError"></div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="scheduleEndDate" class="form-label">Дата окончания</label>
-                            <input type="date" id="scheduleEndDate" class="form-control schedule-input">
-                            <div class="invalid-feedback" id="scheduleEndDateError"></div>
-                            <small class="form-text text-muted">Оставьте пустым для бесконечного периода</small>
-                        </div>
-                    </div>
-                </div>
+<div
+  class="modal fade"
+  id="scheduleModal"
+  tabindex="-1"
+  aria-labelledby="scheduleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content schedule-modal-content">
+      <div class="modal-header schedule-modal-header">
+        <h5 class="modal-title" id="scheduleModalLabel">
+          <i class="fa-solid fa-calendar-days me-2"></i>
+          Настройка расписания публикаций
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Закрыть"
+        ></button>
+      </div>
+      <div class="modal-body schedule-modal-body">
+        <!-- Период публикаций -->
+        <div class="schedule-section">
+          <h6 class="schedule-section-title">
+            <i class="fa-solid fa-calendar-range me-2"></i>
+            Период публикаций
+          </h6>
+          <p class="schedule-section-description">
+            Укажите общий период, в течение которого будут происходить
+            публикации
+          </p>
 
-                <!-- Выбор дат публикаций -->
-                <div class="schedule-section">
-                    <h6 class="schedule-section-title">
-                        <i class="fa-solid fa-calendar-check me-2"></i>
-                        Даты публикаций
-                    </h6>
-                    <p class="schedule-section-description">
-                        Выберите конкретные даты для публикаций в указанном периоде
-                    </p>
-                    
-                    <div class="dates-selection-wrapper">
-                        <div class="dates-controls">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="selectAllDatesBtn">
-                                <i class="fa-solid fa-check-double me-1"></i>Выбрать все
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm" id="clearAllDatesBtn">
-                                <i class="fa-solid fa-times me-1"></i>Очистить все
-                            </button>
-                            <button type="button" class="btn btn-outline-info btn-sm" id="selectWeekendsBtn">
-                                <i class="fa-solid fa-calendar-week me-1"></i>Выходные
-                            </button>
-                            <button type="button" class="btn btn-outline-success btn-sm" id="selectWorkdaysBtn">
-                                <i class="fa-solid fa-briefcase me-1"></i>Будни
-                            </button>
-                        </div>
-                        
-                        <div class="calendar-container" id="scheduleCalendar">
-                            <!-- Календарь будет сгенерирован JS -->
-                        </div>
-                        
-                        <div class="selected-dates-info">
-                            <div class="selected-count">
-                                Выбрано дат: <span id="selectedDatesCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Настройка времени -->
-                <div class="schedule-section">
-                    <h6 class="schedule-section-title">
-                        <i class="fa-solid fa-clock me-2"></i>
-                        Время публикаций
-                    </h6>
-                    <p class="schedule-section-description">
-                        Выберите время для публикаций
-                    </p>
-                    
-                    <div class="time-mode-selection">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="timeMode" id="singleTimeMode" value="single" checked>
-                            <label class="form-check-label" for="singleTimeMode">
-                                <strong>Одно время для всех публикаций</strong>
-                                <small class="d-block text-muted">Все публикации будут в одно и то же время</small>
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="timeMode" id="multipleTimeMode" value="multiple">
-                            <label class="form-check-label" for="multipleTimeMode">
-                                <strong>Индивидуальное время для каждой даты</strong>
-                                <small class="d-block text-muted">Возможность задать свое время для каждого дня</small>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <!-- Одно время для всех -->
-                    <div class="time-setting single-time-setting" id="singleTimeSetting">
-                        <label for="globalTime" class="form-label">Время публикации (UTC)</label>
-                        <input type="time" id="globalTime" class="form-control schedule-input" value="12:00">
-                        <small class="form-text text-muted">
-                            <i class="fa-solid fa-globe me-1"></i>
-                            Время указывается в формате UTC
-                        </small>
-                    </div>
-                    
-                    <!-- Индивидуальное время -->
-                    <div class="time-setting multiple-time-setting" id="multipleTimeSetting" style="display: none;">
-                        <div class="individual-times-container" id="individualTimesContainer">
-                            <div class="no-dates-selected">
-                                <i class="fa-solid fa-info-circle me-2"></i>
-                                Сначала выберите даты публикаций
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Превью расписания -->
-                <div class="schedule-section">
-                    <h6 class="schedule-section-title">
-                        <i class="fa-solid fa-eye me-2"></i>
-                        Превью расписания
-                    </h6>
-                    <div class="schedule-preview" id="schedulePreview">
-                        <div class="no-schedule-preview">
-                            <i class="fa-solid fa-calendar-xmark me-2"></i>
-                            Выберите даты и время для отображения превью
-                        </div>
-                    </div>
-                </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="scheduleStartDate" class="form-label"
+                >Дата начала</label
+              >
+              <input
+                type="date"
+                id="scheduleStartDate"
+                class="form-control schedule-input"
+                required
+              />
+              <div class="invalid-feedback" id="scheduleStartDateError"></div>
             </div>
-            
-            <div class="modal-footer schedule-modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-primary" id="saveScheduleBtn">
-                    <i class="fa-solid fa-save me-2"></i>Сохранить расписание
-                </button>
+            <div class="col-md-6">
+              <label for="scheduleEndDate" class="form-label"
+                >Дата окончания</label
+              >
+              <input
+                type="date"
+                id="scheduleEndDate"
+                class="form-control schedule-input"
+              />
+              <div class="invalid-feedback" id="scheduleEndDateError"></div>
+              <small class="form-text text-muted"
+                >Оставьте пустым для бесконечного периода</small
+              >
             </div>
+          </div>
         </div>
+
+        <!-- Выбор дат публикаций -->
+        <div class="schedule-section">
+          <h6 class="schedule-section-title">
+            <i class="fa-solid fa-calendar-check me-2"></i>
+            Даты публикаций
+          </h6>
+          <p class="schedule-section-description">
+            Выберите конкретные даты для публикаций в указанном периоде
+          </p>
+
+          <div class="dates-selection-wrapper">
+            <div class="dates-controls">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                id="selectAllDatesBtn"
+              >
+                <i class="fa-solid fa-check-double me-1"></i>Выбрать все
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                id="clearAllDatesBtn"
+              >
+                <i class="fa-solid fa-times me-1"></i>Очистить все
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-info btn-sm"
+                id="selectWeekendsBtn"
+              >
+                <i class="fa-solid fa-calendar-week me-1"></i>Выходные
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                id="selectWorkdaysBtn"
+              >
+                <i class="fa-solid fa-briefcase me-1"></i>Будни
+              </button>
+            </div>
+
+            <div class="calendar-container" id="scheduleCalendar">
+              <!-- Календарь будет сгенерирован JS -->
+            </div>
+
+            <div class="selected-dates-info">
+              <div class="selected-count">
+                Выбрано дат: <span id="selectedDatesCount">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Настройка времени -->
+        <div class="schedule-section">
+          <h6 class="schedule-section-title">
+            <i class="fa-solid fa-clock me-2"></i>
+            Время публикаций
+          </h6>
+          <p class="schedule-section-description">
+            Выберите время для публикаций
+          </p>
+
+          <div class="time-mode-selection">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="timeMode"
+                id="singleTimeMode"
+                value="single"
+                checked
+              />
+              <label class="form-check-label" for="singleTimeMode">
+                <strong>Одно время для всех публикаций</strong>
+                <small class="d-block text-muted"
+                  >Все публикации будут в одно и то же время</small
+                >
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="timeMode"
+                id="multipleTimeMode"
+                value="multiple"
+              />
+              <label class="form-check-label" for="multipleTimeMode">
+                <strong>Индивидуальное время для каждой даты</strong>
+                <small class="d-block text-muted"
+                  >Возможность задать свое время для каждого дня</small
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Одно время для всех -->
+          <div class="time-setting single-time-setting" id="singleTimeSetting">
+            <label for="globalTime" class="form-label"
+              >Время публикации (UTC)</label
+            >
+            <input
+              type="time"
+              id="globalTime"
+              class="form-control schedule-input"
+              value="12:00"
+            />
+            <small class="form-text text-muted">
+              <i class="fa-solid fa-globe me-1"></i>
+              Время указывается в формате UTC
+            </small>
+          </div>
+
+          <!-- Индивидуальное время -->
+          <div
+            class="time-setting multiple-time-setting"
+            id="multipleTimeSetting"
+            style="display: none"
+          >
+            <div
+              class="individual-times-container"
+              id="individualTimesContainer"
+            >
+              <div class="no-dates-selected">
+                <i class="fa-solid fa-info-circle me-2"></i>
+                Сначала выберите даты публикаций
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Превью расписания -->
+        <div class="schedule-section">
+          <h6 class="schedule-section-title">
+            <i class="fa-solid fa-eye me-2"></i>
+            Превью расписания
+          </h6>
+          <div class="schedule-preview" id="schedulePreview">
+            <div class="no-schedule-preview">
+              <i class="fa-solid fa-calendar-xmark me-2"></i>
+              Выберите даты и время для отображения превью
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer schedule-modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Отмена
+        </button>
+        <button type="button" class="btn btn-primary" id="saveScheduleBtn">
+          <i class="fa-solid fa-save me-2"></i>Сохранить расписание
+        </button>
+      </div>
     </div>
+  </div>
 </div>

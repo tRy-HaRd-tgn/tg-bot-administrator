@@ -1,125 +1,154 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Календарь публикаций | TG AutoPosting</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" rel="stylesheet">
-    <!-- Подключаем стили сайдбара и календаря -->    <link href="{{ url_for('static', filename='css/sidebar.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/calendar.css') }}" rel="stylesheet">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Подключаем стили сайдбара и календаря -->
+    <link
+      href="{{ url_for('static', filename='css/sidebar.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='css/calendar.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- Добавляем разметку сайдбара -->
     <div class="container-fluid">
-        <div class="row">
-            {% include 'components/sidebar.html' %}
-            <!-- Остальной контент -->
-            <main class="main-content col py-3">
-                <div class="calendar-container">
-                    <!-- Заголовок страницы -->
-                    <div class="calendar-header">
-                        <div class="header-content">
-                            <div class="header-title">
-                                <h1><i class="fas fa-calendar-day me-3"></i>Календарь кампаний</h1>
-                                <p class="header-subtitle">Отслеживайте все запланированные кампании</p>
-                                
-                                <!-- UTC time display -->
-                                <div class="utc-time-display">
-                                    <i class="fas fa-clock"></i>
-                                    <span class="utc-time" id="utcTime">Загрузка...</span>
-                                    <span class="utc-indicator">UTC</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div class="row">
+        {% include 'components/sidebar.html' %}
+        <!-- Остальной контент -->
+        <main class="main-content col py-3">
+          <div class="calendar-container">
+            <!-- Заголовок страницы -->
+            <div class="calendar-header">
+              <div class="header-content">
+                <div class="header-title">
+                  <h1>
+                    <i class="fas fa-calendar-day me-3"></i>Календарь кампаний
+                  </h1>
+                  <p class="header-subtitle">
+                    Отслеживайте все запланированные кампании
+                  </p>
 
-                    <!-- Статистика календаря -->
-                    <div class="calendar-stats" id="calendar-stats">
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-icon campaigns">
-                                    <i class="fas fa-bullhorn"></i>
-                                </div>
-                                <div class="stat-value" id="active-campaigns">0</div>
-                                <div class="stat-label">Активные кампании</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon events">
-                                    <i class="fas fa-calendar-check"></i>
-                                </div>
-                                <div class="stat-value" id="total-campaigns">0</div>
-                                <div class="stat-label">Всего кампаний</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Информация о сегодняшних кампаниях -->
-                    <div class="today-campaigns-container" id="todayCampaigns">
-                        <div class="today-campaigns-header">
-                            <i class="fas fa-bullhorn me-2"></i>Сегодняшние кампании
-                        </div>
-                        <div class="today-campaigns-content" id="todayCampaignsContent">
-                            <div class="loading-placeholder">Загрузка информации о кампаниях...</div>
-                        </div>
-                    </div>
-
-                    <!-- Календарный виджет -->
-                    <div class="calendar-widget" id="calendar-content">
-                        <div class="calendar-header-widget">
-                            <div class="calendar-navigation">
-                                <button class="nav-btn prev-month" id="prevMonth">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </button>
-                                <div class="current-month">
-                                    <span id="currentMonth">Месяц Год</span>
-                                    <small class="utc-indicator">(UTC время)</small>
-                                </div>
-                                <button class="nav-btn next-month" id="nextMonth">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                            </div>
-                            <div class="calendar-actions">
-                                <button class="btn btn-primary" id="todayBtn">
-                                    <i class="fas fa-calendar-day"></i>
-                                    Сегодня
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="calendar-grid" id="calendarGrid">
-                            <!-- Календарная сетка будет заполнена JavaScript -->
-                        </div>
-                    </div>
+                  <!-- UTC time display -->
+                  <div class="utc-time-display">
+                    <i class="fas fa-clock"></i>
+                    <span class="utc-time" id="utcTime">Загрузка...</span>
+                    <span class="utc-indicator">UTC</span>
+                  </div>
                 </div>
-            </main>
-        </div>
-    </div>    <!-- Модальное окно событий дня -->
+              </div>
+            </div>
+
+            <!-- Статистика календаря -->
+            <div class="calendar-stats" id="calendar-stats">
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-icon campaigns">
+                    <i class="fas fa-bullhorn"></i>
+                  </div>
+                  <div class="stat-value" id="active-campaigns">0</div>
+                  <div class="stat-label">Активные кампании</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon events">
+                    <i class="fas fa-calendar-check"></i>
+                  </div>
+                  <div class="stat-value" id="total-campaigns">0</div>
+                  <div class="stat-label">Всего кампаний</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Информация о сегодняшних кампаниях -->
+            <div class="today-campaigns-container" id="todayCampaigns">
+              <div class="today-campaigns-header">
+                <i class="fas fa-bullhorn me-2"></i>Сегодняшние кампании
+              </div>
+              <div class="today-campaigns-content" id="todayCampaignsContent">
+                <div class="loading-placeholder">
+                  Загрузка информации о кампаниях...
+                </div>
+              </div>
+            </div>
+
+            <!-- Календарный виджет -->
+            <div class="calendar-widget" id="calendar-content">
+              <div class="calendar-header-widget">
+                <div class="calendar-navigation">
+                  <button class="nav-btn prev-month" id="prevMonth">
+                    <i class="fa-solid fa-chevron-left"></i>
+                  </button>
+                  <div class="current-month">
+                    <span id="currentMonth">Месяц Год</span>
+                    <small class="utc-indicator">(UTC время)</small>
+                  </div>
+                  <button class="nav-btn next-month" id="nextMonth">
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </button>
+                </div>
+                <div class="calendar-actions">
+                  <button class="btn btn-primary" id="todayBtn">
+                    <i class="fas fa-calendar-day"></i>
+                    Сегодня
+                  </button>
+                </div>
+              </div>
+
+              <div class="calendar-grid" id="calendarGrid">
+                <!-- Календарная сетка будет заполнена JavaScript -->
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <!-- Модальное окно событий дня -->
     <div class="modal" id="dayEventsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="dayEventsTitle">События дня</h3>
-                <button type="button" class="modal-close" onclick="calendarManager.closeModals()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="dayEventsBody">
-                <!-- События дня будут загружены здесь -->
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="dayEventsTitle">События дня</h3>
+          <button
+            type="button"
+            class="modal-close"
+            onclick="calendarManager.closeModals()"
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-    </div>    <!-- Модальное окно деталей события -->
+        <div class="modal-body" id="dayEventsBody">
+          <!-- События дня будут загружены здесь -->
+        </div>
+      </div>
+    </div>
+    <!-- Модальное окно деталей события -->
     <div class="modal" id="eventDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="eventDetailsTitle">Детали события</h3>
-                <button type="button" class="modal-close" onclick="calendarManager.closeModals()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="eventDetailsBody">
-                <!-- Детали события будут загружены здесь -->
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="eventDetailsTitle">Детали события</h3>
+          <button
+            type="button"
+            class="modal-close"
+            onclick="calendarManager.closeModals()"
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <div class="modal-body" id="eventDetailsBody">
+          <!-- Детали события будут загружены здесь -->
+        </div>
+      </div>
     </div>
 
     <!-- Скрипты -->
@@ -127,5 +156,5 @@
     <!-- Подключаем скрипт сайдбара -->
     <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
-</body>
+  </body>
 </html>

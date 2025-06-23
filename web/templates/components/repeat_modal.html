@@ -1,285 +1,354 @@
+<!DOCTYPE html>
 <!-- Модальное окно настройки автоповтора публикации -->
-<div class="modal fade" id="repeatModal" tabindex="-1" aria-labelledby="repeatModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content modal-glass">
-            <div class="modal-header">
-                <h5 class="modal-title" id="repeatModalLabel">
-                    <i class="fa-solid fa-repeat me-2"></i>
-                    Настройка автоповтора публикации
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <div class="modal-body">
-                <div class="repeat-container">
-                    <!-- Выбор интервала повторения -->
-                    <div class="interval-selection">
-                        <h6 class="section-title">
-                            <i class="fa-solid fa-clock me-2"></i>
-                            Выберите интервал повторения
-                        </h6>
-                        <p class="section-description">
-                            Укажите как часто должна происходить публикация
-                        </p>
-                        
-                        <div class="interval-options">
-                            <label class="interval-option">
-                                <input type="radio" name="repeat_interval" value="minutely" class="interval-radio">
-                                <div class="interval-card">
-                                    <div class="interval-icon minutely">
-                                        <i class="fa-solid fa-stopwatch"></i>
-                                    </div>
-                                    <div class="interval-content">
-                                        <h6>Каждую минуту</h6>
-                                        <p>Публикация каждую минуту</p>
-                                    </div>
-                                </div>
-                            </label>
-                            
-                            <label class="interval-option">
-                                <input type="radio" name="repeat_interval" value="hourly" class="interval-radio">
-                                <div class="interval-card">
-                                    <div class="interval-icon hourly">
-                                        <i class="fa-solid fa-clock"></i>
-                                    </div>
-                                    <div class="interval-content">
-                                        <h6>Каждый час</h6>
-                                        <p>Публикация каждый час</p>
-                                    </div>
-                                </div>
-                            </label>
-                            
-                            <label class="interval-option">
-                                <input type="radio" name="repeat_interval" value="daily" class="interval-radio" checked>
-                                <div class="interval-card">
-                                    <div class="interval-icon daily">
-                                        <i class="fa-solid fa-calendar-day"></i>
-                                    </div>
-                                    <div class="interval-content">
-                                        <h6>Ежедневно</h6>
-                                        <p>Публикация один раз в день</p>
-                                    </div>
-                                </div>
-                            </label>
-                            
-                            <label class="interval-option">
-                                <input type="radio" name="repeat_interval" value="weekly" class="interval-radio">
-                                <div class="interval-card">
-                                    <div class="interval-icon weekly">
-                                        <i class="fa-solid fa-calendar-week"></i>
-                                    </div>
-                                    <div class="interval-content">
-                                        <h6>Еженедельно</h6>
-                                        <p>Публикация один раз в неделю</p>
-                                    </div>
-                                </div>
-                            </label>
-                            
-                            <label class="interval-option">
-                                <input type="radio" name="repeat_interval" value="monthly" class="interval-radio">
-                                <div class="interval-card">
-                                    <div class="interval-icon monthly">
-                                        <i class="fa-solid fa-calendar"></i>
-                                    </div>
-                                    <div class="interval-content">
-                                        <h6>Ежемесячно</h6>
-                                        <p>Публикация один раз в месяц</p>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
+<div
+  class="modal fade"
+  id="repeatModal"
+  tabindex="-1"
+  aria-labelledby="repeatModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content modal-glass">
+      <div class="modal-header">
+        <h5 class="modal-title" id="repeatModalLabel">
+          <i class="fa-solid fa-repeat me-2"></i>
+          Настройка автоповтора публикации
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Закрыть"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="repeat-container">
+          <!-- Выбор интервала повторения -->
+          <div class="interval-selection">
+            <h6 class="section-title">
+              <i class="fa-solid fa-clock me-2"></i>
+              Выберите интервал повторения
+            </h6>
+            <p class="section-description">
+              Укажите как часто должна происходить публикация
+            </p>
 
-                    <!-- Настройки периода -->
-                    <div class="period-settings">
-                        <h6 class="section-title">
-                            <i class="fa-solid fa-calendar-days me-2"></i>
-                            Период повторения
-                        </h6>
-                        <p class="section-description">
-                            Укажите период, в течение которого будет действовать автоповтор
-                        </p>
-                        
-                        <div class="period-selector">
-                            <div class="form-group">
-                                <label for="repeatStartDate" class="form-label">Дата начала</label>
-                                <input type="date" class="form-control" id="repeatStartDate" required>
-                                <div class="invalid-feedback" id="repeatStartDateError"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="repeatEndDate" class="form-label">Дата окончания</label>
-                                <input type="date" class="form-control" id="repeatEndDate">
-                                <div class="invalid-feedback" id="repeatEndDateError"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Дополнительные настройки для разных интервалов -->
-                    <div class="additional-settings">
-                        <!-- Настройки для еженедельного повторения -->
-                        <div id="weekly-settings" class="interval-specific-settings" style="display: none;">
-                            <h6 class="section-title">
-                                <i class="fa-solid fa-calendar-week me-2"></i>
-                                Настройки еженедельного повторения
-                            </h6>
-                            <p class="section-description">
-                                Выберите день недели для публикации
-                            </p>
-                            
-                            <div class="weekday-selector">
-                                <div class="weekdays-grid">
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="1">
-                                        <div class="weekday-label">Понедельник</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="2">
-                                        <div class="weekday-label">Вторник</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="3">
-                                        <div class="weekday-label">Среда</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="4">
-                                        <div class="weekday-label">Четверг</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="5">
-                                        <div class="weekday-label">Пятница</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="6">
-                                        <div class="weekday-label">Суббота</div>
-                                    </label>
-                                    <label class="weekday-option">
-                                        <input type="radio" name="weekly_day" value="7">
-                                        <div class="weekday-label">Воскресенье</div>
-                                    </label>
-                                </div>
-                                <div class="invalid-feedback" id="weeklyDayError"></div>
-                            </div>
-                        </div>
-
-                        <!-- Настройки для ежемесячного повторения -->
-                        <div id="monthly-settings" class="interval-specific-settings" style="display: none;">
-                            <h6 class="section-title">
-                                <i class="fa-solid fa-calendar me-2"></i>
-                                Настройки ежемесячного повторения
-                            </h6>
-                            <p class="section-description">
-                                Выберите способ определения дня публикации
-                            </p>
-                            
-                            <div class="monthly-options">
-                                <label class="monthly-option">
-                                    <input type="radio" name="monthly_type" value="date" checked>
-                                    <div class="monthly-option-content">
-                                        <h6>По дате</h6>
-                                        <p>Публикация в определенный день месяца</p>
-                                        <div class="date-input-group">
-                                            <label for="monthlyDate">День месяца:</label>
-                                            <select class="form-control" id="monthlyDate">
-                                                <!-- Опции генерируются JavaScript -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </label>
-                                
-                                <label class="monthly-option">
-                                    <input type="radio" name="monthly_type" value="weekday">
-                                    <div class="monthly-option-content">
-                                        <h6>По дню недели</h6>
-                                        <p>Публикация в определенный день недели</p>
-                                        <div class="weekday-input-group">
-                                            <div class="form-row">
-                                                <label for="monthlyWeek">Неделя:</label>
-                                                <select class="form-control" id="monthlyWeek">
-                                                    <option value="1">Первая</option>
-                                                    <option value="2">Вторая</option>
-                                                    <option value="3">Третья</option>
-                                                    <option value="4">Четвертая</option>
-                                                    <option value="-1">Последняя</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-row">
-                                                <label for="monthlyWeekday">День недели:</label>
-                                                <select class="form-control" id="monthlyWeekday">
-                                                    <option value="1">Понедельник</option>
-                                                    <option value="2">Вторник</option>
-                                                    <option value="3">Среда</option>
-                                                    <option value="4">Четверг</option>
-                                                    <option value="5">Пятница</option>
-                                                    <option value="6">Суббота</option>
-                                                    <option value="7">Воскресенье</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Превью настроек -->
-                    <div class="repeat-preview">
-                        <h6 class="section-title">
-                            <i class="fa-solid fa-eye me-2"></i>
-                            Превью настроек повторения
-                        </h6>
-                        <div class="preview-content" id="repeatPreviewContent">
-                            <div class="preview-item">
-                                <strong>Интервал:</strong> <span id="previewInterval">Ежедневно</span>
-                            </div>
-                            <div class="preview-item">
-                                <strong>Период:</strong> <span id="previewPeriod">Не указан</span>
-                            </div>
-                            <div class="preview-item">
-                                <strong>Следующая публикация:</strong> <span id="previewNext">Не определена</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="interval-options">
+              <label class="interval-option">
+                <input
+                  type="radio"
+                  name="repeat_interval"
+                  value="minutely"
+                  class="interval-radio"
+                />
+                <div class="interval-card">
+                  <div class="interval-icon minutely">
+                    <i class="fa-solid fa-stopwatch"></i>
+                  </div>
+                  <div class="interval-content">
+                    <h6>Каждую минуту</h6>
+                    <p>Публикация каждую минуту</p>
+                  </div>
                 </div>
+              </label>
+
+              <label class="interval-option">
+                <input
+                  type="radio"
+                  name="repeat_interval"
+                  value="hourly"
+                  class="interval-radio"
+                />
+                <div class="interval-card">
+                  <div class="interval-icon hourly">
+                    <i class="fa-solid fa-clock"></i>
+                  </div>
+                  <div class="interval-content">
+                    <h6>Каждый час</h6>
+                    <p>Публикация каждый час</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="interval-option">
+                <input
+                  type="radio"
+                  name="repeat_interval"
+                  value="daily"
+                  class="interval-radio"
+                  checked
+                />
+                <div class="interval-card">
+                  <div class="interval-icon daily">
+                    <i class="fa-solid fa-calendar-day"></i>
+                  </div>
+                  <div class="interval-content">
+                    <h6>Ежедневно</h6>
+                    <p>Публикация один раз в день</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="interval-option">
+                <input
+                  type="radio"
+                  name="repeat_interval"
+                  value="weekly"
+                  class="interval-radio"
+                />
+                <div class="interval-card">
+                  <div class="interval-icon weekly">
+                    <i class="fa-solid fa-calendar-week"></i>
+                  </div>
+                  <div class="interval-content">
+                    <h6>Еженедельно</h6>
+                    <p>Публикация один раз в неделю</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="interval-option">
+                <input
+                  type="radio"
+                  name="repeat_interval"
+                  value="monthly"
+                  class="interval-radio"
+                />
+                <div class="interval-card">
+                  <div class="interval-icon monthly">
+                    <i class="fa-solid fa-calendar"></i>
+                  </div>
+                  <div class="interval-content">
+                    <h6>Ежемесячно</h6>
+                    <p>Публикация один раз в месяц</p>
+                  </div>
+                </div>
+              </label>
             </div>
-            
-            <!-- Добавлена фиксированная нижняя панель с кнопками для мобильных -->
-            <div class="modal-footer mobile-optimized-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-primary" id="saveRepeatSettings">Сохранить</button>
+          </div>
+
+          <!-- Настройки периода -->
+          <div class="period-settings">
+            <h6 class="section-title">
+              <i class="fa-solid fa-calendar-days me-2"></i>
+              Период повторения
+            </h6>
+            <p class="section-description">
+              Укажите период, в течение которого будет действовать автоповтор
+            </p>
+
+            <div class="period-selector">
+              <div class="form-group">
+                <label for="repeatStartDate" class="form-label"
+                  >Дата начала</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  id="repeatStartDate"
+                  required
+                />
+                <div class="invalid-feedback" id="repeatStartDateError"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="repeatEndDate" class="form-label"
+                  >Дата окончания</label
+                >
+                <input type="date" class="form-control" id="repeatEndDate" />
+                <div class="invalid-feedback" id="repeatEndDateError"></div>
+              </div>
             </div>
+          </div>
+
+          <!-- Дополнительные настройки для разных интервалов -->
+          <div class="additional-settings">
+            <!-- Настройки для еженедельного повторения -->
+            <div
+              id="weekly-settings"
+              class="interval-specific-settings"
+              style="display: none"
+            >
+              <h6 class="section-title">
+                <i class="fa-solid fa-calendar-week me-2"></i>
+                Настройки еженедельного повторения
+              </h6>
+              <p class="section-description">
+                Выберите день недели для публикации
+              </p>
+
+              <div class="weekday-selector">
+                <div class="weekdays-grid">
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="1" />
+                    <div class="weekday-label">Понедельник</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="2" />
+                    <div class="weekday-label">Вторник</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="3" />
+                    <div class="weekday-label">Среда</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="4" />
+                    <div class="weekday-label">Четверг</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="5" />
+                    <div class="weekday-label">Пятница</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="6" />
+                    <div class="weekday-label">Суббота</div>
+                  </label>
+                  <label class="weekday-option">
+                    <input type="radio" name="weekly_day" value="7" />
+                    <div class="weekday-label">Воскресенье</div>
+                  </label>
+                </div>
+                <div class="invalid-feedback" id="weeklyDayError"></div>
+              </div>
+            </div>
+
+            <!-- Настройки для ежемесячного повторения -->
+            <div
+              id="monthly-settings"
+              class="interval-specific-settings"
+              style="display: none"
+            >
+              <h6 class="section-title">
+                <i class="fa-solid fa-calendar me-2"></i>
+                Настройки ежемесячного повторения
+              </h6>
+              <p class="section-description">
+                Выберите способ определения дня публикации
+              </p>
+
+              <div class="monthly-options">
+                <label class="monthly-option">
+                  <input
+                    type="radio"
+                    name="monthly_type"
+                    value="date"
+                    checked
+                  />
+                  <div class="monthly-option-content">
+                    <h6>По дате</h6>
+                    <p>Публикация в определенный день месяца</p>
+                    <div class="date-input-group">
+                      <label for="monthlyDate">День месяца:</label>
+                      <select class="form-control" id="monthlyDate">
+                        <!-- Опции генерируются JavaScript -->
+                      </select>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="monthly-option">
+                  <input type="radio" name="monthly_type" value="weekday" />
+                  <div class="monthly-option-content">
+                    <h6>По дню недели</h6>
+                    <p>Публикация в определенный день недели</p>
+                    <div class="weekday-input-group">
+                      <div class="form-row">
+                        <label for="monthlyWeek">Неделя:</label>
+                        <select class="form-control" id="monthlyWeek">
+                          <option value="1">Первая</option>
+                          <option value="2">Вторая</option>
+                          <option value="3">Третья</option>
+                          <option value="4">Четвертая</option>
+                          <option value="-1">Последняя</option>
+                        </select>
+                      </div>
+                      <div class="form-row">
+                        <label for="monthlyWeekday">День недели:</label>
+                        <select class="form-control" id="monthlyWeekday">
+                          <option value="1">Понедельник</option>
+                          <option value="2">Вторник</option>
+                          <option value="3">Среда</option>
+                          <option value="4">Четверг</option>
+                          <option value="5">Пятница</option>
+                          <option value="6">Суббота</option>
+                          <option value="7">Воскресенье</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Превью настроек -->
+          <div class="repeat-preview">
+            <h6 class="section-title">
+              <i class="fa-solid fa-eye me-2"></i>
+              Превью настроек повторения
+            </h6>
+            <div class="preview-content" id="repeatPreviewContent">
+              <div class="preview-item">
+                <strong>Интервал:</strong>
+                <span id="previewInterval">Ежедневно</span>
+              </div>
+              <div class="preview-item">
+                <strong>Период:</strong>
+                <span id="previewPeriod">Не указан</span>
+              </div>
+              <div class="preview-item">
+                <strong>Следующая публикация:</strong>
+                <span id="previewNext">Не определена</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Добавлена фиксированная нижняя панель с кнопками для мобильных -->
+      <div class="modal-footer mobile-optimized-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Отмена
+        </button>
+        <button type="button" class="btn btn-primary" id="saveRepeatSettings">
+          Сохранить
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
-    /* Мобильная оптимизация для модальных окон */
-    @media (max-width: 576px) {
-        .modal-dialog {
-            margin: 10px;
-            max-width: calc(100% - 20px);
-        }
-        
-        .modal-body {
-            padding: 15px;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        
-        .mobile-optimized-footer {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 15px;
-        }
-        
-        .mobile-optimized-footer .btn {
-            flex: 1;
-            margin: 0 5px;
-            padding: 10px;
-        }
-        
-        /* Более крупные элементы для удобного нажатия */
-        .interval-option {
-            min-height: 44px;
-        }
+  /* Мобильная оптимизация для модальных окон */
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 10px;
+      max-width: calc(100% - 20px);
     }
+
+    .modal-body {
+      padding: 15px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .mobile-optimized-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+    }
+
+    .mobile-optimized-footer .btn {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+    }
+
+    /* Более крупные элементы для удобного нажатия */
+    .interval-option {
+      min-height: 44px;
+    }
+  }
 </style>
