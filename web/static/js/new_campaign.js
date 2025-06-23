@@ -91,7 +91,7 @@ class NewCampaignManager {
     this.bindElement("addButton", "click", () => this.addButton());
 
     // Предпросмотр
-    this.bindElement("previewButton", "click", () => this.showPreview());
+    this.bindElement("previewButton", "click", () => this.togglePreview());
 
     // Счетчик символов
     this.bindElement("messageText", "input", () => this.updateCharCounter());
@@ -643,52 +643,37 @@ class NewCampaignManager {
       // Обновляем предпросмотр, если он активен
       const previewContainer = document.getElementById("messagePreview");
       if (previewContainer && previewContainer.style.display !== "none") {
-        this.showPreview();
+        this.togglePreview();
       }
     }
   }
 
-  showPreview() {
-    // Получаем текст из Telegram редактора
-    const messageText = window.telegramEditor
-      ? window.telegramEditor.getValue()
-      : document.getElementById("messageText").value;
-
-    if (!messageText.trim()) {
-      Utils.showNotification(
-        "warning",
-        "Предупреждение",
-        "Введите текст сообщения для предпросмотра"
-      );
-      return;
-    }
-
+  togglePreview() {
     const previewContainer = document.getElementById("messagePreview");
-    if (!previewContainer) return;
-
-    const previewHtml = this.generatePreviewHtml(messageText);
-    previewContainer.innerHTML = previewHtml;
-    previewContainer.style.display = "block";
-
     const previewButton = document.getElementById("previewButton");
-    if (previewButton) {
-      previewButton.innerHTML =
-        '<i class="fa-solid fa-eye-slash me-2"></i>Скрыть предпросмотр';
-      previewButton.onclick = () => this.hidePreview();
-    }
-  }
-
-  hidePreview() {
-    const previewContainer = document.getElementById("messagePreview");
-    if (previewContainer) {
+    if (!previewContainer || !previewButton) return;
+    if (previewContainer.style.display === "block") {
       previewContainer.style.display = "none";
-    }
-
-    const previewButton = document.getElementById("previewButton");
-    if (previewButton) {
       previewButton.innerHTML =
         '<i class="fa-solid fa-eye me-2"></i>Показать предпросмотр';
-      previewButton.onclick = () => this.showPreview();
+    } else {
+      // Получаем текст из Telegram редактора
+      const messageText = window.telegramEditor
+        ? window.telegramEditor.getValue()
+        : document.getElementById("messageText").value;
+      if (!messageText.trim()) {
+        Utils.showNotification(
+          "warning",
+          "Предупреждение",
+          "Введите текст сообщения для предпросмотра"
+        );
+        return;
+      }
+      const previewHtml = this.generatePreviewHtml(messageText);
+      previewContainer.innerHTML = previewHtml;
+      previewContainer.style.display = "block";
+      previewButton.innerHTML =
+        '<i class="fa-solid fa-eye-slash me-2"></i>Скрыть предпросмотр';
     }
   }
 
