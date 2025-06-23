@@ -111,14 +111,8 @@ def get_chat_info_sync(chat_id, token):
             if chat.get('photo'):
                 photo_id = chat.get('photo', {}).get('big_file_id')
                 if photo_id:
-                    photo_url = f"https://api.telegram.org/bot{token}/getFile"
-                    photo_response = requests.get(photo_url, params={'file_id': photo_id})
-                    photo_data = photo_response.json()
-                    
-                    if photo_data.get('ok'):
-                        file_path = photo_data.get('result', {}).get('file_path')
-                        if file_path:
-                            avatar_url = f"https://api.telegram.org/file/bot{token}/{file_path}"
+                    # avatar_url = f"https://api.telegram.org/file/bot{token}/{file_path}"
+                    avatar_url = f"/api/chat-photo/{photo_id}"
         except Exception as e:
             logger.error(f"Ошибка при получении аватара: {e}")
         
@@ -1013,3 +1007,27 @@ def test_chat_parameters(chat_id):
     except Exception as e:
         logger.error(f"❌ Ошибка при тестировании параметров: {e}")
         return jsonify({"error": "Внутренняя ошибка сервера", "detail": str(e)}), 500
+
+@api_bp.route('/chat-photo/<file_id>', methods=['GET'])
+@login_required
+def get_chat_photo(file_id):
+    """Проксирует фото чата, скрывая токен бота"""
+    try:
+        token = current_app.config_obj.BOT_TOKEN
+        # Получаем путь к файлу через Telegram API
+        file_info_url = f"https://api.telegram.org/bot{token}/getFile"
+        file_info_resp = requests.get(file_info_url, params={'file_id': file_id})
+        file_info = file_info_resp.json()
+        if not file_info.get('ok'):
+            return jsonify({"error": "Не удалось получить информацию о файле"}), 404
+        file_path = file_info['result']['file_path']
+        # Скачиваем сам файл
+        file_url = f"https://api.telegram.org/file/bot{token}/{file_path}"
+        file_resp = requests.get(file_url)
+        if file_resp.status_code != 200:
+            return jsonify({"error": "Не удалось скачать файл"}), 404
+        # Отправляем файл как ответ
+        return send_file(BytesIO(file_resp.content), mimetype='image/jpeg')
+    except Exception as e:
+        logger.error(f"Ошибка при проксировании фото чата: {e}")
+        return jsonify({"error": "Внутренняя ошибка сервера"}), 500
