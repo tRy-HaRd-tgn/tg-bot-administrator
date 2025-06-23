@@ -1405,7 +1405,9 @@
           "updated_at": "2025-06-23T22:08:17.715121",
           "username": null,
           "thread_id": null,
-          "is_active": true
+          "is_active": true,
+          "last_posted": "2025-06-24T01:30:48.708448",
+          "post_count": 1
         }
       ],
       "buttons": [
@@ -1425,7 +1427,9 @@
       ],
       "id": "8855cb2a-8d73-479b-b894-630e163f4d22",
       "created_at": "2025-06-24T01:27:37.102907",
-      "updated_at": "2025-06-24T01:27:37.102907"
+      "updated_at": "2025-06-24T01:27:37.102907",
+      "last_run": "2025-06-23T22:30:48.708448+00:00",
+      "run_count": 1
     }
   ]
 }
