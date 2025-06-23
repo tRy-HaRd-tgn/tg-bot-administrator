@@ -404,3 +404,23 @@ B ЛС
 2025-06-23 12:42:17.540 | DEBUG    | bot.telegram_bot:echo_message:89 - Получено сообщение от пользователя 7679684655: Здраствуйте требуеться люди для поомощи в уборке на складе , все подлробности в лс
 2025-06-23 12:42:17.541 | DEBUG    | bot.telegram_bot:echo_message:90 - Тип чата: supergroup
 2025-06-23 12:42:17.541 | DEBUG    | bot.telegram_bot:echo_message:104 - Бот добавлен в группу/канал -1001792970894, никаких действий не требуется
+2025-06-23 12:42:43.967 | DEBUG    | bot.campaign_scheduler:_schedule_checker:231 - Проверка кампаний в UTC: 2025-06-23 09:42:43 (Локальное: 2025-06-23 12:42:43)
+2025-06-23 12:42:46.519 | DEBUG    | __main__:main:85 - Heartbeat - система работает
+2025-06-23 12:43:43.971 | DEBUG    | bot.campaign_scheduler:_schedule_checker:231 - Проверка кампаний в UTC: 2025-06-23 09:43:43 (Локальное: 2025-06-23 12:43:43)
+2025-06-23 12:43:46.535 | DEBUG    | __main__:main:85 - Heartbeat - система работает
+2025-06-23 12:44:43.977 | DEBUG    | bot.campaign_scheduler:_schedule_checker:231 - Проверка кампаний в UTC: 2025-06-23 09:44:43 (Локальное: 2025-06-23 12:44:43)
+2025-06-23 12:44:46.546 | DEBUG    | __main__:main:85 - Heartbeat - система работает
+2025-06-23 12:45:43.991 | DEBUG    | bot.campaign_scheduler:_schedule_checker:231 - Проверка кампаний в UTC: 2025-06-23 09:45:43 (Локальное: 2025-06-23 12:45:43)
+2025-06-23 12:45:44.268 | DEBUG    | web.app:load_user:39 - Загрузка пользователя: 850c4c2f-51b2-410f-b9ea-35f265735b71
+2025-06-23 12:45:44.269 | DEBUG    | web.app:load_user:39 - Загрузка пользователя: 850c4c2f-51b2-410f-b9ea-35f265735b71
+2025-06-23 12:45:44.269 | DEBUG    | web.utils.auth:get_user_by_id:96 - Получение пользователя по ID: 850c4c2f-51b2-410f-b9ea-35f265735b71
+2025-06-23 12:45:44.270 | DEBUG    | web.utils.auth:get_user_by_id:96 - Получение пользователя по ID: 850c4c2f-51b2-410f-b9ea-35f265735b71
+2025-06-23 12:45:44.270 | DEBUG    | web.utils.auth:get_user_by_id:106 - ✅ Пользователь найден: admin
+2025-06-23 12:45:44.271 | DEBUG    | web.utils.auth:get_user_by_id:106 - ✅ Пользователь найден: admin
+2025-06-23 12:45:44.271 | DEBUG    | web.models.user:__init__:8 - Создание объекта пользователя: admin
+2025-06-23 12:45:44.271 | DEBUG    | web.models.user:__init__:8 - Создание объекта пользователя: admin
+2025-06-23 12:45:44.271 | DEBUG    | web.routes.api:get_campaigns_statistics:633 - Получение статистики кампаний
+2025-06-23 12:45:44.272 | DEBUG    | web.routes.api:get_chats_statistics:661 - Получение статистики чатов
+2025-06-23 12:45:44.272 | DEBUG    | web.routes.api:get_campaigns_statistics:650 - Статистика кампаний: {'active_campaigns': 0, 'total_campaigns': 0, 'scheduled_messages': 0}
+2025-06-23 12:45:44.272 | DEBUG    | web.routes.api:get_chats_statistics:681 - Статистика чатов: {'regular_groups': 1, 'forum_groups': 1, 'supergroups': 2, 'total_chats': 3}
+2025-06-23 12:45:46.550 | DEBUG    | __main__:main:85 - Heartbeat - система работает
