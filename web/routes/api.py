@@ -668,7 +668,7 @@ def get_chats_statistics():
         # Собираем статистику
         regular_groups = sum(1 for c in chats if str(c.get('type')) == 'group')
         forum_groups = sum(1 for c in chats if c.get('is_forum', False))
-        supergroups = sum(1 for c in chats if str(c.get('type')) == 'supergroup')
+        supergroups = sum(1 for c in chats if str(c.get('type')) == 'supergroup' and not c.get('is_forum', False))
         total_chats = len(chats)
         
         stats = {
