@@ -382,7 +382,7 @@ class TelegramBot:
                 protect_content=protect_content             # Защищённый контент
             )
             
-            # Если есть кнопки, отправляем их отдельным сообщением
+            # Если есть кнопки, добавляем их к первому сообщению медиа-группы
             if buttons and messages:
                 keyboard = []
                 for button in buttons:
@@ -395,19 +395,32 @@ class TelegramBot:
                     
                 markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
                 
-                logger.debug("Отправка дополнительного сообщения с кнопками")
+                logger.debug("Добавление кнопок к первому сообщению медиа-группы")
                 
-                button_message = await self.bot.send_message(
-                    chat_id=chat_id,
-                    text="⚡ Дополнительные действия:",
-                    reply_markup=markup,
-                    message_thread_id=thread_id,
-                    disable_notification=disable_notification,
-                    protect_content=protect_content
-                )
-                
-                if button_message:
-                    messages.append(button_message)
+                # Редактируем первое сообщение медиа-группы, добавляя кнопки
+                try:
+                    await self.bot.edit_message_reply_markup(
+                        chat_id=chat_id,
+                        message_id=messages[0].message_id,
+                        reply_markup=markup
+                    )
+                    logger.debug("Кнопки успешно добавлены к медиа-сообщению")
+                except Exception as e:
+                    logger.warning(f"Не удалось добавить кнопки к медиа-сообщению: {e}")
+                    # Если не удалось добавить кнопки к медиа, отправляем их отдельным сообщением
+                    logger.debug("Отправка кнопок отдельным сообщением")
+                    
+                    button_message = await self.bot.send_message(
+                        chat_id=chat_id,
+                        text="⚡ Дополнительные действия:",
+                        reply_markup=markup,
+                        message_thread_id=thread_id,
+                        disable_notification=disable_notification,
+                        protect_content=protect_content
+                    )
+                    
+                    if button_message:
+                        messages.append(button_message)
             
             logger.info(f"✅ Медиа-группа отправлена в чат {chat_id}, сообщений: {len(messages)}")
             return messages
