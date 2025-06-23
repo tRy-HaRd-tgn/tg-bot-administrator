@@ -274,14 +274,37 @@ class CalendarManager {
 
     // Фильтруем события на сегодня
     const todayEvents = this.events.filter((event) => {
-      const eventDate = new Date(event.date);
-      const eventYear = eventDate.getUTCFullYear();
-      const eventMonth = eventDate.getUTCMonth() + 1;
-      const eventDay = eventDate.getUTCDate();
-      const eventDateStr = `${eventYear}-${eventMonth
-        .toString()
-        .padStart(2, "0")}-${eventDay.toString().padStart(2, "0")}`;
-      return eventDateStr === dateStr;
+      if (!event.date) {
+        return false;
+      }
+
+      try {
+        const eventDate = new Date(event.date);
+
+        // Проверяем, что дата валидна
+        if (isNaN(eventDate.getTime())) {
+          console.warn(
+            "Неверная дата события в сегодняшних кампаниях:",
+            event.date
+          );
+          return false;
+        }
+
+        const eventYear = eventDate.getUTCFullYear();
+        const eventMonth = eventDate.getUTCMonth() + 1;
+        const eventDay = eventDate.getUTCDate();
+        const eventDateStr = `${eventYear}-${eventMonth
+          .toString()
+          .padStart(2, "0")}-${eventDay.toString().padStart(2, "0")}`;
+        return eventDateStr === dateStr;
+      } catch (error) {
+        console.error(
+          "Ошибка при обработке даты события в сегодняшних кампаниях:",
+          error,
+          event
+        );
+        return false;
+      }
     });
 
     // Сортируем события по времени
@@ -373,7 +396,19 @@ class CalendarManager {
     // Отображаем события на календаре
     this.events.forEach((event) => {
       try {
+        if (!event.date) {
+          console.warn("Событие без даты:", event);
+          return;
+        }
+
         const eventDate = new Date(event.date);
+
+        // Проверяем, что дата валидна
+        if (isNaN(eventDate.getTime())) {
+          console.warn("Неверная дата события:", event.date, event);
+          return;
+        }
+
         const year = eventDate.getUTCFullYear();
         const month = eventDate.getUTCMonth() + 1;
         const day = eventDate.getUTCDate();
@@ -472,10 +507,25 @@ class CalendarManager {
     const dateStr = `${year}-${month.toString().padStart(2, "0")}-${day
       .toString()
       .padStart(2, "0")}`;
+
     const dayEvents = this.events.filter((event) => {
-      const eventDate = new Date(event.date);
-      const eventDateStr = eventDate.toISOString().split("T")[0];
-      return eventDateStr === dateStr;
+      if (!event.date) return false;
+
+      try {
+        const eventDate = new Date(event.date);
+
+        // Проверяем, что дата валидна
+        if (isNaN(eventDate.getTime())) {
+          console.warn("Неверная дата события:", event.date);
+          return false;
+        }
+
+        const eventDateStr = eventDate.toISOString().split("T")[0];
+        return eventDateStr === dateStr;
+      } catch (error) {
+        console.error("Ошибка при обработке даты события:", error, event);
+        return false;
+      }
     });
 
     // Сортировка событий по времени
@@ -664,12 +714,23 @@ class CalendarManager {
     return monthNames[monthIndex];
   }
 
-  formatTime(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleTimeString("ru-RU", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  formatTime(timeStr) {
+    // Если передана строка времени (например, "14:30"), возвращаем её как есть
+    if (typeof timeStr === "string" && timeStr.includes(":")) {
+      return timeStr;
+    }
+
+    // Если передана дата, извлекаем время
+    if (timeStr && !isNaN(new Date(timeStr).getTime())) {
+      const date = new Date(timeStr);
+      return date.toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
+    // Возвращаем время по умолчанию
+    return "00:00";
   }
 
   formatEventTimeUTC(event) {
@@ -684,7 +745,17 @@ class CalendarManager {
   }
 
   formatDate(dateStr) {
+    if (!dateStr) {
+      return "Дата не указана";
+    }
+
     const date = new Date(dateStr);
+
+    // Проверяем, что дата валидна
+    if (isNaN(date.getTime())) {
+      return "Неверная дата";
+    }
+
     return date.toLocaleDateString("ru-RU", {
       year: "numeric",
       month: "long",
