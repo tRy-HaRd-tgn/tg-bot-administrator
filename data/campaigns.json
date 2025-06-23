@@ -1,3 +1,835 @@
 {
-  "campaigns": []
+  "campaigns": [
+    {
+      "name": "вау вау",
+      "message_text": "бээээм",
+      "status": "active",
+      "start_date": "2025-06-23",
+      "end_date": "9999-12-31",
+      "post_time": "18:58",
+      "repeat_enabled": false,
+      "days_of_week": "",
+      "specific_dates": "",
+      "timezone": "UTC",
+      "disable_preview": false,
+      "disable_notification": false,
+      "protect_content": false,
+      "pin_message": false,
+      "description": "мяу мяу",
+      "created_utc": "2025-06-23T18:55:02.639032+00:00",
+      "utc_offset": 3.0,
+      "chats": [
+        {
+          "accent_color_id": 2,
+          "accepted_gift_types": {
+            "limited_gifts": false,
+            "premium_subscription": false,
+            "unique_gifts": false,
+            "unlimited_gifts": false
+          },
+          "avatar_url": null,
+          "bot_is_admin": true,
+          "bot_permissions": {
+            "can_add_web_page_previews": true,
+            "can_be_edited": false,
+            "can_change_info": true,
+            "can_delete_messages": true,
+            "can_edit_messages": false,
+            "can_invite_users": true,
+            "can_manage_chat": true,
+            "can_manage_topics": false,
+            "can_manage_video_chats": true,
+            "can_pin_messages": true,
+            "can_post_messages": false,
+            "can_promote_members": false,
+            "can_restrict_members": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_polls": true
+          },
+          "bot_status": "administrator",
+          "can_send_messages": true,
+          "can_set_sticker_set": false,
+          "chat_id": -4835189893,
+          "created_at": "2025-06-15T09:49:43.127910",
+          "description": null,
+          "has_aggressive_anti_spam": false,
+          "has_hidden_members": false,
+          "has_protected_content": false,
+          "has_visible_history": false,
+          "id": "1b7eae01-de7c-4a66-ac14-b3dc4e7852ae",
+          "invite_link": "https://t.me/+AJQgOFRrCfRjOTAx",
+          "is_forum": false,
+          "join_to_send_messages": false,
+          "linked_chat_id": null,
+          "location": {},
+          "max_reaction_count": 11,
+          "member_count": 2,
+          "message_auto_delete_time": 0,
+          "permissions": {
+            "can_add_web_page_previews": true,
+            "can_change_info": true,
+            "can_invite_users": true,
+            "can_manage_topics": true,
+            "can_pin_messages": true,
+            "can_send_audios": true,
+            "can_send_documents": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_photos": true,
+            "can_send_polls": true,
+            "can_send_video_notes": true,
+            "can_send_videos": true,
+            "can_send_voice_notes": true
+          },
+          "photo_info": {},
+          "pinned_message": {
+            "chat": {
+              "accepted_gift_types": {
+                "limited_gifts": false,
+                "premium_subscription": false,
+                "unique_gifts": false,
+                "unlimited_gifts": false
+              },
+              "all_members_are_administrators": true,
+              "id": -4835189893,
+              "title": "22222222",
+              "type": "group"
+            },
+            "date": 1750419356,
+            "entities": [
+              {
+                "length": 4,
+                "offset": 0,
+                "type": "bold"
+              },
+              {
+                "length": 4,
+                "offset": 6,
+                "type": "bold"
+              },
+              {
+                "length": 6,
+                "offset": 12,
+                "type": "italic"
+              },
+              {
+                "length": 6,
+                "offset": 20,
+                "type": "italic"
+              },
+              {
+                "length": 9,
+                "offset": 28,
+                "type": "underline"
+              },
+              {
+                "length": 9,
+                "offset": 39,
+                "type": "underline"
+              },
+              {
+                "length": 13,
+                "offset": 50,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 65,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 80,
+                "type": "strikethrough"
+              },
+              {
+                "length": 7,
+                "offset": 95,
+                "type": "spoiler"
+              },
+              {
+                "length": 7,
+                "offset": 104,
+                "type": "spoiler"
+              },
+              {
+                "length": 5,
+                "offset": 113,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "bold"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "strikethrough"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "bold"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "italic"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "strikethrough"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "spoiler"
+              },
+              {
+                "length": 26,
+                "offset": 190,
+                "type": "bold"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "italic"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "underline"
+              },
+              {
+                "length": 10,
+                "offset": 218,
+                "type": "text_link",
+                "url": "http://www.example.com/"
+              },
+              {
+                "length": 23,
+                "offset": 230,
+                "type": "code"
+              },
+              {
+                "length": 36,
+                "offset": 255,
+                "type": "pre"
+              },
+              {
+                "language": "python",
+                "length": 79,
+                "offset": 293,
+                "type": "pre"
+              },
+              {
+                "length": 48,
+                "offset": 386,
+                "type": "url"
+              }
+            ],
+            "from": {
+              "first_name": "Автопостинг телеграм тест",
+              "id": 7213801546,
+              "is_bot": true,
+              "username": "autotesttesttestbot"
+            },
+            "has_protected_content": true,
+            "link_preview_options": {
+              "is_disabled": true
+            },
+            "message_id": 477,
+            "text": "bold\n\nbold\n\nitalic\n\nitalic\n\nunderline\n\nunderline\n\nstrikethrough\n\nstrikethrough\n\nstrikethrough\n\nspoiler\n\nspoiler\n\nbold italic bold italic bold strikethrough italic bold strikethrough spoiler underline italic bold bold\n\ninline URL\n\ninline fixed-width code\n\npre-formatted fixed-width code block\n\npre-formatted fixed-width code block written in the Python programming language              https://youtu.be/sEpXl-AbvrA?si=a9FB05YrD3sGLOvO  31"
+          },
+          "slow_mode_delay": 0,
+          "sticker_set_name": null,
+          "title": "22222222",
+          "type": "group",
+          "updated_at": "2025-06-23T13:05:45.434340",
+          "username": null,
+          "thread_id": null,
+          "is_active": true
+        }
+      ],
+      "buttons": [],
+      "media_files": [],
+      "id": "2f0d758b-1035-4e66-bb3a-a13d17a82de1",
+      "created_at": "2025-06-23T21:55:02.645032",
+      "updated_at": "2025-06-23T21:55:02.645032"
+    },
+    {
+      "name": "опр",
+      "message_text": "бээээээээээээээээээээм",
+      "status": "active",
+      "start_date": "2025-06-23",
+      "end_date": "9999-12-31",
+      "post_time": "22:04",
+      "repeat_enabled": false,
+      "days_of_week": "",
+      "specific_dates": "",
+      "timezone": "UTC",
+      "disable_preview": false,
+      "disable_notification": false,
+      "protect_content": false,
+      "pin_message": false,
+      "description": "йцук",
+      "created_utc": "2025-06-23T19:01:23.466944+00:00",
+      "utc_offset": 3.0,
+      "chats": [
+        {
+          "accent_color_id": 2,
+          "accepted_gift_types": {
+            "limited_gifts": false,
+            "premium_subscription": false,
+            "unique_gifts": false,
+            "unlimited_gifts": false
+          },
+          "avatar_url": null,
+          "bot_is_admin": true,
+          "bot_permissions": {
+            "can_add_web_page_previews": true,
+            "can_be_edited": false,
+            "can_change_info": true,
+            "can_delete_messages": true,
+            "can_edit_messages": false,
+            "can_invite_users": true,
+            "can_manage_chat": true,
+            "can_manage_topics": false,
+            "can_manage_video_chats": true,
+            "can_pin_messages": true,
+            "can_post_messages": false,
+            "can_promote_members": false,
+            "can_restrict_members": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_polls": true
+          },
+          "bot_status": "administrator",
+          "can_send_messages": true,
+          "can_set_sticker_set": false,
+          "chat_id": -4835189893,
+          "created_at": "2025-06-15T09:49:43.127910",
+          "description": null,
+          "has_aggressive_anti_spam": false,
+          "has_hidden_members": false,
+          "has_protected_content": false,
+          "has_visible_history": false,
+          "id": "1b7eae01-de7c-4a66-ac14-b3dc4e7852ae",
+          "invite_link": "https://t.me/+AJQgOFRrCfRjOTAx",
+          "is_forum": false,
+          "join_to_send_messages": false,
+          "linked_chat_id": null,
+          "location": {},
+          "max_reaction_count": 11,
+          "member_count": 2,
+          "message_auto_delete_time": 0,
+          "permissions": {
+            "can_add_web_page_previews": true,
+            "can_change_info": true,
+            "can_invite_users": true,
+            "can_manage_topics": true,
+            "can_pin_messages": true,
+            "can_send_audios": true,
+            "can_send_documents": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_photos": true,
+            "can_send_polls": true,
+            "can_send_video_notes": true,
+            "can_send_videos": true,
+            "can_send_voice_notes": true
+          },
+          "photo_info": {},
+          "pinned_message": {
+            "chat": {
+              "accepted_gift_types": {
+                "limited_gifts": false,
+                "premium_subscription": false,
+                "unique_gifts": false,
+                "unlimited_gifts": false
+              },
+              "all_members_are_administrators": true,
+              "id": -4835189893,
+              "title": "22222222",
+              "type": "group"
+            },
+            "date": 1750419356,
+            "entities": [
+              {
+                "length": 4,
+                "offset": 0,
+                "type": "bold"
+              },
+              {
+                "length": 4,
+                "offset": 6,
+                "type": "bold"
+              },
+              {
+                "length": 6,
+                "offset": 12,
+                "type": "italic"
+              },
+              {
+                "length": 6,
+                "offset": 20,
+                "type": "italic"
+              },
+              {
+                "length": 9,
+                "offset": 28,
+                "type": "underline"
+              },
+              {
+                "length": 9,
+                "offset": 39,
+                "type": "underline"
+              },
+              {
+                "length": 13,
+                "offset": 50,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 65,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 80,
+                "type": "strikethrough"
+              },
+              {
+                "length": 7,
+                "offset": 95,
+                "type": "spoiler"
+              },
+              {
+                "length": 7,
+                "offset": 104,
+                "type": "spoiler"
+              },
+              {
+                "length": 5,
+                "offset": 113,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "bold"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "strikethrough"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "bold"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "italic"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "strikethrough"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "spoiler"
+              },
+              {
+                "length": 26,
+                "offset": 190,
+                "type": "bold"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "italic"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "underline"
+              },
+              {
+                "length": 10,
+                "offset": 218,
+                "type": "text_link",
+                "url": "http://www.example.com/"
+              },
+              {
+                "length": 23,
+                "offset": 230,
+                "type": "code"
+              },
+              {
+                "length": 36,
+                "offset": 255,
+                "type": "pre"
+              },
+              {
+                "language": "python",
+                "length": 79,
+                "offset": 293,
+                "type": "pre"
+              },
+              {
+                "length": 48,
+                "offset": 386,
+                "type": "url"
+              }
+            ],
+            "from": {
+              "first_name": "Автопостинг телеграм тест",
+              "id": 7213801546,
+              "is_bot": true,
+              "username": "autotesttesttestbot"
+            },
+            "has_protected_content": true,
+            "link_preview_options": {
+              "is_disabled": true
+            },
+            "message_id": 477,
+            "text": "bold\n\nbold\n\nitalic\n\nitalic\n\nunderline\n\nunderline\n\nstrikethrough\n\nstrikethrough\n\nstrikethrough\n\nspoiler\n\nspoiler\n\nbold italic bold italic bold strikethrough italic bold strikethrough spoiler underline italic bold bold\n\ninline URL\n\ninline fixed-width code\n\npre-formatted fixed-width code block\n\npre-formatted fixed-width code block written in the Python programming language              https://youtu.be/sEpXl-AbvrA?si=a9FB05YrD3sGLOvO  31"
+          },
+          "slow_mode_delay": 0,
+          "sticker_set_name": null,
+          "title": "22222222",
+          "type": "group",
+          "updated_at": "2025-06-23T13:05:45.434340",
+          "username": null,
+          "thread_id": null,
+          "is_active": true
+        }
+      ],
+      "buttons": [],
+      "media_files": [],
+      "id": "729b6ac0-fca9-48db-b5f8-57aa688394ca",
+      "created_at": "2025-06-23T22:01:23.472950",
+      "updated_at": "2025-06-23T22:01:23.472950"
+    },
+    {
+      "name": "тест3",
+      "message_text": "тест3",
+      "status": "active",
+      "start_date": "2025-06-24",
+      "end_date": "9999-12-31",
+      "post_time": "12:00",
+      "repeat_enabled": false,
+      "days_of_week": "",
+      "specific_dates": "",
+      "timezone": "UTC",
+      "disable_preview": false,
+      "disable_notification": false,
+      "protect_content": false,
+      "pin_message": false,
+      "description": "вау вау",
+      "created_utc": "2025-06-23T19:06:26.523816+00:00",
+      "utc_offset": 3.0,
+      "chats": [
+        {
+          "accent_color_id": 2,
+          "accepted_gift_types": {
+            "limited_gifts": false,
+            "premium_subscription": false,
+            "unique_gifts": false,
+            "unlimited_gifts": false
+          },
+          "avatar_url": null,
+          "bot_is_admin": true,
+          "bot_permissions": {
+            "can_add_web_page_previews": true,
+            "can_be_edited": false,
+            "can_change_info": true,
+            "can_delete_messages": true,
+            "can_edit_messages": false,
+            "can_invite_users": true,
+            "can_manage_chat": true,
+            "can_manage_topics": false,
+            "can_manage_video_chats": true,
+            "can_pin_messages": true,
+            "can_post_messages": false,
+            "can_promote_members": false,
+            "can_restrict_members": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_polls": true
+          },
+          "bot_status": "administrator",
+          "can_send_messages": true,
+          "can_set_sticker_set": false,
+          "chat_id": -4835189893,
+          "created_at": "2025-06-15T09:49:43.127910",
+          "description": null,
+          "has_aggressive_anti_spam": false,
+          "has_hidden_members": false,
+          "has_protected_content": false,
+          "has_visible_history": false,
+          "id": "1b7eae01-de7c-4a66-ac14-b3dc4e7852ae",
+          "invite_link": "https://t.me/+AJQgOFRrCfRjOTAx",
+          "is_forum": false,
+          "join_to_send_messages": false,
+          "linked_chat_id": null,
+          "location": {},
+          "max_reaction_count": 11,
+          "member_count": 2,
+          "message_auto_delete_time": 0,
+          "permissions": {
+            "can_add_web_page_previews": true,
+            "can_change_info": true,
+            "can_invite_users": true,
+            "can_manage_topics": true,
+            "can_pin_messages": true,
+            "can_send_audios": true,
+            "can_send_documents": true,
+            "can_send_media_messages": true,
+            "can_send_messages": true,
+            "can_send_other_messages": true,
+            "can_send_photos": true,
+            "can_send_polls": true,
+            "can_send_video_notes": true,
+            "can_send_videos": true,
+            "can_send_voice_notes": true
+          },
+          "photo_info": {},
+          "pinned_message": {
+            "chat": {
+              "accepted_gift_types": {
+                "limited_gifts": false,
+                "premium_subscription": false,
+                "unique_gifts": false,
+                "unlimited_gifts": false
+              },
+              "all_members_are_administrators": true,
+              "id": -4835189893,
+              "title": "22222222",
+              "type": "group"
+            },
+            "date": 1750419356,
+            "entities": [
+              {
+                "length": 4,
+                "offset": 0,
+                "type": "bold"
+              },
+              {
+                "length": 4,
+                "offset": 6,
+                "type": "bold"
+              },
+              {
+                "length": 6,
+                "offset": 12,
+                "type": "italic"
+              },
+              {
+                "length": 6,
+                "offset": 20,
+                "type": "italic"
+              },
+              {
+                "length": 9,
+                "offset": 28,
+                "type": "underline"
+              },
+              {
+                "length": 9,
+                "offset": 39,
+                "type": "underline"
+              },
+              {
+                "length": 13,
+                "offset": 50,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 65,
+                "type": "strikethrough"
+              },
+              {
+                "length": 13,
+                "offset": 80,
+                "type": "strikethrough"
+              },
+              {
+                "length": 7,
+                "offset": 95,
+                "type": "spoiler"
+              },
+              {
+                "length": 7,
+                "offset": 104,
+                "type": "spoiler"
+              },
+              {
+                "length": 5,
+                "offset": 113,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "bold"
+              },
+              {
+                "length": 12,
+                "offset": 118,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "bold"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "italic"
+              },
+              {
+                "length": 26,
+                "offset": 130,
+                "type": "strikethrough"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "bold"
+              },
+              {
+                "length": 34,
+                "offset": 156,
+                "type": "italic"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "strikethrough"
+              },
+              {
+                "length": 33,
+                "offset": 156,
+                "type": "spoiler"
+              },
+              {
+                "length": 26,
+                "offset": 190,
+                "type": "bold"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "italic"
+              },
+              {
+                "length": 21,
+                "offset": 190,
+                "type": "underline"
+              },
+              {
+                "length": 10,
+                "offset": 218,
+                "type": "text_link",
+                "url": "http://www.example.com/"
+              },
+              {
+                "length": 23,
+                "offset": 230,
+                "type": "code"
+              },
+              {
+                "length": 36,
+                "offset": 255,
+                "type": "pre"
+              },
+              {
+                "language": "python",
+                "length": 79,
+                "offset": 293,
+                "type": "pre"
+              },
+              {
+                "length": 48,
+                "offset": 386,
+                "type": "url"
+              }
+            ],
+            "from": {
+              "first_name": "Автопостинг телеграм тест",
+              "id": 7213801546,
+              "is_bot": true,
+              "username": "autotesttesttestbot"
+            },
+            "has_protected_content": true,
+            "link_preview_options": {
+              "is_disabled": true
+            },
+            "message_id": 477,
+            "text": "bold\n\nbold\n\nitalic\n\nitalic\n\nunderline\n\nunderline\n\nstrikethrough\n\nstrikethrough\n\nstrikethrough\n\nspoiler\n\nspoiler\n\nbold italic bold italic bold strikethrough italic bold strikethrough spoiler underline italic bold bold\n\ninline URL\n\ninline fixed-width code\n\npre-formatted fixed-width code block\n\npre-formatted fixed-width code block written in the Python programming language              https://youtu.be/sEpXl-AbvrA?si=a9FB05YrD3sGLOvO  31"
+          },
+          "slow_mode_delay": 0,
+          "sticker_set_name": null,
+          "title": "22222222",
+          "type": "group",
+          "updated_at": "2025-06-23T13:05:45.434340",
+          "username": null,
+          "thread_id": null,
+          "is_active": true
+        }
+      ],
+      "buttons": [],
+      "media_files": [],
+      "id": "11c2c2b3-c4bf-45dc-8394-8448c1d4e444",
+      "created_at": "2025-06-23T22:06:26.528816",
+      "updated_at": "2025-06-23T22:06:26.528816"
+    }
+  ]
 }

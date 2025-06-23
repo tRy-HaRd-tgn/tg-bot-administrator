@@ -7,9 +7,9 @@
       "title": "444444444",
       "username": null,
       "description": null,
-      "member_count": 2,
+      "member_count": 3,
       "is_forum": false,
-      "avatar_url": "https://api.telegram.org/file/bot7213801546:AAE9wFgoxJxHlC5xny1xfeH0wNwUPOKsHSs/profile_photos/file_4.jpg",
+      "avatar_url": "/api/chat-photo/AQADAQADjK0xG2F_cEYACAMAAxu_84EW____knoCwHRTPNs2BA",
       "bot_status": "administrator",
       "bot_is_admin": true,
       "bot_permissions": {
@@ -77,7 +77,7 @@
       "can_set_sticker_set": false,
       "can_send_messages": true,
       "created_at": "2025-06-15T09:30:29.120938",
-      "updated_at": "2025-06-23T13:05:43.833340"
+      "updated_at": "2025-06-23T22:08:12.909123"
     },
     {
       "id": "4d9d55db-f998-45b5-bc74-0f22fb176d04",
@@ -86,7 +86,7 @@
       "title": "12121212",
       "username": null,
       "description": null,
-      "member_count": 2,
+      "member_count": 3,
       "is_forum": true,
       "avatar_url": null,
       "bot_status": "administrator",
@@ -151,7 +151,7 @@
       "can_set_sticker_set": false,
       "can_send_messages": true,
       "created_at": "2025-06-15T09:45:02.624914",
-      "updated_at": "2025-06-23T18:39:26.859736"
+      "updated_at": "2025-06-23T22:08:15.207120"
     },
     {
       "id": "1b7eae01-de7c-4a66-ac14-b3dc4e7852ae",
@@ -160,7 +160,7 @@
       "title": "22222222",
       "username": null,
       "description": null,
-      "member_count": 2,
+      "member_count": 3,
       "is_forum": false,
       "avatar_url": null,
       "bot_status": "administrator",
@@ -400,7 +400,7 @@
       "can_set_sticker_set": false,
       "can_send_messages": true,
       "created_at": "2025-06-15T09:49:43.127910",
-      "updated_at": "2025-06-23T13:05:45.434340"
+      "updated_at": "2025-06-23T22:08:17.715121"
     }
   ]
 }

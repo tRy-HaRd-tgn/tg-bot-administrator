@@ -184,6 +184,10 @@
                 </div>
               </div>
             </div>
+            <!-- Скрытые поля для дат и времени -->
+            <input type="hidden" id="startDate" name="start_date" />
+            <input type="hidden" id="endDate" name="end_date" />
+            <input type="hidden" id="postTime" name="post_time" />
           </div>
 
           <!-- Автоповтор публикации -->
@@ -685,6 +689,21 @@
         }
 
         content.innerHTML = settingsHtml;
+
+        // Синхронизация дат с основной формой
+        if (settings && settings.startDate) {
+          const startDateInput = document.getElementById("startDate");
+          if (startDateInput) startDateInput.value = settings.startDate;
+        }
+        if (settings) {
+          const endDateInput = document.getElementById("endDate");
+          if (endDateInput) endDateInput.value = settings.endDate || "";
+        }
+        // Синхронизация времени публикации
+        if (settings && settings.globalTime) {
+          const postTimeInput = document.getElementById("postTime");
+          if (postTimeInput) postTimeInput.value = settings.globalTime;
+        }
       }
 
       // Функция редактирования настроек расписания

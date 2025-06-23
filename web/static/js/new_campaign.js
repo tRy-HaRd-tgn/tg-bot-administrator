@@ -972,7 +972,11 @@ class NewCampaignManager {
 
     // Расписание - все времена сохраняются как UTC
     formData.append("start_date", document.getElementById("startDate").value);
-    formData.append("end_date", document.getElementById("endDate").value);
+    let endDateValue = document.getElementById("endDate").value;
+    if (!endDateValue) {
+      endDateValue = "9999-12-31"; // символическая бесконечность
+    }
+    formData.append("end_date", endDateValue);
 
     // Время тоже в UTC
     const postTimeValue = document.getElementById("postTime").value;
@@ -1045,10 +1049,10 @@ class NewCampaignManager {
     const requiredFields = [
       { id: "campaignName", message: "Введите название кампании" },
       { id: "startDate", message: "Выберите дату начала" },
-      { id: "endDate", message: "Выберите дату окончания" },
       { id: "postTime", message: "Укажите время публикации" },
     ];
 
+    const invalidFields = [];
     requiredFields.forEach((field) => {
       const element = document.getElementById(field.id);
       if (!element || !element.value.trim()) {
@@ -1057,10 +1061,29 @@ class NewCampaignManager {
           Utils.showNotification("error", "Ошибка", field.message);
         }
         isValid = false;
+        invalidFields.push(field.id);
       } else {
         this.clearFieldError(field.id);
       }
     });
+
+    // Проверка: если оба поля расписания пусты, выводим отдельную ошибку
+    const startDateInput = document.getElementById("startDate");
+    const endDateInput = document.getElementById("endDate");
+    if (
+      startDateInput &&
+      endDateInput &&
+      !startDateInput.value.trim() &&
+      !endDateInput.value.trim()
+    ) {
+      Utils.showNotification(
+        "error",
+        "Ошибка",
+        "Необходимо задать расписание публикаций"
+      );
+      isValid = false;
+      invalidFields.push("schedule");
+    }
 
     // Проверяем текст сообщения через Telegram редактор
     const messageText = window.telegramEditor
@@ -1070,6 +1093,7 @@ class NewCampaignManager {
     if (!messageText.trim()) {
       Utils.showNotification("error", "Ошибка", "Введите текст сообщения");
       isValid = false;
+      invalidFields.push("messageText");
     }
 
     if (this.selectedChats.size === 0) {
@@ -1079,10 +1103,12 @@ class NewCampaignManager {
         "Выберите хотя бы один чат для публикации"
       );
       isValid = false;
+      invalidFields.push("selectedChats");
     }
 
     if (!this.validateDates()) {
       isValid = false;
+      invalidFields.push("dates");
     }
 
     const repeatEnabled = document.getElementById("repeatEnabled").checked;
@@ -1099,6 +1125,7 @@ class NewCampaignManager {
           "Укажите дни недели или конкретные даты для повторения"
         );
         isValid = false;
+        invalidFields.push("weekdays");
       }
     }
 
@@ -1109,6 +1136,11 @@ class NewCampaignManager {
         "Текст сообщения слишком длинный (макс. 4096 символов)"
       );
       isValid = false;
+      invalidFields.push("messageLength");
+    }
+
+    if (!isValid) {
+      console.error("Не прошли валидацию следующие поля:", invalidFields);
     }
 
     return isValid;
