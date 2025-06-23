@@ -1033,7 +1033,22 @@ class NewCampaignManager {
     // Настройки повтора уже были добавлены выше, поэтому убираем дублирование
 
     if (repeatEnabled && this.repeatSettings) {
-      formData.append("repeat_settings", JSON.stringify(this.repeatSettings));
+      // Проверяем только для weekly
+      if (this.repeatSettings.interval === "weekly") {
+        const weekdays = document.querySelectorAll(
+          'input[name="weekday"]:checked'
+        );
+        if (weekdays.length === 0) {
+          Utils.showNotification(
+            "error",
+            "Ошибка",
+            "Укажите дни недели для повторения"
+          );
+          isValid = false;
+          invalidFields.push("weekdays");
+        }
+      }
+      // Если появится custom-режим с specificDates, добавить аналогичную проверку здесь
     }
 
     // Для отладки
@@ -1109,24 +1124,6 @@ class NewCampaignManager {
     if (!this.validateDates()) {
       isValid = false;
       invalidFields.push("dates");
-    }
-
-    const repeatEnabled = document.getElementById("repeatEnabled").checked;
-    if (repeatEnabled) {
-      const weekdays = document.querySelectorAll(
-        'input[name="weekday"]:checked'
-      );
-      const specificDates = document.getElementById("specificDates").value;
-
-      if (weekdays.length === 0 && !specificDates) {
-        Utils.showNotification(
-          "error",
-          "Ошибка",
-          "Укажите дни недели или конкретные даты для повторения"
-        );
-        isValid = false;
-        invalidFields.push("weekdays");
-      }
     }
 
     if (messageText.length > 4096) {

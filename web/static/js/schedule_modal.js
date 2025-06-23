@@ -123,7 +123,7 @@ class ScheduleModal {
 
     if (!startDateStr) {
       this.currentDate = new Date();
-      this.currentDate.setHours(0, 0, 0, 0);
+      this.currentDate.setUTCHours(0, 0, 0, 0);
       calendarContainer.innerHTML =
         '<div class="text-center text-muted">Сначала выберите дату начала</div>';
       return;
@@ -132,9 +132,9 @@ class ScheduleModal {
     const startDate = new Date(startDateStr);
     const endDate = endDateStr ? new Date(endDateStr) : null;
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    startDate.setHours(0, 0, 0, 0);
-    if (endDate) endDate.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
+    startDate.setUTCHours(0, 0, 0, 0);
+    if (endDate) endDate.setUTCHours(0, 0, 0, 0);
 
     // Устанавливаем текущий месяц на основе даты начала если это первый рендер
     if (this.currentDate < startDate) {
@@ -190,8 +190,7 @@ class ScheduleModal {
 
     // Дни текущего месяца
     for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day);
-      date.setHours(0, 0, 0, 0);
+      const date = new Date(Date.UTC(year, month, day));
       const dateStr = toLocalDateString(date);
 
       let classes = ["calendar-day"];
@@ -287,7 +286,7 @@ class ScheduleModal {
       ? new Date(endDateStr)
       : new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 дней по умолчанию
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
 
     this.selectedDates.clear();
     this.individualTimes = {};
@@ -336,7 +335,7 @@ class ScheduleModal {
       ? new Date(endDateStr)
       : new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
 
     this.selectedDates.clear();
     this.individualTimes = {};
@@ -412,11 +411,12 @@ class ScheduleModal {
 
     container.innerHTML = sortedDates
       .map((dateStr) => {
-        const date = new Date(dateStr);
+        const date = new Date(dateStr + "T00:00:00Z"); // Создаем UTC дату
         const formattedDate = date.toLocaleDateString("ru-RU", {
           weekday: "short",
           day: "numeric",
           month: "short",
+          timeZone: "UTC",
         });
 
         return `
@@ -454,12 +454,13 @@ class ScheduleModal {
 
     const previewItems = sortedDates
       .map((dateStr) => {
-        const date = new Date(dateStr);
+        const date = new Date(dateStr + "T00:00:00Z"); // Создаем UTC дату
         const formattedDate = date.toLocaleDateString("ru-RU", {
           weekday: "long",
           day: "numeric",
           month: "long",
           year: "numeric",
+          timeZone: "UTC",
         });
 
         const time =
@@ -618,7 +619,7 @@ class ScheduleModal {
     this.timeMode = "single";
     this.currentSettings = null;
     this.currentDate = new Date();
-    this.currentDate.setHours(0, 0, 0, 0);
+    this.currentDate.setUTCHours(0, 0, 0, 0);
 
     // Сбрасываем поля формы
     const inputs = this.modal.querySelectorAll("input");
@@ -701,10 +702,10 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("ScheduleModal инициализирован");
 });
 
-// Добавляю функцию для локального форматирования даты
+// Добавляю функцию для UTC форматирования даты
 function toLocalDateString(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
