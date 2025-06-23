@@ -974,7 +974,7 @@ class NewCampaignManager {
     formData.append("start_date", document.getElementById("startDate").value);
     let endDateValue = document.getElementById("endDate").value;
     if (!endDateValue) {
-      endDateValue = "9999-12-31"; // символическая бесконечность
+      endDateValue = "2100-12-31"; // более безопасная "бесконечность"
     }
     formData.append("end_date", endDateValue);
 
