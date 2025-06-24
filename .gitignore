@@ -3,3 +3,6 @@ logs/
 .env
 uploads/*
 data/
+__pycache__/
+*.pyc
+ngrok.exe
