@@ -276,6 +276,15 @@ def create_campaign():
             "utc_offset": datetime.now().astimezone().utcoffset().total_seconds() / 3600
         }
         
+        # Обработка repeat_settings (интервал автоповтора)
+        repeat_settings_json = request.form.get('repeat_settings')
+        if repeat_settings_json:
+            try:
+                campaign_data['repeat_settings'] = json.loads(repeat_settings_json)
+                logger.debug(f"Добавлены repeat_settings: {campaign_data['repeat_settings']}")
+            except Exception as e:
+                logger.warning(f"Ошибка парсинга repeat_settings: {e}")
+        
         # Логируем настройки для отладки
         logger.info(f"Настройки публикации для кампании '{name}':")
         logger.info(f"  - disable_preview: {campaign_data['disable_preview']} (исходное: '{request.form.get('disable_preview')}')")

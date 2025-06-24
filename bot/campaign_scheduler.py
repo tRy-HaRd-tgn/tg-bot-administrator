@@ -276,14 +276,70 @@ class CampaignScheduler:
             if current_date_utc < start_date or current_date_utc > end_date:
                 return False
 
-            # Проверка времени публикации
-            post_time_str = campaign.get("post_time", "12:00")
-            post_time_parts = post_time_str.split(":")
-            post_time_hour = int(post_time_parts[0])
-            post_time_minute = int(post_time_parts[1])
-            
-            if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
-                return False
+            # Проверка настроек автоповтора
+            repeat_enabled = campaign.get("repeat_enabled", False)
+            if repeat_enabled:
+                repeat_settings = campaign.get("repeat_settings", {})
+                interval = repeat_settings.get("interval")
+                post_time_str = campaign.get("post_time", "12:00")
+                post_time_parts = post_time_str.split(":")
+                post_time_hour = int(post_time_parts[0])
+                post_time_minute = int(post_time_parts[1])
+                last_run = self.next_run_times.get(campaign.get('id'))
+                
+                if interval == "minutely":
+                    # Каждую минуту в диапазоне дат
+                    logger.debug(f"Кампания {campaign.get('id')} — автоповтор: каждую минуту")
+                    if last_run and (now_utc - last_run).total_seconds() < 60:
+                        return False
+                elif interval == "hourly":
+                    # Каждый час в указанную минуту
+                    logger.debug(f"Кампания {campaign.get('id')} — автоповтор: каждый час в {post_time_minute:02d} минуту")
+                    if now_utc.minute != post_time_minute:
+                        return False
+                    if last_run and (now_utc - last_run).total_seconds() < 3600:
+                        return False
+                elif interval == "daily":
+                    # Каждый день в указанное время
+                    if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
+                        return False
+                    if last_run and (now_utc - last_run).total_seconds() < 86400:
+                        return False
+                elif interval == "weekly":
+                    # В указанный день недели и время
+                    week_day = repeat_settings.get("weekDay")
+                    if str(now_utc.isoweekday()) != str(week_day):
+                        return False
+                    if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
+                        return False
+                    if last_run and (now_utc - last_run).total_seconds() < 604800:
+                        return False
+                elif interval == "monthly":
+                    month_settings = repeat_settings.get("monthlySettings", {})
+                    if month_settings.get("type") == "date":
+                        # В указанный день месяца и время
+                        if str(now_utc.day) != str(month_settings.get("date")):
+                            return False
+                        if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
+                            return False
+                    else:
+                        # В определённый день недели месяца
+                        week_num = month_settings.get("week")
+                        week_day = month_settings.get("weekDay")
+                        current_week = (now_utc.day - 1) // 7 + 1
+                        if (str(current_week) != str(week_num) or str(now_utc.isoweekday()) != str(week_day)):
+                            return False
+                        if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
+                            return False
+                # Если не minutely/hourly/daily/weekly/monthly — старая логика времени
+            else:
+                # Если автоповтор не включён — старая логика: публикация только в указанное время
+                post_time_str = campaign.get("post_time", "12:00")
+                post_time_parts = post_time_str.split(":")
+                post_time_hour = int(post_time_parts[0])
+                post_time_minute = int(post_time_parts[1])
+                if now_utc.hour != post_time_hour or now_utc.minute != post_time_minute:
+                    return False
 
             # Проверка дополнительных условий публикации
             conditions = campaign.get("conditions", [])
@@ -323,50 +379,6 @@ class CampaignScheduler:
                 if not should_publish:
                     logger.debug(f"Кампания {campaign.get('id')} не соответствует дополнительным условиям")
                     return False
-
-            # Проверка настроек автоповтора
-            repeat_enabled = campaign.get("repeat_enabled", False)
-            if repeat_enabled:
-                repeat_settings = campaign.get("repeat_settings", {})
-                interval = repeat_settings.get("interval")
-                
-                if interval == "hourly":
-                    # Проверяем, прошел ли час с последнего запуска
-                    last_run = self.next_run_times.get(campaign.get('id'))
-                    if last_run and (now_utc - last_run).total_seconds() < 3600:
-                        return False
-                        
-                elif interval == "daily":
-                    # Проверяем, прошел ли день с последнего запуска
-                    last_run = self.next_run_times.get(campaign.get('id'))
-                    if last_run and (now_utc - last_run).total_seconds() < 86400:
-                        return False
-                        
-                elif interval == "weekly":
-                    # Проверяем день недели и неделю с последнего запуска
-                    week_day = repeat_settings.get("weekDay")
-                    if str(now_utc.isoweekday()) != str(week_day):
-                        return False
-                        
-                    last_run = self.next_run_times.get(campaign.get('id'))
-                    if last_run and (now_utc - last_run).total_seconds() < 604800:
-                        return False
-                        
-                elif interval == "monthly":
-                    month_settings = repeat_settings.get("monthlySettings", {})
-                    if month_settings.get("type") == "date":
-                        # Проверяем конкретное число месяца
-                        if str(now_utc.day) != str(month_settings.get("date")):
-                            return False
-                    else:
-                        # Проверяем определенный день недели месяца
-                        week_num = month_settings.get("week")
-                        week_day = month_settings.get("weekDay")
-                        
-                        current_week = (now_utc.day - 1) // 7 + 1
-                        if (str(current_week) != str(week_num) or 
-                            str(now_utc.isoweekday()) != str(week_day)):
-                            return False
 
             # Обновляем время последнего запуска
             self.next_run_times[campaign.get('id')] = now_utc
@@ -668,16 +680,6 @@ class CampaignScheduler:
         logger.info(f"✅ Изменен статус кампании {campaign_id}: {current_status} → {new_status}")
         
         return new_status
-    
-    def _save_campaigns_sync(self):
-        """Синхронное сохранение кампаний в JSON файл"""
-        try:
-            campaigns_list = list(self.campaigns.values())
-            with open(self.config.CAMPAIGNS_FILE, 'w', encoding='utf-8') as f:
-                json.dump({"campaigns": campaigns_list}, f, ensure_ascii=False, indent=2)
-            logger.debug(f"Синхронно сохранено {len(campaigns_list)} кампаний")
-        except Exception as e:
-            logger.error(f"❌ Ошибка при синхронном сохранении кампаний: {e}")
     
     def _save_campaigns_sync(self):
         """Синхронное сохранение кампаний в JSON файл"""
