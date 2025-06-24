@@ -708,7 +708,21 @@
 
       // Функция редактирования настроек расписания
       function editScheduleSettings() {
+        // Получаем текущие настройки из скрытого поля или переменной
+        let settings = null;
+        const hiddenInput = document.getElementById("scheduleSettings");
+        if (hiddenInput && hiddenInput.value) {
+          try {
+            settings = JSON.parse(hiddenInput.value);
+          } catch (e) {
+            settings = null;
+          }
+        }
+
         if (window.scheduleModal) {
+          if (settings) {
+            window.scheduleModal.loadSettings(settings);
+          }
           window.scheduleModal.show();
         }
       }

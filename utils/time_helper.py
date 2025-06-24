@@ -31,6 +31,7 @@ def get_future_utc_time_str(hours: int = 0, minutes: int = 0, seconds: int = 0,
 
 def get_time_left_info(future_timestamp: float) -> Dict[str, Any]:
     """Возвращает информацию об оставшемся времени до указанного timestamp"""
+    # Обязательно используем UTC для расчета
     now = datetime.now(timezone.utc).timestamp()
     seconds_left = max(0, int(future_timestamp - now))
     
@@ -38,10 +39,18 @@ def get_time_left_info(future_timestamp: float) -> Dict[str, Any]:
     minutes_left = (seconds_left % 3600) // 60
     seconds_remaining = seconds_left % 60
     
+    # Формируем строку в зависимости от величины оставшегося времени
+    if hours_left > 0:
+        formatted = f"{hours_left} ч. {minutes_left} мин."
+    elif minutes_left > 0:
+        formatted = f"{minutes_left} мин. {seconds_remaining} сек."
+    else:
+        formatted = f"{seconds_remaining} сек."
+    
     return {
         "hours": hours_left,
         "minutes": minutes_left,
         "seconds": seconds_remaining,
         "total_seconds": seconds_left,
-        "formatted": f"{hours_left} ч. {minutes_left} мин." if hours_left > 0 else f"{minutes_left} мин. {seconds_remaining} сек."
+        "formatted": formatted
     }

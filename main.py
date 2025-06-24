@@ -24,6 +24,13 @@ logger.add(
     compression="zip"
 )
 
+# Проверка наличия необходимых библиотек
+try:
+    import requests
+    logger.info("Библиотека requests найдена")
+except ImportError:
+    logger.warning("Библиотека requests не установлена. Рекомендуется установить её командой: pip install requests")
+
 from config import Config
 from bot.telegram_bot import TelegramBot
 from bot.campaign_scheduler import CampaignScheduler
@@ -72,41 +79,60 @@ async def graceful_shutdown(bot: TelegramBot, scheduler: CampaignScheduler, ngro
 
 async def main() -> None:
     logger.info("🚀 Запуск системы автопостинга")
-    bot: Optional[TelegramBot] = None
+    telegram_bot: Optional[TelegramBot] = None
     scheduler: Optional[CampaignScheduler] = None
     ngrok_manager: Optional[NgrokManager] = None
     ngrok_url: Optional[str] = None
     try:
         # Инициализация Telegram бота
         logger.debug("Инициализация Telegram бота")
-        bot = TelegramBot(config)
-        await bot.setup()
+        telegram_bot = TelegramBot(config)
+        await telegram_bot.setup()
         logger.info("✅ Telegram бот инициализирован")
         
         # Инициализация планировщика
         logger.debug("Инициализация планировщика кампаний")
-        scheduler = CampaignScheduler(bot, config)
+        scheduler = CampaignScheduler(telegram_bot, config)
         await scheduler.start()
         logger.info("✅ Планировщик кампаний запущен")
         
         # Запуск веб-сервера
         logger.debug("Запуск веб-сервера")
-        app = create_app(bot, scheduler, config)
+        app = create_app(telegram_bot, scheduler, config)
         logger.info("✅ Веб-сервер запущен")
         
-        # Запускаем Ngrok если включен
-        if config.NGROK_ENABLED:
-            logger.debug("Инициализация Ngrok менеджера")
-            ngrok_manager = NgrokManager(config)
-            if ngrok_manager.start():
-                await asyncio.sleep(2)
-                ngrok_url = ngrok_manager.get_public_url()
-                logger.info(f"✅ Ngrok запущен: {ngrok_url}")
+        # Инициализация Ngrok менеджера
+        logger.debug("Инициализация Ngrok менеджера")
+        ngrok_manager = NgrokManager(config)
         
-        # Отправка уведомления админу о запуске (с URL Ngrok если доступен)
-        logger.debug("Отправка уведомления админу о запуске")
-        await bot.notify_admin_startup(config.WEB_HOST, config.WEB_PORT, ngrok_url)
-        logger.info("✅ Уведомление админу отправлено")
+        # Сохраняем ссылку на NgrokManager в TelegramBot сразу
+        telegram_bot.ngrok_manager = ngrok_manager
+        
+        if config.NGROK_ENABLED:
+            if ngrok_manager.start():
+                # Делаем несколько попыток получить URL с паузами
+                for attempt in range(3):
+                    ngrok_url = ngrok_manager.get_public_url()
+                    if ngrok_url:
+                        logger.info(f"✅ Ngrok запущен: {ngrok_url}")
+                        # Теперь передаём ngrok_manager при уведомлении
+                        logger.debug("Отправка уведомления админу о запуске")
+                        await telegram_bot.notify_admin_startup(
+                            host=config.WEB_HOST,
+                            port=config.WEB_PORT,
+                            ngrok_url=ngrok_url,
+                            ngrok_manager=ngrok_manager  # Передаём NgrokManager в метод
+                        )
+                        logger.info("✅ Уведомление админу отправлено")
+                        break
+                    else:
+                        logger.warning(f"Не удалось получить Ngrok URL (попытка {attempt+1}/3)")
+                        await asyncio.sleep(5)
+                
+                if not ngrok_url:
+                    logger.error("⛔ Не удалось получить Ngrok URL после нескольких попыток")
+            else:
+                logger.error("⛔ Не удалось запустить Ngrok")
         
         logger.info("🎯 Система полностью готова к работе")
         while True:
@@ -115,18 +141,18 @@ async def main() -> None:
             # Проверяем, не обновился ли URL Ngrok
             if ngrok_manager and getattr(ngrok_manager, 'is_running', False):
                 current_url = ngrok_manager.get_public_url()
-                if current_url != ngrok_url:
+                if current_url and current_url != ngrok_url:
                     logger.info(f"Обнаружен новый Ngrok URL: {current_url}")
                     ngrok_url = current_url
-                    await notify_admins(bot, config.ADMIN_IDS, ngrok_url, config)
+                    await notify_admins(telegram_bot, config.ADMIN_IDS, ngrok_url, config)
     except (KeyboardInterrupt, SystemExit):
         logger.info("🛑 Получен сигнал остановки системы...")
-        if bot and scheduler:
-            await graceful_shutdown(bot, scheduler, ngrok_manager)
+        if telegram_bot and scheduler:
+            await graceful_shutdown(telegram_bot, scheduler, ngrok_manager)
     except Exception as e:
         logger.error(f"❌ Критическая ошибка в main: {e}")
-        if bot and scheduler:
-            await graceful_shutdown(bot, scheduler, ngrok_manager)
+        if telegram_bot and scheduler:
+            await graceful_shutdown(telegram_bot, scheduler, ngrok_manager)
         raise
 
 if __name__ == "__main__":

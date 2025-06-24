@@ -131,6 +131,15 @@ class NewCampaignManager {
         this.toggleRepeatOptions(e.target.checked);
       });
     }
+
+    // Добавляем обработчик Enter для полей ввода тем
+    document.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && e.target.classList.contains("topic-input")) {
+        e.preventDefault();
+        const chatId = e.target.closest(".chat-item").dataset.chatId;
+        this.addTopic(chatId);
+      }
+    });
   }
 
   bindElement(id, event, handler) {
@@ -265,11 +274,21 @@ class NewCampaignManager {
                       isSelected ? "block" : "none"
                     };">
                         <div class="topics-header">
-                            <small>Тема форума (опционально):</small>
+                            <small>Темы форума (опционально):</small>
                         </div>
                         <div class="topics-list">
-                            <input type="number" placeholder="ID темы" class="topic-input" min="1">
-                            <small>Оставьте пустым для общей темы</small>
+                            <div class="topics-input-group">
+                                <input type="number" placeholder="ID темы" class="topic-input" min="1">
+                                <button type="button" class="btn btn-sm btn-outline-primary add-topic-btn" onclick="newCampaignManager.addTopic('${
+                                  chat.id
+                                }')">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="selected-topics-list" id="selected-topics-${
+                              chat.id
+                            }"></div>
+                            <small>Оставьте пустым для общей темы. Можно выбрать несколько тем.</small>
                         </div>
                     </div>
                 `
@@ -284,12 +303,23 @@ class NewCampaignManager {
       item.addEventListener("click", (e) => {
         if (
           !e.target.closest(".chat-select-btn") &&
-          !e.target.closest(".topic-input")
+          !e.target.closest(".topic-input") &&
+          !e.target.closest(".add-topic-btn") &&
+          !e.target.closest(".remove-topic-btn")
         ) {
           const chatId = item.dataset.chatId;
           this.toggleChatSelection(chatId);
         }
       });
+    });
+
+    // Добавляем обработчик Enter для полей ввода тем
+    document.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && e.target.classList.contains("topic-input")) {
+        e.preventDefault();
+        const chatId = e.target.closest(".chat-item").dataset.chatId;
+        this.addTopic(chatId);
+      }
     });
   }
 
@@ -300,18 +330,26 @@ class NewCampaignManager {
     if (this.selectedChats.has(chatId)) {
       this.selectedChats.delete(chatId);
     } else {
-      let threadId = null;
+      let threadIds = [];
       if (chat.is_forum) {
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"]`);
-        const topicInput = chatItem?.querySelector(".topic-input");
-        if (topicInput && topicInput.value) {
-          threadId = parseInt(topicInput.value);
+        const selectedTopicsList = chatItem?.querySelector(
+          `#selected-topics-${chatId}`
+        );
+        if (selectedTopicsList) {
+          // Получаем все выбранные темы из списка
+          const topicElements = selectedTopicsList.querySelectorAll(
+            ".selected-topic-item"
+          );
+          threadIds = Array.from(topicElements).map((el) =>
+            parseInt(el.dataset.topicId)
+          );
         }
       }
 
       this.selectedChats.set(chatId, {
         ...chat,
-        thread_id: threadId,
+        thread_ids: threadIds,
         is_active: true,
       });
     }
@@ -337,6 +375,30 @@ class NewCampaignManager {
     const forumTopics = chatItem.querySelector(".forum-topics");
     if (forumTopics) {
       forumTopics.style.display = isSelected ? "block" : "none";
+
+      // Восстанавливаем выбранные темы если чат выбран
+      if (isSelected) {
+        const chatData = this.selectedChats.get(chatId);
+        if (chatData && chatData.thread_ids && chatData.thread_ids.length > 0) {
+          const selectedTopicsList = chatItem.querySelector(
+            `#selected-topics-${chatId}`
+          );
+          if (selectedTopicsList) {
+            selectedTopicsList.innerHTML = chatData.thread_ids
+              .map(
+                (topicId) => `
+              <div class="selected-topic-item" data-topic-id="${topicId}">
+                <span class="topic-id">Тема ${topicId}</span>
+                <button type="button" class="remove-topic-btn" onclick="newCampaignManager.removeTopic('${chatId}', ${topicId})">
+                  <i class="fa-solid fa-times"></i>
+                </button>
+              </div>
+            `
+              )
+              .join("");
+          }
+        }
+      }
     }
   }
 
@@ -360,8 +422,10 @@ class NewCampaignManager {
                               chat.title
                             )}</span>
                             ${
-                              chat.thread_id
-                                ? `<small class="thread-id">Тема: ${chat.thread_id}</small>`
+                              chat.thread_ids && chat.thread_ids.length > 0
+                                ? `<small class="thread-id">Темы: ${chat.thread_ids.join(
+                                    ", "
+                                  )}</small>`
                                 : ""
                             }
                             <button type="button" class="remove-chat-btn" onclick="newCampaignManager.toggleChatSelection('${
@@ -992,8 +1056,21 @@ class NewCampaignManager {
     }
 
     // Чаты
-    const chatsArray = Array.from(this.selectedChats.values());
+    const chatsArray = Array.from(this.selectedChats.values()).map((chat) => {
+      const chatData = { ...chat };
+      // Преобразуем thread_ids в thread_id для совместимости с API
+      if (chatData.thread_ids && chatData.thread_ids.length > 0) {
+        // Если выбрано несколько тем, отправляем их как массив
+        chatData.thread_ids = chatData.thread_ids;
+        // Удаляем старое поле thread_id если оно есть
+        delete chatData.thread_id;
+      }
+      return chatData;
+    });
     formData.append("chats", JSON.stringify(chatsArray));
+
+    // Для отладки
+    console.log("Отправляемые чаты:", JSON.stringify(chatsArray));
 
     // Текст сообщения из Telegram редактора
     const messageText = window.telegramEditor
@@ -1044,8 +1121,7 @@ class NewCampaignManager {
             "Ошибка",
             "Укажите дни недели для повторения"
           );
-          isValid = false;
-          invalidFields.push("weekdays");
+          throw new Error("Укажите дни недели для повторения");
         }
       }
       // Если появится custom-режим с specificDates, добавить аналогичную проверку здесь
@@ -1346,6 +1422,98 @@ class NewCampaignManager {
       window.repeatModal.clearSettings();
     }
   }
+
+  // Методы для работы с темами форума
+  addTopic(chatId) {
+    const chatItem = document.querySelector(`[data-chat-id="${chatId}"]`);
+    const topicInput = chatItem?.querySelector(".topic-input");
+    const selectedTopicsList = chatItem?.querySelector(
+      `#selected-topics-${chatId}`
+    );
+
+    if (!topicInput || !selectedTopicsList) return;
+
+    const topicId = topicInput.value.trim();
+    if (!topicId) {
+      Utils.showNotification("warning", "Предупреждение", "Введите ID темы");
+      return;
+    }
+
+    const topicIdNum = parseInt(topicId);
+    if (isNaN(topicIdNum) || topicIdNum <= 0) {
+      Utils.showNotification(
+        "error",
+        "Ошибка",
+        "ID темы должен быть положительным числом"
+      );
+      return;
+    }
+
+    // Проверяем, не добавлена ли уже эта тема
+    const existingTopic = selectedTopicsList.querySelector(
+      `[data-topic-id="${topicIdNum}"]`
+    );
+    if (existingTopic) {
+      Utils.showNotification(
+        "warning",
+        "Предупреждение",
+        "Эта тема уже добавлена"
+      );
+      return;
+    }
+
+    // Добавляем тему в список
+    const topicElement = document.createElement("div");
+    topicElement.className = "selected-topic-item";
+    topicElement.dataset.topicId = topicIdNum;
+    topicElement.innerHTML = `
+      <span class="topic-id">Тема ${topicIdNum}</span>
+      <button type="button" class="remove-topic-btn" onclick="newCampaignManager.removeTopic('${chatId}', ${topicIdNum})">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    `;
+
+    selectedTopicsList.appendChild(topicElement);
+    topicInput.value = "";
+
+    // Обновляем данные выбранного чата
+    if (this.selectedChats.has(chatId)) {
+      const chatData = this.selectedChats.get(chatId);
+      if (!chatData.thread_ids) {
+        chatData.thread_ids = [];
+      }
+      chatData.thread_ids.push(topicIdNum);
+      this.selectedChats.set(chatId, chatData);
+      this.updateSelectedChatsDisplay();
+    }
+  }
+
+  removeTopic(chatId, topicId) {
+    const chatItem = document.querySelector(`[data-chat-id="${chatId}"]`);
+    const selectedTopicsList = chatItem?.querySelector(
+      `#selected-topics-${chatId}`
+    );
+    const topicElement = selectedTopicsList?.querySelector(
+      `[data-topic-id="${topicId}"]`
+    );
+
+    if (topicElement) {
+      topicElement.remove();
+    }
+
+    // Обновляем данные выбранного чата
+    if (this.selectedChats.has(chatId)) {
+      const chatData = this.selectedChats.get(chatId);
+      if (chatData.thread_ids) {
+        chatData.thread_ids = chatData.thread_ids.filter(
+          (id) => id !== topicId
+        );
+        this.selectedChats.set(chatId, chatData);
+        this.updateSelectedChatsDisplay();
+      }
+    }
+  }
+
   formatDate(dateStr) {
     if (!dateStr) return "";
     const date = new Date(dateStr);

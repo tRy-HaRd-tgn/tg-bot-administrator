@@ -8,7 +8,7 @@ def toggle_campaign_status(campaign_id):
         scheduler = current_app.scheduler
         if campaign_id not in scheduler.campaigns:
             return jsonify({"error": "Кампания не найдена"}), 404
-        new_status = scheduler.toggle_campaign_status(campaign_id)
+        new_status = scheduler.toggle_campaign_status_sync(campaign_id)
         if new_status:
             status_text = "активирована" if new_status == "active" else "приостановлена"
             return jsonify({

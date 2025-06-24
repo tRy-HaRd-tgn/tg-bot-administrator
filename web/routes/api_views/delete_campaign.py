@@ -14,7 +14,7 @@ def delete_campaign(campaign_id):
             file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], media.get('filename', ''))
             if os.path.exists(file_path):
                 os.remove(file_path)
-        success = scheduler.delete_campaign(campaign_id)
+        success = scheduler.delete_campaign_sync(campaign_id)
         if success:
             return jsonify({
                 "success": True,

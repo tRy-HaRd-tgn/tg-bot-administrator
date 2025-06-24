@@ -12,6 +12,9 @@ def create_campaign():
     """Создание новой кампании"""
     try:
         logger.debug("Создание новой кампании")
+        logger.debug(f"Полученные данные формы: {dict(request.form)}")
+        logger.debug(f"Полученные файлы: {list(request.files.keys())}")
+        
         scheduler = current_app.scheduler
         name = request.form.get('name')
         message_text = request.form.get('message_text')
@@ -56,9 +59,15 @@ def create_campaign():
             chats = json.loads(chats_json)
             campaign_data["chats"] = chats
             logger.debug(f"Выбрано чатов: {len(chats)}")
-        except json.JSONDecodeError:
+            logger.debug(f"Данные чатов: {json.dumps(chats, indent=2)}")
+        except json.JSONDecodeError as e:
             campaign_data["chats"] = []
-            logger.warning("Ошибка парсинга JSON чатов")
+            logger.warning(f"Ошибка парсинга JSON чатов: {e}")
+            logger.warning(f"Полученные данные чатов: {chats_json}")
+        except Exception as e:
+            campaign_data["chats"] = []
+            logger.error(f"Неожиданная ошибка при обработке чатов: {e}")
+            logger.error(f"Полученные данные чатов: {chats_json}")
         buttons_json = request.form.get('buttons', '[]')
         try:
             buttons = json.loads(buttons_json)
@@ -90,7 +99,7 @@ def create_campaign():
                         logger.error(f"❌ Ошибка при сохранении файла {file.filename}: {e}")
                         continue
         campaign_data["media_files"] = media_files
-        campaign_id = scheduler.add_campaign(campaign_data)
+        campaign_id = scheduler.add_campaign_sync(campaign_data)
         logger.info(f"✅ Создана кампания: {campaign_id} - {name}")
         return jsonify({
             "success": True,

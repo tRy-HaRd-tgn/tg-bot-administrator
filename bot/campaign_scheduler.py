@@ -130,6 +130,19 @@ class CampaignScheduler:
         except Exception as e:
             logger.error(f"❌ Ошибка при сохранении кампаний: {e}")
     
+    def add_campaign_sync(self, campaign_data: dict) -> str:
+        """Добавляет новую кампанию (синхронная версия для Flask)"""
+        campaign_id = str(uuid.uuid4())
+        campaign_data["id"] = campaign_id
+        campaign_data["created_at"] = datetime.now().isoformat()
+        campaign_data["updated_at"] = datetime.now().isoformat()
+        if "created_utc" not in campaign_data:
+            campaign_data["created_utc"] = datetime.now(timezone.utc).isoformat()
+        self.campaigns[campaign_id] = campaign_data
+        self._save_campaigns_sync()
+        logger.info(f"✅ Добавлена новая кампания (sync): {campaign_id} - {campaign_data.get('name', 'Без названия')}")
+        return campaign_id
+    
     async def add_campaign(self, campaign_data: Dict) -> str:
         """Добавляет новую кампанию"""
         # Генерируем уникальный ID для кампании
@@ -195,6 +208,25 @@ class CampaignScheduler:
         
         return True
     
+    def delete_campaign_sync(self, campaign_id: str) -> bool:
+        """Удаляет кампанию (синхронная версия для Flask)"""
+        logger.debug(f"Удаление кампании (sync): {campaign_id}")
+        
+        if campaign_id not in self.campaigns:
+            logger.error(f"❌ Кампания не найдена: {campaign_id}")
+            return False
+        
+        # Удаляем кампанию из памяти
+        campaign_name = self.campaigns[campaign_id].get('name', 'Без названия')
+        del self.campaigns[campaign_id]
+        
+        # Сохраняем изменения в JSON
+        self._save_campaigns_sync()
+        
+        logger.info(f"✅ Удалена кампания (sync): {campaign_id} - {campaign_name}")
+        
+        return True
+    
     async def toggle_campaign_status(self, campaign_id: str) -> Optional[str]:
         """Изменяет статус кампании (активна/приостановлена)"""
         logger.debug(f"Изменение статуса кампании: {campaign_id}")
@@ -217,6 +249,31 @@ class CampaignScheduler:
         await self.save_campaigns()
         
         logger.info(f"✅ Изменен статус кампании {campaign_id}: {current_status} → {new_status}")
+        
+        return new_status
+    
+    def toggle_campaign_status_sync(self, campaign_id: str) -> Optional[str]:
+        """Изменяет статус кампании (активна/приостановлена) - синхронная версия для Flask"""
+        logger.debug(f"Изменение статуса кампании (sync): {campaign_id}")
+        
+        if campaign_id not in self.campaigns:
+            logger.error(f"❌ Кампания не найдена: {campaign_id}")
+            return None
+        
+        campaign = self.campaigns[campaign_id]
+        
+        # Переключаем статус
+        current_status = campaign.get("status", "draft")
+        new_status = "paused" if current_status == "active" else "active"
+        
+        # Обновляем статус
+        campaign["status"] = new_status
+        campaign["updated_at"] = datetime.now().isoformat()
+        
+        # Сохраняем изменения в JSON
+        self._save_campaigns_sync()
+        
+        logger.info(f"✅ Изменен статус кампании {campaign_id} (sync): {current_status} → {new_status}")
         
         return new_status
     
@@ -448,94 +505,72 @@ class CampaignScheduler:
             # Отправка сообщений в чаты с учетом всех параметров
             for chat in chats:
                 chat_id = chat.get("chat_id")
-                thread_id = chat.get("thread_id")
+                thread_ids = chat.get("thread_ids", [])
+                thread_id = chat.get("thread_id")  # Для обратной совместимости
                 
-                logger.info(f"📤 Публикация в чат: {chat_id}, thread_id: {thread_id}")
-                
-                if not chat.get("is_active", True):
-                    logger.debug(f"Пропуск неактивного чата: {chat_id}")
-                    continue
-                
-                try:
-                    message_sent = None
-                    
-                    if has_media:
-                        # Подготавливаем медиа файлы
-                        media = []
-                        for file_info in media_files:
-                            file_path = os.path.join(self.config.UPLOADS_DIR, file_info.get("filename"))
-                            if not os.path.exists(file_path):
-                                logger.warning(f"⚠️ Файл не найден: {file_path}")
-                                continue
+                # Если есть thread_ids, используем их, иначе используем thread_id
+                if thread_ids and len(thread_ids) > 0:
+                    # Отправляем в каждую выбранную тему
+                    for topic_thread_id in thread_ids:
+                        logger.info(f"📤 Публикация в чат: {chat_id}, thread_id: {topic_thread_id}")
+                        
+                        if not chat.get("is_active", True):
+                            logger.debug(f"Пропуск неактивного чата: {chat_id}")
+                            continue
+                        
+                        try:
+                            message_sent = await self._send_message_to_chat(
+                                chat_id=chat_id,
+                                thread_id=topic_thread_id,
+                                message_text=message_text,
+                                buttons=buttons,
+                                has_media=has_media,
+                                media_files=media_files,
+                                disable_preview=disable_preview,
+                                disable_notification=disable_notification,
+                                protect_content=protect_content,
+                                pin_message=pin_message
+                            )
+                            
+                            if message_sent:
+                                # Обновляем статистику чата
+                                chat["last_posted"] = datetime.now().isoformat()
+                                chat["post_count"] = chat.get("post_count", 0) + 1
                                 
-                            media.append({
-                                "path": file_path,
-                                "type": file_info.get("type", ""),
-                                "caption": message_text if len(media) == 0 else None
-                            })
-                        
-                        # Отправляем медиа группу с параметрами
-                        logger.info(f"📸 Отправка медиа-группы в чат {chat_id} с параметрами: disable_notification={disable_notification}, protect_content={protect_content}")
-                        
-                        messages = await self.bot.send_media_group_with_buttons(
+                        except Exception as e:
+                            logger.error(f"❌ Ошибка при публикации в чат {chat_id}, тему {topic_thread_id}: {e}")
+                            continue
+                else:
+                    # Отправляем в общую тему (thread_id может быть None)
+                    logger.info(f"📤 Публикация в чат: {chat_id}, thread_id: {thread_id}")
+                    
+                    if not chat.get("is_active", True):
+                        logger.debug(f"Пропуск неактивного чата: {chat_id}")
+                        continue
+                    
+                    try:
+                        message_sent = await self._send_message_to_chat(
                             chat_id=chat_id,
                             thread_id=thread_id,
-                            media=media,
+                            message_text=message_text,
                             buttons=buttons,
-                            disable_notification=disable_notification,
-                            protect_content=protect_content
-                        )
-                        
-                        message_sent = messages[-1] if messages else None
-                        
-                    else:
-                        # Отправляем текстовое сообщение с кнопками и всеми параметрами
-                        logger.info(f"💬 Отправка текстового сообщения в чат {chat_id} с параметрами:")
-                        logger.info(f"    disable_preview={disable_preview}, disable_notification={disable_notification}")
-                        logger.info(f"    protect_content={protect_content}")
-                        
-                        message_sent = await self.bot.send_message(
-                            chat_id=chat_id,
-                            thread_id=thread_id,
-                            text=message_text,
-                            buttons=buttons,
+                            has_media=has_media,
+                            media_files=media_files,
                             disable_preview=disable_preview,
                             disable_notification=disable_notification,
-                            protect_content=protect_content
+                            protect_content=protect_content,
+                            pin_message=pin_message
                         )
-                    
-                    # Закрепляем сообщение, если нужно
-                    if message_sent and pin_message:
-                        try:
-                            logger.info(f"📌 Попытка закрепить сообщение {message_sent.message_id} в чате {chat_id}")
+                        
+                        if message_sent:
+                            # Обновляем статистику чата
+                            chat["last_posted"] = datetime.now().isoformat()
+                            chat["post_count"] = chat.get("post_count", 0) + 1
                             
-                            await self.bot.bot.pin_chat_message(
-                                chat_id=chat_id,
-                                message_id=message_sent.message_id,
-                                disable_notification=disable_notification
-                            )
-                            logger.info(f"✅ Сообщение {message_sent.message_id} успешно закреплено в чате {chat_id}")
-                            
-                        except TelegramAPIError as e:
-                            logger.error(f"❌ Ошибка Telegram API при закреплении сообщения: {e}")
-                            logger.error(f"   Код ошибки: {e.error_code if hasattr(e, 'error_code') else 'неизвестен'}")
-                            logger.error(f"   Описание: {e.message if hasattr(e, 'message') else str(e)}")
-                        except Exception as e:
-                            logger.error(f"❌ Неожиданная ошибка при закреплении сообщения: {e}")
-                
-                except TelegramAPIError as e:
-                    logger.error(f"❌ Ошибка Telegram API при публикации в чат {chat_id}: {e}")
-                    logger.error(f"   Код ошибки: {e.error_code if hasattr(e, 'error_code') else 'неизвестен'}")
-                    logger.error(f"   Описание: {e.message if hasattr(e, 'message') else str(e)}")
-                    continue
-                except Exception as e:
-                    logger.error(f"❌ Неожиданная ошибка при публикации в чат {chat_id}: {e}")
-                    continue
+                    except Exception as e:
+                        logger.error(f"❌ Ошибка при публикации в чат {chat_id}: {e}")
+                        continue
 
-                # Обновляем статистику чата
-                chat["last_posted"] = datetime.now().isoformat()
-                chat["post_count"] = chat.get("post_count", 0) + 1
-            
             # Обновляем статистику кампании
             campaign["last_run"] = datetime.now(timezone.utc).isoformat()
             campaign["run_count"] = campaign.get("run_count", 0) + 1
@@ -591,102 +626,93 @@ class CampaignScheduler:
         logger.info(f"✅ Медиа-группа подготовлена: {len(media_group)} файлов")
         return media_group
     
-    def add_campaign(self, campaign_data: Dict) -> str:
-        """Добавляет новую кампанию (синхронная версия)"""
-        # Генерируем уникальный ID для кампании
-        campaign_id = str(uuid.uuid4())
-        logger.debug(f"Добавление новой кампании с ID: {campaign_id}")
-        
-        # Добавляем служебные поля с явным указанием UTC
-        campaign_data["id"] = campaign_id
-        campaign_data["created_at"] = datetime.now().isoformat()
-        campaign_data["updated_at"] = datetime.now().isoformat()
-        # Убедимся, что у нас всегда есть UTC метка времени
-        if "created_utc" not in campaign_data:
-            campaign_data["created_utc"] = datetime.now(timezone.utc).isoformat()
-        
-        # Добавляем кампанию в память
-        self.campaigns[campaign_id] = campaign_data
-        
-        # Сохраняем изменения в JSON (синхронно)
-        self._save_campaigns_sync()
-        
-        logger.info(f"✅ Добавлена новая кампания: {campaign_id} - {campaign_data.get('name', 'Без названия')}")
-        
-        return campaign_id
-    
-    def update_campaign(self, campaign_id: str, campaign_data: Dict) -> bool:
-        """Обновляет существующую кампанию (синхронная версия)"""
-        logger.debug(f"Обновление кампании: {campaign_id}")
-        
-        if campaign_id not in self.campaigns:
-            logger.error(f"❌ Кампания не найдена: {campaign_id}")
-            return False
-        
-        # Обновляем поля кампании
-        campaign_data["id"] = campaign_id  # Сохраняем исходный ID
-        campaign_data["updated_at"] = datetime.now().isoformat()
-        
-        # Обновляем кампанию в памяти
-        self.campaigns[campaign_id] = campaign_data
-        
-        # Сохраняем изменения в JSON
-        self._save_campaigns_sync()
-        
-        logger.info(f"✅ Обновлена кампания: {campaign_id}")
-        
-        return True
-    
-    def delete_campaign(self, campaign_id: str) -> bool:
-        """Удаляет кампанию (синхронная версия)"""
-        logger.debug(f"Удаление кампании: {campaign_id}")
-        
-        if campaign_id not in self.campaigns:
-            logger.error(f"❌ Кампания не найдена: {campaign_id}")
-            return False
-        
-        # Удаляем кампанию из памяти
-        campaign_name = self.campaigns[campaign_id].get('name', 'Без названия')
-        del self.campaigns[campaign_id]
-        
-        # Сохраняем изменения в JSON
-        self._save_campaigns_sync()
-        
-        logger.info(f"✅ Удалена кампания: {campaign_id} - {campaign_name}")
-        
-        return True
-    
-    def toggle_campaign_status(self, campaign_id: str) -> Optional[str]:
-        """Изменяет статус кампании (синхронная версия)"""
-        logger.debug(f"Изменение статуса кампании: {campaign_id}")
-        
-        if campaign_id not in self.campaigns:
-            logger.error(f"❌ Кампания не найдена: {campaign_id}")
-            return None
-        
-        campaign = self.campaigns[campaign_id]
-        
-        # Переключаем статус
-        current_status = campaign.get("status", "draft")
-        new_status = "paused" if current_status == "active" else "active"
-        
-        # Обновляем статус
-        campaign["status"] = new_status
-        campaign["updated_at"] = datetime.now().isoformat()
-        
-        # Сохраняем изменения в JSON
-        self._save_campaigns_sync()
-        
-        logger.info(f"✅ Изменен статус кампании {campaign_id}: {current_status} → {new_status}")
-        
-        return new_status
-    
+    async def _send_message_to_chat(self, chat_id, thread_id, message_text, buttons, has_media, media_files, 
+                                   disable_preview, disable_notification, protect_content, pin_message):
+        """Вспомогательный метод для отправки сообщения в чат"""
+        try:
+            message_sent = None
+            
+            if has_media:
+                # Подготавливаем медиа файлы
+                media = []
+                for file_info in media_files:
+                    file_path = os.path.join(self.config.UPLOADS_DIR, file_info.get("filename"))
+                    if not os.path.exists(file_path):
+                        logger.warning(f"⚠️ Файл не найден: {file_path}")
+                        continue
+                        
+                    media.append({
+                        "path": file_path,
+                        "type": file_info.get("type", ""),
+                        "caption": message_text if len(media) == 0 else None
+                    })
+                
+                # Отправляем медиа группу с параметрами
+                logger.info(f"📸 Отправка медиа-группы в чат {chat_id} с параметрами: disable_notification={disable_notification}, protect_content={protect_content}")
+                
+                messages = await self.bot.send_media_group_with_buttons(
+                    chat_id=chat_id,
+                    thread_id=thread_id,
+                    media=media,
+                    buttons=buttons,
+                    disable_notification=disable_notification,
+                    protect_content=protect_content
+                )
+                
+                message_sent = messages[-1] if messages else None
+                
+            else:
+                # Отправляем текстовое сообщение с кнопками и всеми параметрами
+                logger.info(f"💬 Отправка текстового сообщения в чат {chat_id} с параметрами:")
+                logger.info(f"    disable_preview={disable_preview}, disable_notification={disable_notification}")
+                logger.info(f"    protect_content={protect_content}")
+                
+                message_sent = await self.bot.send_message(
+                    chat_id=chat_id,
+                    thread_id=thread_id,
+                    text=message_text,
+                    buttons=buttons,
+                    disable_preview=disable_preview,
+                    disable_notification=disable_notification,
+                    protect_content=protect_content
+                )
+            
+            # Закрепляем сообщение, если нужно
+            if message_sent and pin_message:
+                try:
+                    logger.info(f"📌 Попытка закрепить сообщение {message_sent.message_id} в чате {chat_id}")
+                    
+                    await self.bot.bot.pin_chat_message(
+                        chat_id=chat_id,
+                        message_id=message_sent.message_id,
+                        disable_notification=disable_notification
+                    )
+                    logger.info(f"✅ Сообщение {message_sent.message_id} успешно закреплено в чате {chat_id}")
+                    
+                except TelegramAPIError as e:
+                    logger.error(f"❌ Ошибка Telegram API при закреплении сообщения: {e}")
+                    logger.error(f"   Код ошибки: {e.error_code if hasattr(e, 'error_code') else 'неизвестен'}")
+                    logger.error(f"   Описание: {e.message if hasattr(e, 'message') else str(e)}")
+                except Exception as e:
+                    logger.error(f"❌ Неожиданная ошибка при закреплении сообщения: {e}")
+            
+            return message_sent
+            
+        except TelegramAPIError as e:
+            logger.error(f"❌ Ошибка Telegram API при публикации в чат {chat_id}: {e}")
+            logger.error(f"   Код ошибки: {e.error_code if hasattr(e, 'error_code') else 'неизвестен'}")
+            logger.error(f"   Описание: {e.message if hasattr(e, 'message') else str(e)}")
+            raise
+        except Exception as e:
+            logger.error(f"❌ Неожиданная ошибка при публикации в чат {chat_id}: {e}")
+            raise
+
     def _save_campaigns_sync(self):
-        """Синхронное сохранение кампаний в JSON файл"""
+        """Сохраняет кампании в JSON файл (синхронно)"""
         try:
             campaigns_list = list(self.campaigns.values())
             with open(self.config.CAMPAIGNS_FILE, 'w', encoding='utf-8') as f:
                 json.dump({"campaigns": campaigns_list}, f, ensure_ascii=False, indent=2)
-            logger.debug(f"Синхронно сохранено {len(campaigns_list)} кампаний")
+            logger.info(f"✅ (sync) Сохранено {len(campaigns_list)} кампаний в JSON")
         except Exception as e:
-            logger.error(f"❌ Ошибка при синхронном сохранении кампаний: {e}")
+            logger.error(f"❌ (sync) Ошибка при сохранении кампаний: {e}")

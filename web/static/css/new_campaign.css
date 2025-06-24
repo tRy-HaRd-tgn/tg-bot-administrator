@@ -856,6 +856,76 @@ body {
   background: var(--apple-bg);
 }
 
+.topics-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.topics-input-group .topic-input {
+  flex: 1;
+}
+
+.add-topic-btn {
+  padding: 8px 12px;
+  border-radius: var(--radius-small);
+  border: 1px solid var(--apple-blue);
+  background: var(--apple-blue);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-topic-btn:hover {
+  background: var(--apple-blue-hover);
+  border-color: var(--apple-blue-hover);
+}
+
+.selected-topics-list {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.selected-topic-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--apple-fill-secondary);
+  border-radius: var(--radius-small);
+  border: 1px solid var(--apple-separator);
+}
+
+.topic-id {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apple-label);
+}
+
+.remove-topic-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: var(--apple-red);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 10px;
+  transition: all 0.3s ease;
+}
+
+.remove-topic-btn:hover {
+  background: var(--apple-red);
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
 .selected-chats-container {
   margin-top: 20px;
   padding: 16px;

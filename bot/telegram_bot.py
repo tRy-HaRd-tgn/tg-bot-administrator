@@ -35,6 +35,7 @@ class TelegramBot:
         self.host = "0.0.0.0"
         self.port = 8000
         self.ngrok_url = None
+        self.ngrok_manager = None  # Добавляем ссылку на NgrokManager
         
         # Регистрируем обработчики сообщений
         self._register_handlers()
@@ -146,7 +147,7 @@ class TelegramBot:
         except Exception as e:
             logger.error(f"Ошибка при остановке бота: {e}")
     
-    async def notify_admin_startup(self, host, port, ngrok_url=None):
+    async def notify_admin_startup(self, host, port, ngrok_url=None, ngrok_manager=None):
         """Уведомляет админов о запуске системы"""
         logger.debug(f"Отправка уведомлений о запуске {len(self.config.ADMIN_IDS)} админам")
         
@@ -154,6 +155,7 @@ class TelegramBot:
         self.host = host
         self.port = port
         self.ngrok_url = ngrok_url
+        self.ngrok_manager = ngrok_manager  # Сохраняем ссылку на NgrokManager
         
         for admin_id in self.config.ADMIN_IDS:
             try:
@@ -201,6 +203,60 @@ class TelegramBot:
                 logger.error(f"❌ Ошибка при отправке уведомления администратору {admin_id}: {e}")
             except Exception as e:
                 logger.error(f"❌ Неожиданная ошибка при отправке уведомления администратору {admin_id}: {e}")
+    def _get_status_message(self):
+        """Формирует текст сообщения со статусом системы"""
+        from utils.time_helper import get_time_left_info, get_future_utc_time_str
+        
+        message = f"🚀 <b>TG AutoPosting запущен!</b>\n\n"
+        
+        # Добавляем локальную ссылку
+        message += f"🌐 Локальная веб-панель: <code>http://{self.host}:{self.port}</code>\n"
+        
+        # Важное изменение: всегда запрашиваем актуальный URL из Ngrok Manager
+        current_ngrok_url = None
+        if self.ngrok_manager:
+            current_ngrok_url = self.ngrok_manager.get_public_url()
+        else:
+            current_ngrok_url = self.ngrok_url
+        
+        # Добавляем актуальную Ngrok ссылку если она есть
+        if current_ngrok_url:
+            # Обновляем сохраненный URL, чтобы другие методы также использовали актуальный URL
+            if self.ngrok_url != current_ngrok_url:
+                logger.info(f"Обнаружено обновление Ngrok URL: {self.ngrok_url} -> {current_ngrok_url}")
+                self.ngrok_url = current_ngrok_url
+            
+            message += f"🔗 Внешний доступ: <code>{current_ngrok_url}</code>\n"
+            
+            # Получаем актуальную информацию о времени перезапуска Ngrok
+            if self.ngrok_manager:
+                logger.debug("Получение информации о времени перезапуска Ngrok")
+                restart_info = self.ngrok_manager.get_next_restart_info()
+                if restart_info:
+                    logger.debug(f"Получена информация о перезапуске: {restart_info}")
+                    
+                    # Изменяем формат отображения времени на относительный от текущего
+                    message += f"⏱️ Ссылка обновится через <b>{self.config.NGROK_RESTART_INTERVAL} ч.</b>\n"
+                    
+                    # Оставляем точный расчет оставшегося времени
+                    message += f"⌛ Осталось: {restart_info['formatted_left']}\n"
+                else:
+                    logger.warning("Не удалось получить информацию о перезапуске Ngrok")
+                    message += f"⏱️ Ссылка обновится примерно через {self.config.NGROK_RESTART_INTERVAL} ч.\n"
+            else:
+                # Ngrok_manager не установлен
+                logger.warning("NgrokManager не передан в TelegramBot")
+                message += f"⏱️ Ссылка будет обновляться каждые {self.config.NGROK_RESTART_INTERVAL} ч.\n"
+        else:
+            logger.warning("Ngrok URL не доступен")
+            message += "❌ Внешний доступ: недоступен\n"
+        
+        message += f"👤 Логин: <code>{self.config.ADMIN_USERNAME}</code>\n"
+        message += f"🔑 Пароль: <code>{self.config.ADMIN_PASSWORD}</code>\n\n"
+        message += f"✅ Система готова к работе!"
+        
+        return message
+    
     async def send_status_message(self, user_id):
         """Отправляет сообщение со статусом системы"""
         try:
@@ -214,7 +270,7 @@ class TelegramBot:
             local_url = f"http://{self.host}:{self.port}"
             buttons.append([InlineKeyboardButton(text="🌐 Открыть локальный интерфейс", url=local_url)])
             
-            # Кнопка для внешнего доступа (если есть)
+            # Кнопка для внешнего доступа с актуальным URL
             if self.ngrok_url:
                 buttons.append([InlineKeyboardButton(text="🔗 Открыть внешний доступ", url=self.ngrok_url)])
             
@@ -231,30 +287,6 @@ class TelegramBot:
             logger.info(f"✅ Сообщение со статусом отправлено пользователю {user_id}")
         except Exception as e:
             logger.error(f"❌ Ошибка при отправке статуса пользователю {user_id}: {e}")
-    def _get_status_message(self):
-        """Формирует текст сообщения со статусом системы"""
-        message = f"🚀 <b>TG AutoPosting запущен!</b>\n\n"
-        
-        # Добавляем локальную ссылку
-        message += f"🌐 Локальная веб-панель: <code>http://{self.host}:{self.port}</code>\n"
-        
-        # Добавляем Ngrok ссылку если она есть
-        if self.ngrok_url:
-            message += f"🔗 Внешний доступ: <code>{self.ngrok_url}</code>\n"
-            
-            # Добавляем информацию об обновлении в UTC формате
-            from utils.time_helper import get_future_utc_time_str
-            next_restart_str = get_future_utc_time_str(hours=self.config.NGROK_RESTART_INTERVAL)
-            
-            message += f"⏱️ Ссылка обновится в <b>{next_restart_str}</b>\n"
-            message += f"⌛ Осталось: {self.config.NGROK_RESTART_INTERVAL} ч. 0 мин.\n"
-        
-        message += f"👤 Логин: <code>{self.config.ADMIN_USERNAME}</code>\n"
-        message += f"🔑 Пароль: <code>{self.config.ADMIN_PASSWORD}</code>\n\n"
-        message += f"✅ Система готова к работе!"
-        
-        return message
-    
     async def send_message(self, chat_id: Union[int, str], text: str, 
                           thread_id: Optional[int] = None,
                           buttons: Optional[List[Dict]] = None,
@@ -355,7 +387,7 @@ class TelegramBot:
                 
                 if not file_path:
                     continue
-                    
+                
                 file = FSInputFile(file_path)
                 
                 if file_type.startswith("image/"):
@@ -544,4 +576,9 @@ class TelegramBot:
         except TelegramAPIError as e:
             logger.error(f"❌ Ошибка при отправке сообщения в чат {chat_id}: {e}")
         except Exception as e:
+            logger.error(f"❌ Неожиданная ошибка при отправке сообщения в чат {chat_id}: {e}")
+            logger.error(f"❌ Неожиданная ошибка при отправке сообщения в чат {chat_id}: {e}")
+            logger.error(f"❌ Ошибка при отправке сообщения в чат {chat_id}: {e}")
+        except Exception as e:
+            logger.error(f"❌ Неожиданная ошибка при отправке сообщения в чат {chat_id}: {e}")
             logger.error(f"❌ Неожиданная ошибка при отправке сообщения в чат {chat_id}: {e}")
